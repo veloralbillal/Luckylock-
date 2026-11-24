@@ -1,0 +1,6 @@
+{
+  "name": "Lottery Winner — Lottery Management System",
+  "description": "Production-grade Lottery Management System with multi-tier campaigns, cryptographic draws, MFS payment verification (bKash, Nagad, Rocket, Upay), user portal, and admin console.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
