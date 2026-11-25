@@ -173,7 +173,7 @@ function renderMessageWithMentions(
             onMentionClick(handle);
           }}
           className={`font-mono font-bold hover:underline cursor-pointer ${
-            isOwn ? "text-amber-300" : "text-emerald-700"
+            isOwn ? "text-amber-300" : "text-amber-400"
           }`}
         >
           {part}
@@ -501,8 +501,8 @@ export function CommunityChatPage({
   // First-time Chat Profile Setup Gate
   if (user && !user.chatProfileCompleted) {
     return (
-      <div className="h-[100dvh] w-full flex flex-col bg-slate-50 overflow-hidden">
-        <header className="bg-gradient-to-r from-[#060D1E] via-[#0D1A36] to-[#132650] text-white px-3 sm:px-5 py-2.5 border-b border-amber-400/25 shrink-0">
+      <div className="h-[100dvh] w-full flex flex-col bg-[#040B1F] text-white overflow-hidden">
+        <header className="bg-[#060E24] text-white px-3 sm:px-5 py-2.5 border-b border-amber-400/25 shrink-0">
           <div className="max-w-5xl mx-auto flex items-center gap-2.5">
             <button
               type="button"
@@ -512,12 +512,12 @@ export function CommunityChatPage({
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <h1 className="text-sm sm:text-base font-bold text-white truncate">
+            <h1 className="text-sm sm:text-base font-extrabold text-white truncate">
               Complete Chat Profile
             </h1>
           </div>
         </header>
-        <div className="flex-1 overflow-y-auto py-4">
+        <div className="flex-1 overflow-y-auto">
           <ChatProfileSetupCard
             user={user}
             isFirstTime={true}
@@ -792,9 +792,9 @@ export function CommunityChatPage({
   const currentChannelMeta = CHANNELS.find((c) => c.id === activeChannel) || CHANNELS[0];
 
   return (
-    <div className="h-[100dvh] w-full flex flex-col bg-[#F1F5F9] overflow-hidden">
-      {/* Compact Dark Navy & Gold Full-Screen App Bar */}
-      <header className="bg-gradient-to-r from-[#060D1E] via-[#0D1A36] to-[#132650] text-white px-3 sm:px-5 py-2.5 border-b border-amber-400/25 shrink-0">
+    <div className="h-[100dvh] w-full flex flex-col bg-gradient-to-b from-[#040B1F] via-[#071330] to-[#040B1F] text-white overflow-hidden">
+      {/* Compact Royal Navy & Gold Full-Screen App Bar */}
+      <header className="bg-[#060E24]/95 backdrop-blur-md text-white px-3 sm:px-5 py-2.5 border-b border-amber-400/25 shrink-0">
         <div className="max-w-5xl mx-auto flex items-center justify-between gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <button
@@ -805,15 +805,15 @@ export function CommunityChatPage({
             >
               <ArrowLeft className="w-5 h-5" />
             </button>
-            <div className="w-9 h-9 rounded-xl bg-amber-400/15 border border-amber-400/30 text-amber-300 hidden xs:flex sm:flex items-center justify-center shrink-0">
+            <div className="w-9 h-9 rounded-xl bg-amber-400/15 border border-amber-400/35 text-amber-400 hidden xs:flex sm:flex items-center justify-center shrink-0">
               <Users className="w-4.5 h-4.5" />
             </div>
             <div className="min-w-0">
               <div className="flex items-center gap-2">
-                <h1 className="text-sm sm:text-base font-bold text-white truncate">
+                <h1 className="text-sm sm:text-base font-extrabold text-white truncate">
                   Community Chat
                 </h1>
-                <span className="font-mono text-[11px] font-semibold text-emerald-300 bg-emerald-500/15 border border-emerald-400/30 px-2 py-0.5 rounded-md tabular-nums shrink-0">
+                <span className="font-mono text-[11px] font-semibold text-emerald-300 bg-emerald-500/15 border border-emerald-400/35 px-2 py-0.5 rounded-full tabular-nums shrink-0">
                   {onlineCount} online
                 </span>
               </div>
@@ -829,9 +829,9 @@ export function CommunityChatPage({
               type="button"
               onClick={() => setShowSearchBar((prev) => !prev)}
               aria-label="Search usernames, agents, and messages"
-              className={`min-h-[42px] min-w-[42px] px-2.5 rounded-xl border inline-flex items-center justify-center gap-1.5 text-xs font-semibold cursor-pointer transition-colors ${
+              className={`min-h-[40px] min-w-[40px] px-3 rounded-full border inline-flex items-center justify-center gap-1.5 text-xs font-bold cursor-pointer transition-all ${
                 showSearchBar
-                  ? "bg-amber-400 text-[#060D1E] border-amber-300"
+                  ? "bg-gradient-to-r from-[#FDE047] via-[#FACC15] to-[#EAB308] text-[#071128] border-amber-300"
                   : "bg-white/10 hover:bg-white/15 text-slate-100 border-white/15"
               }`}
             >
@@ -843,7 +843,7 @@ export function CommunityChatPage({
               type="button"
               onClick={() => loadMessages(activeChannel)}
               aria-label="Refresh messages"
-              className="min-h-[42px] min-w-[42px] px-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-slate-100 inline-flex items-center justify-center cursor-pointer transition-colors"
+              className="min-h-[40px] min-w-[40px] px-2.5 rounded-full bg-white/10 hover:bg-white/15 border border-white/15 text-slate-100 inline-flex items-center justify-center cursor-pointer transition-colors"
             >
               <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
             </button>
@@ -854,9 +854,9 @@ export function CommunityChatPage({
       {/* Channel Room Switcher Strip */}
       <nav
         aria-label="Community channels"
-        className="bg-[#091327] border-b border-white/10 px-2.5 sm:px-5 shrink-0"
+        className="bg-[#08122C] border-b border-white/10 px-2.5 sm:px-5 shrink-0"
       >
-        <div className="max-w-5xl mx-auto flex items-center gap-1.5 overflow-x-auto py-1.5">
+        <div className="max-w-5xl mx-auto flex items-center gap-1.5 overflow-x-auto py-2">
           {CHANNELS.map((ch) => {
             const active = activeChannel === ch.id;
             return (
@@ -864,10 +864,10 @@ export function CommunityChatPage({
                 key={ch.id}
                 type="button"
                 onClick={() => setActiveChannel(ch.id)}
-                className={`min-h-[38px] px-3 py-1.5 rounded-lg text-xs font-semibold inline-flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
+                className={`min-h-[36px] px-3.5 py-1.5 rounded-full text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer transition-all ${
                   active
-                    ? "bg-amber-400 text-[#060D1E] shadow-xs"
-                    : "text-slate-300 hover:text-white hover:bg-white/10"
+                    ? "bg-gradient-to-r from-[#FDE047] via-[#FACC15] to-[#EAB308] text-[#071128] shadow-[0_4px_14px_rgba(250,204,21,0.28)]"
+                    : "text-slate-300 hover:text-white bg-white/5 hover:bg-white/10 border border-white/10"
                 }`}
               >
                 {ch.id === "winners" ? (
@@ -886,24 +886,24 @@ export function CommunityChatPage({
 
       {/* Expandable Search & @username / 64-District Agent Directory Bar */}
       {showSearchBar && (
-        <div className="bg-white border-b border-slate-200 px-3.5 sm:px-5 py-2.5 shrink-0 shadow-xs">
+        <div className="bg-[#091432] border-b border-blue-400/25 px-3.5 sm:px-5 py-2.5 shrink-0">
           <div className="max-w-5xl mx-auto space-y-2.5">
             <div className="relative">
-              <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2 pointer-events-none" />
+              <Search className="w-4 h-4 text-amber-400/80 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
               <input
                 ref={searchInputRef}
                 type="search"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 placeholder="Search @username, 64-district agent (e.g. sylhet_rafi), or message..."
-                className="w-full min-h-[42px] rounded-xl border border-slate-300 bg-slate-50 pl-9 pr-9 py-2 text-xs sm:text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-amber-500 focus:ring-2 focus:ring-amber-400/30 focus:outline-none"
+                className="w-full min-h-[42px] rounded-full border border-blue-400/30 bg-[#050C22] pl-10 pr-9 py-2 text-xs sm:text-sm text-white placeholder:text-slate-400 focus:border-amber-400 focus:ring-2 focus:ring-amber-400/30 focus:outline-none"
               />
               {searchQuery && (
                 <button
                   type="button"
                   onClick={() => setSearchQuery("")}
                   aria-label="Clear search"
-                  className="absolute right-2 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-slate-700 cursor-pointer"
+                  className="absolute right-2.5 top-1/2 -translate-y-1/2 p-1.5 text-slate-400 hover:text-white cursor-pointer"
                 >
                   <X className="w-4 h-4" />
                 </button>
@@ -912,13 +912,13 @@ export function CommunityChatPage({
 
             {searchQuery.trim() && (
               <div className="space-y-2">
-                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-600">
+                <div className="flex items-center justify-between text-[11px] font-semibold text-slate-300">
                   <span>
                     {searchingProfiles
                       ? "Searching @usernames & 64 agents..."
                       : `Matched Users & Agents (${matchedProfiles.length})`}
                   </span>
-                  <span className="font-mono text-slate-500">
+                  <span className="font-mono text-amber-300">
                     {filteredMessages.length} chat {filteredMessages.length === 1 ? "match" : "matches"}
                   </span>
                 </div>
@@ -930,22 +930,22 @@ export function CommunityChatPage({
                       return (
                         <div
                           key={`${profile.entityType}:${profile.id}`}
-                          className="rounded-xl border border-slate-200 bg-slate-50 px-2.5 py-2 flex items-center gap-2 shrink-0"
+                          className="rounded-xl border border-blue-400/25 bg-[#060E24] px-2.5 py-2 flex items-center gap-2 shrink-0"
                         >
                           <UserAvatar src={profile.avatarUrl} name={profile.fullName} size="sm" />
                           <div className="min-w-0">
                             <div className="flex items-center gap-1">
-                              <span className="font-mono text-xs font-bold text-slate-900">
+                              <span className="font-mono text-xs font-bold text-white">
                                 @{profile.username}
                               </span>
                               {profile.isVerified && (
-                                <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
+                                <ShieldCheck className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
                               )}
                             </div>
-                            <p className="text-[10px] text-slate-500 flex items-center gap-1">
+                            <p className="text-[10px] text-slate-400 flex items-center gap-1">
                               {profile.entityType === "agent" && profile.district ? (
                                 <>
-                                  <MapPin className="w-2.5 h-2.5 text-amber-600" />
+                                  <MapPin className="w-2.5 h-2.5 text-amber-400" />
                                   {profile.district} Agent
                                 </>
                               ) : (
@@ -959,7 +959,7 @@ export function CommunityChatPage({
                               type="button"
                               onClick={() => handleMentionUsername(profile.username)}
                               title={`Mention @${profile.username}`}
-                              className="min-h-[34px] min-w-[34px] rounded-lg bg-white border border-slate-200 hover:bg-slate-100 text-slate-800 inline-flex items-center justify-center cursor-pointer"
+                              className="min-h-[34px] min-w-[34px] rounded-lg bg-white/10 border border-white/15 hover:bg-white/15 text-slate-200 inline-flex items-center justify-center cursor-pointer"
                             >
                               <AtSign className="w-3.5 h-3.5" />
                             </button>
@@ -969,8 +969,8 @@ export function CommunityChatPage({
                               onClick={() => handleToggleFollow(profile)}
                               className={`min-h-[34px] px-2.5 rounded-lg text-[11px] font-bold inline-flex items-center gap-1 cursor-pointer ${
                                 profile.isFollowing
-                                  ? "bg-emerald-50 text-emerald-800 border border-emerald-300"
-                                  : "bg-[#0D1A36] text-amber-300"
+                                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/40"
+                                  : "bg-gradient-to-r from-[#FDE047] via-[#FACC15] to-[#EAB308] text-[#071128]"
                               }`}
                             >
                               {profile.isFollowing ? (
@@ -983,9 +983,9 @@ export function CommunityChatPage({
                             <button
                               type="button"
                               onClick={() => onOpenDirectMessage(profile.entityType, profile.id)}
-                              className="min-h-[34px] px-2.5 rounded-lg border border-slate-300 bg-white hover:bg-slate-100 text-slate-800 text-[11px] font-bold inline-flex items-center gap-1 cursor-pointer"
+                              className="min-h-[34px] px-2.5 rounded-lg border border-amber-400/35 bg-amber-400/12 hover:bg-amber-400/20 text-amber-200 text-[11px] font-bold inline-flex items-center gap-1 cursor-pointer"
                             >
-                              <MessageSquare className="w-3 h-3 text-amber-600" />
+                              <MessageSquare className="w-3 h-3 text-amber-400" />
                               DM
                             </button>
                           </div>
@@ -1002,19 +1002,19 @@ export function CommunityChatPage({
 
       {/* Pinned Message Banner */}
       {pinnedMessage && (
-        <div className="bg-amber-50 border-b border-amber-200/90 px-3.5 sm:px-5 py-2 shrink-0">
+        <div className="bg-amber-400/12 border-b border-amber-400/30 px-3.5 sm:px-5 py-2 shrink-0">
           <div className="max-w-5xl mx-auto flex items-center justify-between gap-2">
             <button
               type="button"
               onClick={() => handleJumpToMessage(pinnedMessage.id)}
               className="flex items-center gap-2 min-w-0 text-left cursor-pointer"
             >
-              <Pin className="w-3.5 h-3.5 text-amber-700 shrink-0" />
+              <Pin className="w-3.5 h-3.5 text-amber-400 shrink-0" />
               <div className="min-w-0">
-                <span className="text-[11px] font-bold text-amber-900 mr-1.5">
+                <span className="text-[11px] font-bold text-amber-300 mr-1.5">
                   Pinned · @{pinnedMessage.username}
                 </span>
-                <span className="text-xs text-amber-900/90 truncate block sm:inline">
+                <span className="text-xs text-amber-100/90 truncate block sm:inline">
                   {pinnedMessage.message || (pinnedMessage.imageUrl ? "Photo attachment" : "")}
                 </span>
               </div>
@@ -1023,7 +1023,7 @@ export function CommunityChatPage({
               <button
                 type="button"
                 onClick={() => handlePin(pinnedMessage.id)}
-                className="text-[11px] font-bold text-amber-800 hover:text-amber-950 px-2 py-1 rounded-md hover:bg-amber-100 cursor-pointer shrink-0"
+                className="text-[11px] font-bold text-amber-300 hover:text-amber-200 px-2 py-1 rounded-md hover:bg-amber-400/15 cursor-pointer shrink-0"
               >
                 Unpin
               </button>
@@ -1045,27 +1045,27 @@ export function CommunityChatPage({
         >
           <div className="max-w-4xl mx-auto space-y-3">
             {/* Channel Intro Strip */}
-            <div className="rounded-xl bg-white/80 border border-slate-200/80 px-3.5 py-2.5 text-center">
-              <p className="text-xs font-bold text-slate-800">
+            <div className="rounded-2xl bg-[#0B1634]/85 border border-blue-400/25 px-3.5 py-2.5 text-center">
+              <p className="text-xs font-extrabold text-amber-300">
                 #{currentChannelMeta.label}
               </p>
-              <p className="text-[11px] text-slate-500 mt-0.5">
+              <p className="text-[11px] text-slate-300 mt-0.5">
                 {currentChannelMeta.description} · Tap any message to reply, react, copy, or mention.
               </p>
             </div>
 
             {loading && messages.length === 0 ? (
-              <div className="py-16 text-center text-sm text-slate-500">
+              <div className="py-16 text-center text-sm text-slate-300">
                 Loading #{currentChannelMeta.shortLabel.toLowerCase()} messages...
               </div>
             ) : filteredMessages.length === 0 ? (
               <div className="py-16 text-center space-y-1.5">
-                <p className="text-sm font-bold text-slate-700">
+                <p className="text-sm font-bold text-white">
                   {searchQuery.trim()
                     ? "No messages match your search"
                     : `No messages in #${currentChannelMeta.shortLabel.toLowerCase()} yet`}
                 </p>
-                <p className="text-xs text-slate-500">
+                <p className="text-xs text-slate-400">
                   {searchQuery.trim()
                     ? "Clear search or tap DM on a matched profile above."
                     : "Start the conversation below with text, emoji, or a photo."}
@@ -1092,7 +1092,7 @@ export function CommunityChatPage({
                   <React.Fragment key={m.id}>
                     {showDateDivider && (
                       <div className="flex items-center justify-center py-1.5">
-                        <span className="text-[11px] font-semibold text-slate-500 bg-slate-200/80 px-3 py-0.5 rounded-full">
+                        <span className="text-[11px] font-semibold text-blue-200/80 bg-[#0B1634] border border-white/10 px-3 py-0.5 rounded-full">
                           {currentDivider}
                         </span>
                       </div>
@@ -1111,7 +1111,7 @@ export function CommunityChatPage({
                         src={m.avatarUrl}
                         name={m.fullName}
                         size="sm"
-                        className="mb-1 shrink-0"
+                        className="mb-1 shrink-0 border border-amber-400/35"
                       />
 
                       <div
@@ -1120,15 +1120,15 @@ export function CommunityChatPage({
                         }`}
                       >
                         {/* Sender Meta Row */}
-                        <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-slate-500 mb-1 px-1">
-                          <span className="font-semibold text-slate-800">{m.fullName}</span>
+                        <div className="flex flex-wrap items-center gap-1.5 text-[11px] text-slate-400 mb-1 px-1">
+                          <span className="font-semibold text-slate-100">{m.fullName}</span>
                           <button
                             type="button"
                             onClick={(e) => {
                               e.stopPropagation();
                               handleMentionUsername(m.username);
                             }}
-                            className="font-mono font-semibold text-amber-700 hover:underline cursor-pointer"
+                            className="font-mono font-semibold text-amber-400 hover:underline cursor-pointer"
                           >
                             @{m.username}
                           </button>
@@ -1139,24 +1139,24 @@ export function CommunityChatPage({
                                 e.stopPropagation();
                                 onOpenDirectMessage("user", m.userId);
                               }}
-                              className="text-[10px] font-semibold text-slate-600 hover:text-[#0D1A36] underline underline-offset-2 cursor-pointer"
+                              className="text-[10px] font-semibold text-sky-300 hover:text-amber-300 underline underline-offset-2 cursor-pointer"
                             >
                               DM
                             </button>
                           )}
                           {roleLabel && (
                             <span
-                              className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded ${
+                              className={`text-[10px] font-bold uppercase px-1.5 py-0.5 rounded-full ${
                                 m.role === "admin"
-                                  ? "bg-emerald-100 text-emerald-800"
-                                  : "bg-amber-100 text-amber-800"
+                                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/35"
+                                  : "bg-amber-400/20 text-amber-300 border border-amber-400/35"
                               }`}
                             >
                               {roleLabel}
                             </span>
                           )}
                           {m.isPinned && (
-                            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-amber-700">
+                            <span className="inline-flex items-center gap-0.5 text-[10px] font-bold text-amber-300">
                               <Pin className="w-2.5 h-2.5" />
                               Pinned
                             </span>
@@ -1178,10 +1178,10 @@ export function CommunityChatPage({
                             e.stopPropagation();
                             setActiveActionMsgId((prev) => (prev === m.id ? null : m.id));
                           }}
-                          className={`group relative rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed shadow-2xs border cursor-pointer select-text ${
+                          className={`group relative rounded-2xl px-3.5 py-2.5 text-sm leading-relaxed border cursor-pointer select-text ${
                             isOwn
-                              ? "bg-[#0D1A36] text-white border-[#0D1A36] rounded-br-sm"
-                              : "bg-white text-slate-900 border-slate-200 rounded-bl-sm"
+                              ? "bg-gradient-to-br from-[#1C2E6B] to-[#111E47] text-white border-amber-400/45 rounded-br-sm shadow-[0_6px_18px_rgba(0,0,0,0.3)]"
+                              : "bg-[#0C1736] text-slate-100 border-blue-400/25 rounded-bl-sm shadow-[0_6px_16px_rgba(0,0,0,0.25)]"
                           }`}
                         >
                           {/* Quoted Reply Reference */}
@@ -1195,10 +1195,10 @@ export function CommunityChatPage({
                               className={`w-full text-left mb-2 rounded-lg px-2.5 py-1.5 border-l-2 text-xs cursor-pointer ${
                                 isOwn
                                   ? "bg-white/10 border-amber-400 text-slate-200"
-                                  : "bg-slate-100 border-amber-500 text-slate-700"
+                                  : "bg-[#071028] border-amber-400 text-slate-200"
                               }`}
                             >
-                              <p className="font-mono text-[10px] font-bold text-amber-500">
+                              <p className="font-mono text-[10px] font-bold text-amber-400">
                                 Reply to @{m.replyTo.username}
                               </p>
                               <p className="truncate text-[11px] opacity-90">
@@ -1217,7 +1217,7 @@ export function CommunityChatPage({
                                   e.stopPropagation();
                                   setLightboxImageUrl(m.imageUrl || null);
                                 }}
-                                className="max-h-60 sm:max-h-72 w-auto max-w-full rounded-xl object-cover border border-black/10 cursor-zoom-in"
+                                className="max-h-60 sm:max-h-72 w-auto max-w-full rounded-xl object-cover border border-white/15 cursor-zoom-in"
                               />
                             </div>
                           )}
@@ -1241,8 +1241,8 @@ export function CommunityChatPage({
                               isOwn ? "-left-2.5" : "-right-2.5"
                             } w-7 h-7 rounded-full border shadow-xs flex items-center justify-center transition-opacity cursor-pointer ${
                               isActionOpen
-                                ? "opacity-100 bg-amber-400 text-[#060D1E] border-amber-300"
-                                : "opacity-0 group-hover:opacity-100 bg-white text-slate-600 border-slate-200 hover:bg-slate-100"
+                                ? "opacity-100 bg-amber-400 text-[#071128] border-amber-300"
+                                : "opacity-0 group-hover:opacity-100 bg-[#0B1634] text-slate-200 border-blue-400/35 hover:border-amber-400"
                             }`}
                           >
                             <MoreHorizontal className="w-3.5 h-3.5" />
@@ -1266,10 +1266,10 @@ export function CommunityChatPage({
                                     e.stopPropagation();
                                     handleReact(m.id, emoji);
                                   }}
-                                  className={`min-h-[28px] px-2 py-0.5 rounded-lg border text-xs font-semibold inline-flex items-center gap-1 tabular-nums cursor-pointer transition-colors ${
+                                  className={`min-h-[28px] px-2 py-0.5 rounded-full border text-xs font-semibold inline-flex items-center gap-1 tabular-nums cursor-pointer transition-colors ${
                                     reactedByMe
-                                      ? "bg-amber-100 border-amber-400 text-amber-950"
-                                      : "bg-white border-slate-200 text-slate-700 hover:bg-slate-50"
+                                      ? "bg-amber-400/20 border-amber-400 text-amber-200"
+                                      : "bg-[#0B1634] border-white/15 text-slate-200 hover:border-amber-400/50"
                                   }`}
                                 >
                                   <span>{emoji}</span>
@@ -1284,7 +1284,7 @@ export function CommunityChatPage({
                         {isActionOpen && (
                           <div
                             onClick={(e) => e.stopPropagation()}
-                            className={`mt-1.5 rounded-xl border border-slate-200 bg-white shadow-md p-2 space-y-2 z-10 ${
+                            className={`mt-1.5 rounded-2xl border border-amber-400/35 bg-[#0A1432] shadow-xl p-2 space-y-2 z-10 ${
                               isOwn ? "self-end" : "self-start"
                             }`}
                           >
@@ -1295,7 +1295,7 @@ export function CommunityChatPage({
                                   key={emoji}
                                   type="button"
                                   onClick={() => handleReact(m.id, emoji)}
-                                  className="min-h-[36px] min-w-[36px] rounded-lg hover:bg-slate-100 text-base flex items-center justify-center cursor-pointer transition-transform active:scale-90"
+                                  className="min-h-[36px] min-w-[36px] rounded-lg hover:bg-white/10 text-base flex items-center justify-center cursor-pointer transition-transform active:scale-90"
                                   aria-label={`React with ${emoji}`}
                                 >
                                   {emoji}
@@ -1304,11 +1304,11 @@ export function CommunityChatPage({
                             </div>
 
                             {/* Action Buttons */}
-                            <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-slate-100">
+                            <div className="flex flex-wrap items-center gap-1.5 pt-1 border-t border-white/10">
                               <button
                                 type="button"
                                 onClick={() => handleStartReply(m)}
-                                className="min-h-[34px] px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
+                                className="min-h-[34px] px-2.5 rounded-lg bg-white/10 hover:bg-white/15 text-slate-100 text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
                               >
                                 <Reply className="w-3.5 h-3.5" />
                                 Reply
@@ -1318,7 +1318,7 @@ export function CommunityChatPage({
                                 <button
                                   type="button"
                                   onClick={() => handleCopyMessage(m.message)}
-                                  className="min-h-[34px] px-2.5 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
+                                  className="min-h-[34px] px-2.5 rounded-lg bg-white/10 hover:bg-white/15 text-slate-100 text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
                                 >
                                   <Copy className="w-3.5 h-3.5" />
                                   Copy
@@ -1329,7 +1329,7 @@ export function CommunityChatPage({
                                 <button
                                   type="button"
                                   onClick={() => handleStartEdit(m)}
-                                  className="min-h-[34px] px-2.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
+                                  className="min-h-[34px] px-2.5 rounded-lg bg-amber-400/15 hover:bg-amber-400/25 text-amber-300 text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
                                 >
                                   <Pencil className="w-3.5 h-3.5" />
                                   Edit
@@ -1340,7 +1340,7 @@ export function CommunityChatPage({
                                 <button
                                   type="button"
                                   onClick={() => handlePin(m.id)}
-                                  className="min-h-[34px] px-2.5 rounded-lg bg-amber-50 hover:bg-amber-100 text-amber-900 text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
+                                  className="min-h-[34px] px-2.5 rounded-lg bg-amber-400/15 hover:bg-amber-400/25 text-amber-300 text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
                                 >
                                   <Pin className="w-3.5 h-3.5" />
                                   {m.isPinned ? "Unpin" : "Pin"}
@@ -1351,7 +1351,7 @@ export function CommunityChatPage({
                                 <button
                                   type="button"
                                   onClick={() => handleDelete(m.id)}
-                                  className="min-h-[34px] px-2.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
+                                  className="min-h-[34px] px-2.5 rounded-lg bg-rose-500/20 hover:bg-rose-500/30 text-rose-300 text-xs font-semibold inline-flex items-center gap-1 cursor-pointer"
                                 >
                                   <Trash2 className="w-3.5 h-3.5" />
                                   Delete
@@ -1377,7 +1377,7 @@ export function CommunityChatPage({
             type="button"
             onClick={() => scrollToBottom(true)}
             aria-label="Scroll to latest messages"
-            className="absolute right-4 bottom-3 min-h-[42px] px-3 rounded-full bg-[#0D1A36] text-amber-300 border border-amber-400/40 shadow-lg inline-flex items-center gap-1.5 text-xs font-bold cursor-pointer hover:bg-slate-900"
+            className="absolute right-4 bottom-3 min-h-[42px] px-3.5 rounded-full bg-gradient-to-r from-[#FDE047] via-[#FACC15] to-[#EAB308] text-[#071128] shadow-[0_8px_22px_rgba(250,204,21,0.35)] inline-flex items-center gap-1.5 text-xs font-extrabold cursor-pointer"
           >
             <ChevronDown className="w-4 h-4" />
             {unreadBelowCount > 0 && (
@@ -1389,7 +1389,7 @@ export function CommunityChatPage({
 
       {/* Live Typing Indicator Bar */}
       {activeTypersList.length > 0 && (
-        <div className="bg-slate-100 border-t border-slate-200/70 px-4 py-1 text-[11px] font-mono text-slate-600 shrink-0">
+        <div className="bg-[#07112A] border-t border-white/10 px-4 py-1 text-[11px] font-mono text-amber-300/90 shrink-0">
           <div className="max-w-4xl mx-auto truncate">
             {activeTypersList.slice(0, 3).join(", ")}{" "}
             {activeTypersList.length === 1 ? "is" : "are"} typing...
@@ -1398,18 +1398,18 @@ export function CommunityChatPage({
       )}
 
       {/* Sticky Full-Screen Bottom Composer */}
-      <footer className="bg-white border-t border-slate-200 px-3 sm:px-5 py-2.5 shrink-0">
+      <footer className="bg-[#060E24] border-t border-white/10 px-3 sm:px-5 py-2.5 pb-[max(0.65rem,env(safe-area-inset-bottom))] shrink-0">
         <div className="max-w-4xl mx-auto space-y-2">
           {/* Active Reply or Edit Banner */}
           {(replyTarget || editingMessage) && (
-            <div className="flex items-center justify-between gap-2 rounded-xl bg-slate-100 border-l-4 border-amber-500 px-3 py-2 text-xs">
+            <div className="flex items-center justify-between gap-2 rounded-xl bg-[#0B1634] border-l-4 border-amber-400 px-3 py-2 text-xs">
               <div className="min-w-0">
-                <p className="font-bold text-slate-800">
+                <p className="font-bold text-amber-300">
                   {editingMessage
                     ? "Editing your message"
                     : `Replying to @${replyTarget?.username}`}
                 </p>
-                <p className="text-slate-600 truncate">
+                <p className="text-slate-300 truncate">
                   {editingMessage
                     ? editingMessage.message
                     : replyTarget?.message || (replyTarget?.imageUrl ? "Photo" : "")}
@@ -1419,7 +1419,7 @@ export function CommunityChatPage({
                 type="button"
                 onClick={handleCancelContext}
                 aria-label="Cancel"
-                className="min-h-[32px] min-w-[32px] rounded-lg hover:bg-slate-200 text-slate-600 flex items-center justify-center cursor-pointer shrink-0"
+                className="min-h-[32px] min-w-[32px] rounded-lg hover:bg-white/10 text-slate-300 flex items-center justify-center cursor-pointer shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1428,21 +1428,23 @@ export function CommunityChatPage({
 
           {/* Pending Image Attachment Preview */}
           {pendingImageUrl && (
-            <div className="flex items-center gap-3 rounded-xl bg-slate-50 border border-slate-200 p-2">
+            <div className="flex items-center gap-3 rounded-xl bg-[#0B1634] border border-blue-400/25 p-2">
               <img
                 src={pendingImageUrl}
                 alt="Attachment preview"
-                className="w-14 h-14 rounded-lg object-cover border border-slate-200 shrink-0"
+                className="w-14 h-14 rounded-lg object-cover border border-white/15 shrink-0"
               />
               <div className="flex-1 min-w-0">
-                <p className="text-xs font-bold text-slate-800">Photo attached</p>
-                <p className="text-[11px] text-slate-500">Ready to send in #{currentChannelMeta.shortLabel.toLowerCase()}</p>
+                <p className="text-xs font-bold text-white">Photo attached</p>
+                <p className="text-[11px] text-slate-400">
+                  Ready to send in #{currentChannelMeta.shortLabel.toLowerCase()}
+                </p>
               </div>
               <button
                 type="button"
                 onClick={() => setPendingImageUrl(null)}
                 aria-label="Remove attached photo"
-                className="min-h-[36px] min-w-[36px] rounded-lg hover:bg-slate-200 text-slate-600 flex items-center justify-center cursor-pointer shrink-0"
+                className="min-h-[36px] min-w-[36px] rounded-lg hover:bg-white/10 text-slate-300 flex items-center justify-center cursor-pointer shrink-0"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -1451,7 +1453,7 @@ export function CommunityChatPage({
 
           {/* Quick Emoji Picker Tray */}
           {showEmojiTray && user && (
-            <div className="rounded-xl border border-slate-200 bg-slate-50 p-2 grid grid-cols-9 gap-1">
+            <div className="rounded-2xl border border-blue-400/25 bg-[#0B1634] p-2 grid grid-cols-9 gap-1">
               {COMPOSER_EMOJIS.map((emoji) => (
                 <button
                   key={emoji}
@@ -1460,7 +1462,7 @@ export function CommunityChatPage({
                     setDraft((prev) => `${prev}${emoji}`);
                     inputRef.current?.focus();
                   }}
-                  className="min-h-[36px] rounded-lg hover:bg-white text-lg flex items-center justify-center cursor-pointer transition-transform active:scale-90"
+                  className="min-h-[36px] rounded-lg hover:bg-white/10 text-lg flex items-center justify-center cursor-pointer transition-transform active:scale-90"
                 >
                   {emoji}
                 </button>
@@ -1484,7 +1486,7 @@ export function CommunityChatPage({
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
                   aria-label="Attach photo"
-                  className="min-h-[44px] min-w-[44px] rounded-xl border border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700 inline-flex items-center justify-center cursor-pointer shrink-0"
+                  className="min-h-[44px] min-w-[44px] rounded-full border border-blue-400/30 bg-[#0B1634] hover:border-amber-400/50 text-slate-200 inline-flex items-center justify-center cursor-pointer shrink-0"
                 >
                   <ImagePlus className="w-5 h-5" />
                 </button>
@@ -1494,10 +1496,10 @@ export function CommunityChatPage({
                 type="button"
                 onClick={() => setShowEmojiTray((prev) => !prev)}
                 aria-label="Toggle emoji picker"
-                className={`min-h-[44px] min-w-[44px] rounded-xl border inline-flex items-center justify-center cursor-pointer shrink-0 ${
+                className={`min-h-[44px] min-w-[44px] rounded-full border inline-flex items-center justify-center cursor-pointer shrink-0 ${
                   showEmojiTray
-                    ? "bg-amber-100 border-amber-400 text-amber-900"
-                    : "border-slate-200 bg-slate-50 hover:bg-slate-100 text-slate-700"
+                    ? "bg-amber-400/20 border-amber-400 text-amber-300"
+                    : "border-blue-400/30 bg-[#0B1634] hover:border-amber-400/50 text-slate-200"
                 }`}
               >
                 <Smile className="w-5 h-5" />
@@ -1520,18 +1522,14 @@ export function CommunityChatPage({
                     ? "Edit your message..."
                     : `Message #${currentChannelMeta.shortLabel.toLowerCase()} as @${user.username}...`
                 }
-                className="flex-1 min-w-0 min-h-[44px] rounded-xl border border-slate-300 bg-slate-50 px-3.5 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-amber-500 focus:ring-2 focus:ring-amber-400/30 focus:outline-none"
+                className="flex-1 min-w-0 min-h-[44px] rounded-full border border-blue-400/30 bg-[#0B1634] px-4 py-2 text-sm text-white placeholder:text-slate-400 focus:border-amber-400 focus:outline-none"
               />
 
               <button
                 type="submit"
                 disabled={sending || (!draft.trim() && !pendingImageUrl)}
                 aria-label={editingMessage ? "Save edited message" : "Send message"}
-                className={`min-h-[44px] min-w-[44px] sm:px-4 rounded-xl text-sm font-bold inline-flex items-center justify-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer disabled:opacity-50 ${
-                  editingMessage
-                    ? "bg-[#0D1A36] hover:bg-slate-900 text-amber-300"
-                    : "bg-emerald-700 hover:bg-emerald-800 text-white"
-                }`}
+                className="min-h-[44px] min-w-[44px] sm:px-5 rounded-full bg-gradient-to-r from-[#FDE047] via-[#FACC15] to-[#EAB308] hover:brightness-105 text-[#071128] text-sm font-extrabold inline-flex items-center justify-center gap-1.5 transition-all whitespace-nowrap shrink-0 cursor-pointer disabled:opacity-50 shadow-[0_6px_18px_rgba(250,204,21,0.28)]"
               >
                 {editingMessage ? <Check className="w-4 h-4" /> : <Send className="w-4 h-4" />}
                 <span className="hidden sm:inline">
@@ -1541,14 +1539,14 @@ export function CommunityChatPage({
             </form>
           ) : (
             <div className="flex flex-wrap items-center justify-between gap-2.5 py-0.5">
-              <p className="text-xs sm:text-sm text-slate-600">
+              <p className="text-xs sm:text-sm text-slate-300">
                 Sign in to chat, react, reply, and share photos with your{" "}
-                <span className="font-mono font-semibold">@username</span>.
+                <span className="font-mono font-semibold text-amber-300">@username</span>.
               </p>
               <button
                 type="button"
                 onClick={onOpenAuth}
-                className="min-h-[44px] rounded-xl bg-[#0D1A36] hover:bg-slate-900 px-4 py-2 text-xs sm:text-sm font-bold text-amber-300 cursor-pointer whitespace-nowrap shrink-0"
+                className="min-h-[44px] rounded-full bg-gradient-to-r from-[#FDE047] via-[#FACC15] to-[#EAB308] hover:brightness-105 px-5 py-2 text-xs sm:text-sm font-extrabold text-[#071128] cursor-pointer whitespace-nowrap shrink-0"
               >
                 Sign In to Chat
               </button>
@@ -1561,7 +1559,7 @@ export function CommunityChatPage({
       {lightboxImageUrl && (
         <div
           onClick={() => setLightboxImageUrl(null)}
-          className="fixed inset-0 z-50 bg-slate-950/90 flex items-center justify-center p-4"
+          className="fixed inset-0 z-50 bg-[#040B1F]/95 backdrop-blur-sm flex items-center justify-center p-4"
         >
           <button
             type="button"
@@ -1575,7 +1573,7 @@ export function CommunityChatPage({
             src={lightboxImageUrl}
             alt="Full screen preview"
             onClick={(e) => e.stopPropagation()}
-            className="max-h-[88dvh] max-w-[94vw] rounded-xl object-contain shadow-2xl"
+            className="max-h-[88dvh] max-w-[94vw] rounded-2xl object-contain shadow-2xl border border-white/15"
           />
         </div>
       )}

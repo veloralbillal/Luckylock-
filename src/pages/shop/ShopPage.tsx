@@ -1,17 +1,23 @@
 import {
   ArrowLeft,
   ArrowRight,
+  Box,
   Check,
   CheckCircle2,
+  ChevronDown,
+  ChevronRight,
   Clock,
   Copy,
   CreditCard,
+  Crown,
   Download,
   ExternalLink,
   Eye,
+  Gamepad2,
   Heart,
   Inbox,
   Layers,
+  LayoutGrid,
   Link2,
   Lock,
   Mail,
@@ -22,18 +28,21 @@ import {
   Plus,
   Receipt,
   RefreshCw,
+  Rocket,
   Search,
   Send,
   Share2,
   ShieldCheck,
   ShoppingBag,
   ShoppingCart,
+  SlidersHorizontal,
   Store,
   Tag,
   TicketPercent,
   UserCheck,
   Wallet,
   X,
+  Zap,
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
@@ -46,6 +55,7 @@ import {
   formatCouponTimeRemaining,
   ShopCouponsWorkspace,
 } from "../../components/shop/ShopCouponsWorkspace";
+import { ShopHeroCartArt } from "../../components/shop/ShopHeroCartArt";
 import { formatTaka } from "../../components/LotteryVisuals";
 import { useToast } from "../../components/ToastProvider";
 import { UserAvatar } from "../../components/UserAvatar";
@@ -254,7 +264,7 @@ function ProductImageFrame({
 
   return (
     <div
-      className={`relative w-full ${aspectClass} overflow-hidden bg-[#ECEAE4] flex items-center justify-center`}
+      className={`relative w-full ${aspectClass} overflow-hidden bg-[#09122A] flex items-center justify-center`}
     >
       {!imgFailed ? (
         <>
@@ -367,6 +377,7 @@ export function ShopPage({
   const [quickViewQty, setQuickViewQty] = useState(1);
   const [justAddedItemId, setJustAddedItemId] = useState<string | null>(null);
   const justAddedTimerRef = useRef<number | null>(null);
+  const catalogGridRef = useRef<HTMLDivElement | null>(null);
   const prefersReducedMotion = useReducedMotion();
   const [searchQuery, setSearchQuery] = useState("");
   const [sortBy, setSortBy] = useState<ShopSortOption>("featured");
@@ -1816,10 +1827,16 @@ export function ShopPage({
     );
   }
 
+  const isDarkCatalogView = !productId && (panelTab === "catalog" || panelTab === "agent-store");
+
   return (
-    <div className="min-h-screen w-full flex bg-[#F6F8FB] text-slate-900 overflow-x-clip">
+    <div
+      className={`min-h-screen w-full flex overflow-x-clip ${
+        isDarkCatalogView ? "bg-[#050C20] text-white" : "bg-[#F6F8FB] text-slate-900"
+      }`}
+    >
       {/* Desktop Dedicated Shop Panel Sidebar */}
-      <aside className="hidden lg:flex lg:flex-col w-[260px] shrink-0 sticky top-0 h-screen border-r border-slate-800/80 z-20">
+      <aside className="hidden lg:flex lg:flex-col w-[260px] shrink-0 sticky top-0 h-screen border-r border-blue-400/15 z-20">
         {renderPanelSidebar(false)}
       </aside>
 
@@ -1827,7 +1844,7 @@ export function ShopPage({
       {mobileSidebarOpen && (
         <div className="fixed inset-0 z-50 lg:hidden flex">
           <div
-            className="fixed inset-0 bg-slate-950/65 backdrop-blur-xs"
+            className="fixed inset-0 bg-slate-950/75 backdrop-blur-xs"
             onClick={() => setMobileSidebarOpen(false)}
             aria-hidden="true"
           />
@@ -1839,17 +1856,17 @@ export function ShopPage({
 
       {/* Main Separate Shop Panel Content Column */}
       <div className="flex-1 min-w-0 flex flex-col min-h-screen">
-        {/* Top Sticky Shop Panel Bar */}
-        <header className="sticky top-0 z-30 h-16 w-full bg-[#0B1221] text-white border-b border-slate-800 px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
-          {/* Left: Mobile Menu / Back + Contextual Breadcrumb */}
-          <div className="flex items-center gap-2 sm:gap-3 min-w-0">
+        {/* Top Sticky Shop Panel Bar (Royal Midnight-Navy & Gold) */}
+        <header className="sticky top-0 z-30 h-16 w-full bg-[#060E24]/95 backdrop-blur-md text-white border-b border-white/10 px-3 sm:px-6 lg:px-8 flex items-center justify-between gap-2 sm:gap-4">
+          {/* Left: Mobile Menu / Back + Crown Brand Lockup */}
+          <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
             <button
               type="button"
               onClick={() => setMobileSidebarOpen(true)}
               aria-label="Open Shop Panel Menu"
-              className="lg:hidden min-h-[38px] min-w-[38px] rounded-lg bg-white/10 hover:bg-white/15 border border-white/10 flex items-center justify-center text-white shrink-0 cursor-pointer"
+              className="lg:hidden min-h-[40px] min-w-[40px] rounded-xl bg-[#131F40] hover:bg-[#1B2B56] border border-white/10 flex items-center justify-center text-white shrink-0 cursor-pointer transition-colors"
             >
-              <Menu className="w-4 h-4" />
+              <Menu className="w-5 h-5" />
             </button>
 
             {productId ? (
@@ -1857,7 +1874,7 @@ export function ShopPage({
                 type="button"
                 onClick={() => onSelectProduct(null)}
                 aria-label="Back to Shop Catalog"
-                className="min-h-[38px] px-2.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-100 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                className="min-h-[38px] px-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 inline-flex items-center gap-1.5 text-xs font-semibold text-slate-100 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4 shrink-0" />
                 <span className="hidden sm:inline">Catalog</span>
@@ -1867,7 +1884,7 @@ export function ShopPage({
                 type="button"
                 onClick={onBackExit}
                 aria-label={backLabel}
-                className="hidden sm:inline-flex min-h-[38px] px-2.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/10 items-center gap-1.5 text-xs font-semibold text-slate-100 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                className="hidden sm:inline-flex min-h-[38px] px-2.5 rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 items-center gap-1.5 text-xs font-semibold text-slate-100 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               >
                 <ArrowLeft className="w-4 h-4 shrink-0" />
                 <span>Home</span>
@@ -1875,29 +1892,30 @@ export function ShopPage({
             )}
 
             <div className="min-w-0">
-              <p className="text-[11px] text-slate-400 truncate">
+              <p className="text-[11px] text-slate-400 truncate leading-tight">
                 Shop Panel / {activeSectionLabel}
               </p>
               <button
                 type="button"
                 onClick={() => openPanelSection("catalog")}
-                className="text-sm sm:text-base font-bold tracking-tight text-white hover:text-amber-300 transition-colors truncate cursor-pointer block text-left"
+                className="mt-0.5 text-sm sm:text-base font-extrabold tracking-tight text-white hover:text-amber-300 transition-colors truncate cursor-pointer flex items-center gap-1.5 text-left"
               >
-                {siteName || "Lottery Winner"} Shop
+                <Crown className="w-4 h-4 text-amber-400 fill-amber-400 shrink-0" />
+                <span className="truncate">{siteName || "Lottery Winner"}</span>
               </button>
             </div>
           </div>
 
-          {/* Right: Wallet Balance + Quick Orders + Cart */}
-          <div className="flex items-center gap-1.5 sm:gap-2 shrink-0">
+          {/* Right: Wallet Balance Pill + Quick Orders + Gold Cart Pill */}
+          <div className="flex items-center gap-2 shrink-0">
             {walletAuthenticated && walletBalance !== null ? (
               <button
                 type="button"
                 onClick={() => void fetchWalletBalance()}
                 title="Refresh Main Wallet Balance"
-                className="min-h-[38px] px-2.5 sm:px-3 rounded-lg bg-slate-900 hover:bg-slate-800 border border-slate-700 inline-flex items-center gap-1.5 text-xs font-mono font-bold text-white tabular-nums whitespace-nowrap shrink-0 cursor-pointer transition-colors"
+                className="min-h-[40px] px-3 sm:px-3.5 rounded-2xl bg-[#0D1734] hover:bg-[#14234B] border border-blue-400/20 inline-flex items-center gap-1.5 text-xs sm:text-sm font-mono font-bold text-white tabular-nums whitespace-nowrap shrink-0 cursor-pointer transition-colors"
               >
-                <Wallet className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+                <Wallet className="w-4 h-4 text-amber-400 shrink-0" />
                 <span>{formatTaka(walletBalance, sym)}</span>
                 <RefreshCw
                   className={`w-3 h-3 text-slate-400 hidden sm:inline shrink-0 ${
@@ -1909,7 +1927,7 @@ export function ShopPage({
               <button
                 type="button"
                 onClick={() => onRequireAuth("login", false)}
-                className="min-h-[38px] px-3 rounded-lg bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-semibold text-white transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+                className="min-h-[40px] px-3.5 rounded-2xl bg-[#131F40] hover:bg-[#1C2D5A] border border-blue-400/25 text-xs font-bold text-white transition-colors whitespace-nowrap shrink-0 cursor-pointer"
               >
                 Sign In
               </button>
@@ -1920,18 +1938,18 @@ export function ShopPage({
                 type="button"
                 onClick={() => openPanelSection("orders")}
                 aria-label="My Shop Orders"
-                className={`min-h-[38px] px-2.5 rounded-lg border text-xs font-semibold inline-flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
+                className={`hidden sm:inline-flex min-h-[40px] px-3 rounded-2xl border text-xs font-semibold items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
                   !productId && panelTab === "orders"
                     ? "bg-white text-slate-950 border-white"
-                    : "bg-white/10 hover:bg-white/15 border-white/10 text-slate-100"
+                    : "bg-[#0D1734] hover:bg-[#15244E] border-blue-400/20 text-slate-100"
                 }`}
               >
                 <Receipt
                   className={`w-3.5 h-3.5 shrink-0 ${
-                    !productId && panelTab === "orders" ? "text-slate-950" : "text-amber-300"
+                    !productId && panelTab === "orders" ? "text-slate-950" : "text-amber-400"
                   }`}
                 />
-                <span className="hidden sm:inline">Orders</span>
+                <span>Orders</span>
               </button>
             )}
 
@@ -1939,46 +1957,48 @@ export function ShopPage({
               type="button"
               onClick={openCartPage}
               aria-label="Open Cart Page"
-              className="min-h-[38px] px-3 sm:px-3.5 rounded-lg bg-amber-400 hover:bg-amber-300 text-[#0B1221] text-xs font-bold inline-flex items-center gap-1.5 transition-colors whitespace-nowrap shrink-0 cursor-pointer"
+              className="min-h-[40px] px-3.5 sm:px-4 rounded-2xl bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-400 hover:from-yellow-200 hover:to-amber-300 text-[#071128] text-xs sm:text-sm font-extrabold inline-flex items-center gap-1.5 shadow-[0_4px_16px_rgba(250,204,21,0.28)] transition-all active:scale-95 whitespace-nowrap shrink-0 cursor-pointer"
             >
-              <ShoppingCart className="w-3.5 h-3.5 shrink-0" />
+              <ShoppingCart className="w-4 h-4 shrink-0 stroke-[2.3]" />
               <span className="hidden sm:inline">Cart</span>
               <span className="font-mono tabular-nums">({cartItemCount})</span>
             </button>
           </div>
         </header>
 
-        {/* Mobile Quick Shop Panel Section Strip (Visible < lg for 1-Tap Switching) */}
-        <div className="lg:hidden border-b border-slate-200 bg-white px-3 py-2 flex items-center gap-1.5 overflow-x-auto">
+        {/* Mobile Quick Shop Panel Pill Strip (Matches Royal Navy & Gold Pill Design) */}
+        <div className="lg:hidden bg-[#060E24] border-b border-white/10 px-3 py-2.5 flex items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
           {(
             [
-              { id: "catalog", label: "All Products" },
-              { id: "agent-store", label: `Agent Store (${agentProductsCount})` },
-              { id: "orders", label: user ? `My Orders (${myOrders.length})` : "My Orders" },
-              { id: "inbox", label: user ? `Inbox (${shopInboxMessages.length})` : "Shop Inbox" },
+              { id: "catalog", label: "All Products", icon: LayoutGrid },
+              { id: "agent-store", label: `Agent Store (${agentProductsCount})`, icon: ShieldCheck },
+              { id: "orders", label: user ? `My Orders (${myOrders.length})` : "My Orders", icon: ShoppingBag },
+              { id: "inbox", label: user ? `Inbox${shopInboxMessages.length ? ` (${shopInboxMessages.length})` : ""}` : "Inbox", icon: Mail },
               ...(isAgentRole
                 ? [
-                    { id: "seller-add", label: "+ Add Product" },
-                    { id: "seller-manage", label: "Manage" },
-                    { id: "seller-orders", label: "Seller Orders" },
-                    { id: "seller-coupons", label: "Coupons" },
+                    { id: "seller-add", label: "+ Add Product", icon: PackagePlus },
+                    { id: "seller-manage", label: "Manage", icon: Layers },
+                    { id: "seller-orders", label: "Seller Orders", icon: Receipt },
+                    { id: "seller-coupons", label: "Coupons", icon: TicketPercent },
                   ]
                 : []),
-            ] as Array<{ id: ShopPanelTab; label: string }>
+            ] as Array<{ id: ShopPanelTab; label: string; icon: typeof LayoutGrid }>
           ).map((item) => {
+            const Icon = item.icon;
             const active = !productId && panelTab === item.id;
             return (
               <button
                 key={item.id}
                 type="button"
                 onClick={() => openPanelSection(item.id)}
-                className={`min-h-[34px] px-3 rounded-lg text-xs font-semibold whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
+                className={`min-h-[38px] px-3.5 rounded-2xl text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer transition-all ${
                   active
-                    ? "bg-[#0B1221] text-white"
-                    : "bg-slate-100 text-slate-700 hover:bg-slate-200"
+                    ? "bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-400 text-[#071128] shadow-[0_4px_14px_rgba(250,204,21,0.3)]"
+                    : "bg-[#0F1B3A] border border-blue-400/20 text-slate-200 hover:border-amber-400/45 hover:text-white"
                 }`}
               >
-                {item.label}
+                <Icon className={`w-3.5 h-3.5 shrink-0 ${active ? "text-[#071128]" : "text-slate-300"}`} />
+                <span>{item.label}</span>
               </button>
             );
           })}
@@ -2952,14 +2972,14 @@ export function ShopPage({
             />
           </section>
         ) : (
-          /* VIEW B: PREMIUM 2-COLUMN E-COMMERCE STOREFRONT CATALOG (/shop) */
-          <div className="bg-[#F7F6F2] min-h-full">
+          /* VIEW B: ROYAL MIDNIGHT-NAVY & GOLD E-COMMERCE STOREFRONT CATALOG (/shop) */
+          <div className="min-h-full bg-gradient-to-b from-[#050C20] via-[#081330] to-[#050C20] text-white pb-24 lg:pb-12">
             {/* Slim Dismissible Active Coupon Bar (<= 40px, shown only when live coupons exist) */}
             {!promoBannerDismissed && storeCoupons.length > 0 && (() => {
               const lead = storeCoupons[0];
               return (
-                <div className="bg-emerald-950 text-emerald-50 border-b border-emerald-900/80">
-                  <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 min-h-[38px] py-1.5 flex items-center justify-between gap-3 text-xs">
+                <div className="bg-emerald-950/90 text-emerald-50 border-b border-emerald-400/20">
+                  <div className="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 min-h-[38px] py-1.5 flex items-center justify-between gap-3 text-xs">
                     <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 min-w-0">
                       <TicketPercent className="w-3.5 h-3.5 text-amber-300 shrink-0" />
                       <span className="truncate">
@@ -3010,647 +3030,776 @@ export function ShopPage({
               );
             })()}
 
-            {/* Premium Editorial Storefront Hero */}
-            <section className="bg-[#0C111D] text-white border-b border-slate-800/90">
-              <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-9 sm:py-12">
-                <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-end">
-                  <div className="lg:col-span-7 space-y-3">
-                    <p className="text-[11px] font-semibold uppercase tracking-[0.16em] text-amber-300">
+            <div className="max-w-6xl mx-auto px-3.5 sm:px-6 lg:px-8 pt-4 sm:pt-6 space-y-4 sm:space-y-6">
+              {/* 1. ROYAL INDIGO-VIOLET HERO BANNER CARD WITH 3D GOLDEN CART ART */}
+              <section className="relative overflow-hidden rounded-[24px] bg-gradient-to-br from-[#19286E] via-[#261D74] to-[#3D167E] border border-indigo-400/35 shadow-[0_16px_42px_rgba(18,12,72,0.58)] p-5 sm:p-7 lg:p-8">
+                {/* Ambient glowing orbs */}
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -top-14 -left-14 w-56 h-56 rounded-full bg-indigo-400/20 blur-3xl"
+                />
+                <div
+                  aria-hidden="true"
+                  className="pointer-events-none absolute -bottom-16 -right-10 w-64 h-64 rounded-full bg-fuchsia-500/25 blur-3xl"
+                />
+
+                <div className="relative z-10 grid grid-cols-1 sm:grid-cols-12 gap-4 sm:gap-6 items-center">
+                  <div className="sm:col-span-7 space-y-2.5 sm:space-y-3">
+                    <p className="text-[10px] sm:text-[11px] font-extrabold uppercase tracking-[0.14em] text-amber-300 leading-relaxed">
                       {panelTab === "agent-store"
-                        ? "Verified Agent Marketplace · Direct Seller Desk"
-                        : "Curated Digital · Cyber Packs · Physical · SMM · On-Demand"}
+                        ? "VERIFIED AGENT MARKETPLACE · DIRECT SELLER DESK"
+                        : "CURATED DIGITAL · CYBER PACKS · PHYSICAL · SMM · ON-DEMAND"}
                     </p>
                     <h1
-                      className="font-bold tracking-tight text-white text-balance leading-[1.08]"
-                      style={{ fontSize: "clamp(1.75rem, 3.2vw, 2.6rem)" }}
+                      className="font-extrabold tracking-tight text-white text-balance leading-[1.12]"
+                      style={{ fontSize: "clamp(1.5rem, 3.1vw, 2.55rem)" }}
                     >
-                      {panelTab === "agent-store"
-                        ? "Verified Agent & Sub-Agent Collection"
-                        : "Elevated Digital & Physical Commerce"}
+                      {panelTab === "agent-store" ? (
+                        <>
+                          Verified Agent <span className="text-amber-400">&amp;</span> Sub-Agent Collection
+                        </>
+                      ) : (
+                        <>
+                          Elevated Digital <span className="text-amber-400">&amp;</span> Physical Commerce
+                        </>
+                      )}
                     </h1>
-                    <p className="text-sm text-slate-300 max-w-xl leading-relaxed">
+                    <p className="text-xs sm:text-sm text-indigo-100/85 max-w-xl leading-relaxed">
                       {panelTab === "agent-store"
                         ? "Shop directly from verified district agents with live bKash, Nagad, Rocket, Upay, and Website Store Wallet protection."
                         : "Store Wallet Preferred with 0% transaction fee, instant digital auto-email delivery, Bangla QR checkout, and verified fulfillment."}
                     </p>
-                    <div className="pt-1 flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-slate-400">
-                      <span>Store Wallet 0% Fee</span>
-                      <span aria-hidden="true">·</span>
-                      <span>Bangla QR Ready</span>
-                      <span aria-hidden="true">·</span>
-                      <span>Instant Digital Delivery</span>
+                    <div className="pt-1.5 flex items-center gap-3">
+                      <button
+                        type="button"
+                        onClick={() => {
+                          catalogGridRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+                        }}
+                        className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-400 hover:from-yellow-200 hover:to-amber-300 text-[#071128] font-extrabold text-xs sm:text-sm px-5 py-2.5 shadow-[0_6px_20px_rgba(250,204,21,0.38)] cursor-pointer active:scale-95 transition-transform whitespace-nowrap"
+                      >
+                        <span>Shop Now</span>
+                        <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                      </button>
                     </div>
                   </div>
 
-                  {/* High-Contrast Search Bar */}
-                  <div className="lg:col-span-5 space-y-2.5">
-                    <label htmlFor="shop-search" className="sr-only">
-                      Search products or coupon codes
-                    </label>
-                    <div className="relative">
-                      <Search className="w-4 h-4 text-slate-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
-                      <input
-                        id="shop-search"
-                        type="search"
-                        value={searchQuery}
-                        onChange={(e) => setSearchQuery(e.target.value)}
-                        placeholder="Search products, categories, agents, or coupon code..."
-                        className="w-full min-h-[46px] pl-10 pr-10 py-2.5 rounded-xl bg-white/10 border border-white/15 text-sm text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-400 focus:bg-slate-900/90 transition-colors"
-                      />
-                      {searchQuery && (
-                        <button
-                          type="button"
-                          onClick={() => setSearchQuery("")}
-                          aria-label="Clear search"
-                          className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
-                        >
-                          <X className="w-4 h-4" />
-                        </button>
-                      )}
-                    </div>
-                    <div className="flex items-center justify-between text-[11px] text-slate-400 px-0.5">
-                      <span>{visibleProducts.length} products available</span>
-                      <span className="font-mono tabular-nums">
-                        {couponDealsCount > 0
-                          ? `${couponDealsCount} with active coupons`
-                          : "Direct checkout"}
-                      </span>
-                    </div>
+                  {/* Right Hero 3D Golden Cart Centerpiece */}
+                  <div className="sm:col-span-5 flex items-center justify-center sm:justify-end">
+                    <ShopHeroCartArt className="w-40 h-36 sm:w-52 sm:h-48 lg:w-60 lg:h-52 drop-shadow-[0_14px_28px_rgba(0,0,0,0.45)]" />
                   </div>
                 </div>
-              </div>
-            </section>
+              </section>
 
-            {/* Category Bar + Feature Filters + 2-Column Left & Right Product Grid */}
-            <section className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-7 sm:py-9 space-y-6">
-              {/* Primary Filter Layer: Categories + Sort */}
-              <div className="space-y-3.5 pb-5 border-b border-slate-200/90">
-                <div className="flex flex-col md:flex-row md:items-center justify-between gap-3">
-                  {/* Scrollable Segmented E-Commerce Category Tabs */}
-                  <div className="flex items-center gap-1 p-1 bg-slate-200/75 rounded-xl overflow-x-auto max-w-full">
-                    {CATEGORY_TABS.map((tab) => (
-                      <button
-                        key={tab.id}
-                        type="button"
-                        onClick={() => setCategoryFilter(tab.id)}
-                        className={`min-h-[36px] px-3 py-1.5 rounded-lg text-xs font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer tabular-nums ${
-                          categoryFilter === tab.id
-                            ? "bg-white text-slate-950 shadow-xs"
-                            : "text-slate-600 hover:text-slate-950"
-                        }`}
-                      >
-                        {tab.shortLabel} ({categoryCounts[tab.id] || 0})
-                      </button>
-                    ))}
+              {/* 2. DARK-NAVY SEARCH BAR + 2-COLUMN LIVE STATUS STRIP */}
+              <section className="space-y-3">
+                <label htmlFor="shop-search" className="sr-only">
+                  Search products or coupon codes
+                </label>
+                <div className="relative">
+                  <Search className="w-5 h-5 text-slate-300 absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none" />
+                  <input
+                    id="shop-search"
+                    type="search"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    placeholder="Search products, categories, agents, or coupon code..."
+                    className="w-full min-h-[50px] pl-12 pr-11 py-3 rounded-2xl bg-[#101A36] border border-blue-300/20 text-sm text-white placeholder:text-slate-400 focus:outline-none focus:border-amber-400 focus:bg-[#132042] shadow-[inset_0_1px_0_rgba(255,255,255,0.06)] transition-colors"
+                  />
+                  {searchQuery && (
+                    <button
+                      type="button"
+                      onClick={() => setSearchQuery("")}
+                      aria-label="Clear search"
+                      className="absolute right-3.5 top-1/2 -translate-y-1/2 text-slate-400 hover:text-white cursor-pointer"
+                    >
+                      <X className="w-4 h-4" />
+                    </button>
+                  )}
+                </div>
+
+                {/* 2-Column Info Strip with Center Divider */}
+                <div className="grid grid-cols-2 divide-x divide-white/10 py-1 text-xs sm:text-sm text-slate-200">
+                  <div className="flex items-center justify-center sm:justify-start gap-2 pr-3">
+                    <Box className="w-4 h-4 text-slate-200 shrink-0" />
+                    <span className="font-medium tabular-nums truncate">
+                      {visibleProducts.length} products available
+                    </span>
                   </div>
+                  <div className="flex items-center justify-center sm:justify-end gap-2 pl-3">
+                    <Zap className="w-4 h-4 text-amber-400 fill-amber-400 shrink-0" />
+                    <span className="font-medium tabular-nums truncate">
+                      {couponDealsCount > 0
+                        ? `${couponDealsCount} active coupons`
+                        : "Direct checkout"}
+                    </span>
+                  </div>
+                </div>
+              </section>
 
-                  {/* Sort & Refresh */}
-                  <div className="flex items-center gap-2 shrink-0 self-start md:self-auto">
+              {/* 3. 2x2 VIVID CATEGORY ACTION CARDS (Digital · Cyber Pack · Physical · SMM) */}
+              <section className="grid grid-cols-2 lg:grid-cols-4 gap-3">
+                {(
+                  [
+                    {
+                      id: "digital" as ShopCategoryFilter,
+                      title: "Digital Products",
+                      accent: "text-sky-400",
+                      icon: Gamepad2,
+                      iconClass: "text-indigo-300",
+                      cardBg:
+                        "from-[#1B2264] via-[#131C4C] to-[#0C1438] border-indigo-400/45 hover:border-indigo-300",
+                      activeRing: "ring-2 ring-sky-400/80 border-sky-300",
+                    },
+                    {
+                      id: "cyber_pack" as ShopCategoryFilter,
+                      title: "Cyber Pack",
+                      accent: "text-emerald-400",
+                      icon: ShieldCheck,
+                      iconClass: "text-emerald-400",
+                      cardBg:
+                        "from-[#0D3C3A] via-[#0B2638] to-[#091830] border-emerald-400/45 hover:border-emerald-300",
+                      activeRing: "ring-2 ring-emerald-400/80 border-emerald-300",
+                    },
+                    {
+                      id: "physical" as ShopCategoryFilter,
+                      title: "Physical Products",
+                      accent: "text-amber-400",
+                      icon: Box,
+                      iconClass: "text-amber-400",
+                      cardBg:
+                        "from-[#3E2C1A] via-[#221D2E] to-[#11152D] border-amber-400/45 hover:border-amber-300",
+                      activeRing: "ring-2 ring-amber-400/80 border-amber-300",
+                    },
+                    {
+                      id: "smm" as ShopCategoryFilter,
+                      title: "SMM Services",
+                      accent: "text-pink-400",
+                      icon: Rocket,
+                      iconClass: "text-fuchsia-400",
+                      cardBg:
+                        "from-[#4D1446] via-[#2B133B] to-[#131231] border-fuchsia-400/45 hover:border-fuchsia-300",
+                      activeRing: "ring-2 ring-fuchsia-400/80 border-fuchsia-300",
+                    },
+                  ]
+                ).map((catCard) => {
+                  const Icon = catCard.icon;
+                  const active = categoryFilter === catCard.id;
+                  const count = categoryCounts[catCard.id] || 0;
+                  return (
+                    <button
+                      key={catCard.id}
+                      type="button"
+                      onClick={() => {
+                        setCategoryFilter(active ? "all" : catCard.id);
+                        catalogGridRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+                      }}
+                      className={`group relative overflow-hidden rounded-2xl bg-gradient-to-br ${catCard.cardBg} border p-3.5 sm:p-4 text-left flex items-center justify-between gap-2 shadow-[0_8px_22px_rgba(0,0,0,0.34)] cursor-pointer active:scale-[0.98] transition-all ${
+                        active ? catCard.activeRing : ""
+                      }`}
+                    >
+                      <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+                        <Icon className={`w-8 h-8 sm:w-9 sm:h-9 shrink-0 ${catCard.iconClass} drop-shadow-sm`} />
+                        <div className="min-w-0">
+                          <p className="text-xs sm:text-sm font-extrabold text-white leading-tight line-clamp-2">
+                            {catCard.title}
+                          </p>
+                          <p className={`text-[11px] sm:text-xs font-bold mt-0.5 ${catCard.accent}`}>
+                            {active ? `Showing (${count})` : "Buy Now"}
+                          </p>
+                        </div>
+                      </div>
+                      <span className="w-7 h-7 rounded-full bg-white/10 group-hover:bg-white/20 text-white flex items-center justify-center shrink-0 transition-colors">
+                        <ChevronRight className="w-4 h-4" />
+                      </span>
+                    </button>
+                  );
+                })}
+              </section>
+
+              {/* 4. SORT DROPDOWN + REFRESH SQUARE BUTTON + SECONDARY QUICK FILTERS */}
+              <section ref={catalogGridRef} className="space-y-3 pt-1">
+                <div className="flex flex-wrap items-center justify-between gap-2.5">
+                  <div className="flex items-center gap-2.5 flex-1 sm:flex-initial">
+                    {/* Crisp High-Contrast Sort Dropdown (Matches Reference Design) */}
+                    <div className="relative flex-1 sm:flex-initial sm:min-w-[200px]">
+                      <SlidersHorizontal className="w-4 h-4 text-[#0B142C] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                      <select
+                        id="shop-sort"
+                        aria-label="Sort products"
+                        value={sortBy}
+                        onChange={(e) => setSortBy(e.target.value as ShopSortOption)}
+                        className="w-full min-h-[46px] appearance-none pl-10 pr-10 py-2.5 rounded-2xl bg-gradient-to-b from-[#F4F6FC] to-[#E6ECF8] text-[#0B142C] text-xs sm:text-sm font-bold shadow-[0_6px_18px_rgba(0,0,0,0.28)] focus:outline-none focus:ring-2 focus:ring-amber-400 cursor-pointer"
+                      >
+                        <option value="featured">Sort: Featured</option>
+                        <option value="newest">Sort: Newest</option>
+                        <option value="price_asc">Price: Low to High</option>
+                        <option value="price_desc">Price: High to Low</option>
+                      </select>
+                      <ChevronDown className="w-4 h-4 text-[#0B142C] absolute right-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+                    </div>
+
+                    {/* Dark-Navy Rounded Refresh Button */}
                     <button
                       type="button"
                       onClick={() => void fetchCatalog()}
                       title="Refresh live catalog"
-                      className="min-h-[38px] px-3 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-700 inline-flex items-center gap-1.5 cursor-pointer"
+                      aria-label="Refresh live catalog"
+                      className="min-h-[46px] min-w-[46px] rounded-2xl bg-[#162246] hover:bg-[#1E2E5C] border border-blue-400/25 text-white flex items-center justify-center shrink-0 cursor-pointer shadow-[0_6px_16px_rgba(0,0,0,0.28)] transition-colors"
                     >
-                      <RefreshCw className={`w-3.5 h-3.5 ${catalogLoading ? "animate-spin" : ""}`} />
-                      <span className="hidden sm:inline">Refresh</span>
+                      <RefreshCw className={`w-4 h-4 ${catalogLoading ? "animate-spin text-amber-400" : ""}`} />
                     </button>
-                    <select
-                      id="shop-sort"
-                      aria-label="Sort products"
-                      value={sortBy}
-                      onChange={(e) => setSortBy(e.target.value as ShopSortOption)}
-                      className="min-h-[38px] px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-slate-800 focus:outline-none focus:border-slate-400 cursor-pointer"
-                    >
-                      <option value="featured">Sort: Featured</option>
-                      <option value="newest">Sort: Newest</option>
-                      <option value="price_asc">Price: Low to High</option>
-                      <option value="price_desc">Price: High to Low</option>
-                    </select>
                   </div>
-                </div>
 
-                {/* Secondary Feature Bar: Coupon Deals, Saved Wishlist & Price Range */}
-                <div className="flex flex-wrap items-center justify-between gap-2.5">
-                  <div className="flex flex-wrap items-center gap-2">
+                  {/* Quick Filter Chips (All, On-Demand, Coupon Deals, Saved & Price Ranges) */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto max-w-full pb-0.5 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+                    <button
+                      type="button"
+                      onClick={() => setCategoryFilter("all")}
+                      className={`min-h-[36px] px-3 rounded-xl text-xs font-bold whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
+                        categoryFilter === "all"
+                          ? "bg-amber-400 text-[#071128]"
+                          : "bg-[#101C3D] border border-blue-400/20 text-slate-200 hover:border-amber-400/50"
+                      }`}
+                    >
+                      All ({categoryCounts.all || 0})
+                    </button>
+
+                    {(categoryCounts.on_demand || 0) > 0 && (
+                      <button
+                        type="button"
+                        onClick={() => setCategoryFilter(categoryFilter === "on_demand" ? "all" : "on_demand")}
+                        className={`min-h-[36px] px-3 rounded-xl text-xs font-bold whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
+                          categoryFilter === "on_demand"
+                            ? "bg-amber-400 text-[#071128]"
+                            : "bg-[#101C3D] border border-blue-400/20 text-slate-200 hover:border-amber-400/50"
+                        }`}
+                      >
+                        On-Demand ({categoryCounts.on_demand})
+                      </button>
+                    )}
+
                     <button
                       type="button"
                       onClick={() => setOnlyCouponDeals((v) => !v)}
-                      className={`min-h-[36px] px-3 rounded-lg border text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
+                      className={`min-h-[36px] px-3 rounded-xl border text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
                         onlyCouponDeals
-                          ? "border-emerald-700 bg-emerald-700 text-white"
-                          : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                          ? "border-emerald-400 bg-emerald-500/20 text-emerald-300"
+                          : "border-blue-400/20 bg-[#101C3D] text-slate-200 hover:border-amber-400/50"
                       }`}
                     >
-                      <TicketPercent className="w-3.5 h-3.5" />
-                      <span>Coupon Deals ({couponDealsCount})</span>
+                      <TicketPercent className="w-3.5 h-3.5 text-emerald-400" />
+                      <span>Deals ({couponDealsCount})</span>
                     </button>
 
                     <button
                       type="button"
                       onClick={() => setOnlySaved((v) => !v)}
-                      className={`min-h-[36px] px-3 rounded-lg border text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer transition-colors ${
+                      className={`min-h-[36px] px-3 rounded-xl border text-xs font-bold inline-flex items-center gap-1.5 whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
                         onlySaved
-                          ? "border-slate-950 bg-slate-950 text-white"
-                          : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                          ? "border-rose-400 bg-rose-500/20 text-rose-300"
+                          : "border-blue-400/20 bg-[#101C3D] text-slate-200 hover:border-amber-400/50"
                       }`}
                     >
                       <Heart
                         className={`w-3.5 h-3.5 ${
-                          onlySaved ? "fill-current text-rose-400" : "text-slate-500"
+                          onlySaved ? "fill-current text-rose-400" : "text-slate-300"
                         }`}
                       />
                       <span>Saved ({wishlistIds.length})</span>
                     </button>
 
-                    <div className="h-4 w-px bg-slate-200 hidden sm:block mx-0.5" />
-
                     {(
                       [
-                        { id: "all", label: "All Prices" },
-                        { id: "under_300", label: `Under ${sym}300` },
-                        { id: "300_1000", label: `${sym}300–${sym}1,000` },
-                        { id: "over_1000", label: `${sym}1,000+` },
+                        { id: "all", label: "Any Price" },
+                        { id: "under_300", label: `<${sym}300` },
+                        { id: "300_1000", label: `${sym}300–1k` },
+                        { id: "over_1000", label: `${sym}1k+` },
                       ] as const
                     ).map((range) => (
                       <button
                         key={range.id}
                         type="button"
                         onClick={() => setPriceRange(range.id)}
-                        className={`min-h-[34px] px-2.5 rounded-lg text-xs font-medium cursor-pointer transition-colors ${
+                        className={`min-h-[36px] px-2.5 rounded-xl text-xs font-semibold whitespace-nowrap shrink-0 cursor-pointer transition-colors ${
                           priceRange === range.id
-                            ? "bg-slate-900 text-white font-semibold"
-                            : "text-slate-600 hover:bg-white hover:text-slate-950"
+                            ? "bg-blue-500/25 border border-amber-400/60 text-amber-300"
+                            : "bg-[#0D1734] border border-white/10 text-slate-300 hover:text-white"
                         }`}
                       >
                         {range.label}
                       </button>
                     ))}
-                  </div>
 
-                  {hasActiveFilters && (
-                    <button
+                    {hasActiveFilters && (
+                      <button
+                        type="button"
+                        onClick={() => {
+                          setCategoryFilter("all");
+                          setPriceRange("all");
+                          setOnlyCouponDeals(false);
+                          setOnlySaved(false);
+                          setSearchQuery("");
+                        }}
+                        className="px-2 text-xs font-bold text-amber-300 hover:text-amber-200 underline whitespace-nowrap shrink-0 cursor-pointer"
+                      >
+                        Reset
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Active Category Context Strip */}
+                {categoryFilter !== "all" && (
+                  <div className="rounded-2xl border border-blue-400/25 bg-[#0E1A3B]/90 px-4 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
+                    <div className="flex items-center gap-2.5 text-slate-200">
+                      {categoryFilter === "digital" ? (
+                        <Mail className="w-4 h-4 text-emerald-400 shrink-0" />
+                      ) : (
+                        <Package className="w-4 h-4 text-amber-400 shrink-0" />
+                      )}
+                      <span>
+                        <strong className="text-amber-300">
+                          {getShopCategoryLabel(categoryFilter)}:
+                        </strong>{" "}
+                        {categoryFilter === "digital"
+                          ? "Instant automated email delivery right after payment."
+                          : categoryFilter === "cyber_pack"
+                          ? "Carrom Pool, Free Fire, PUBG & game packs — enter your email at checkout for fast delivery."
+                          : categoryFilter === "physical"
+                          ? "Nationwide physical delivery with verified shipping & tracking."
+                          : categoryFilter === "smm"
+                          ? "Social media growth services — submit your target link & email."
+                          : "Custom on-demand orders — enter your email & requirements for fast review."}
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {/* 5. STRICT 2-COLUMN ROYAL MIDNIGHT-NAVY & GOLD PRODUCT GRID */}
+                {catalogLoading ? (
+                  <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:gap-6">
+                    {[0, 1, 2, 3].map((idx) => (
+                      <motion.div
+                        key={idx}
+                        initial={{ opacity: 0, y: 12 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.25, delay: idx * 0.06 }}
+                        className="rounded-2xl border border-blue-400/20 bg-[#0D1735] overflow-hidden"
+                      >
+                        <div className="aspect-[4/3] bg-[#14224A]/80 animate-pulse" />
+                        <div className="p-3 sm:p-5 space-y-2.5">
+                          <div className="h-3 w-2/5 rounded bg-white/10 animate-pulse" />
+                          <div className="h-4 w-4/5 rounded bg-white/15 animate-pulse" />
+                          <div className="h-3 w-3/5 rounded bg-white/10 animate-pulse hidden sm:block" />
+                          <div className="pt-3 border-t border-white/10 grid grid-cols-2 gap-2">
+                            <div className="h-9 rounded-xl bg-white/10 animate-pulse" />
+                            <div className="h-9 rounded-xl bg-amber-400/25 animate-pulse" />
+                          </div>
+                        </div>
+                      </motion.div>
+                    ))}
+                  </div>
+                ) : visibleProducts.length === 0 ? (
+                  <motion.div
+                    initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 10 }}
+                    animate={{ opacity: 1, scale: 1, y: 0 }}
+                    transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
+                    className="rounded-2xl border border-blue-400/25 bg-[#0D1838]/90 p-10 sm:p-12 text-center"
+                  >
+                    <ShoppingBag className="w-8 h-8 text-amber-400/80 mx-auto" />
+                    <p className="mt-3 text-sm font-bold text-white">
+                      {onlySaved
+                        ? "No saved products in your wishlist yet"
+                        : onlyCouponDeals
+                        ? "No products currently have active coupons matching this filter"
+                        : panelTab === "agent-store"
+                        ? "No Agent products match your filter yet"
+                        : "No matching products found"}
+                    </p>
+                    <p className="mt-1 text-xs text-slate-400">
+                      Try clearing your filters or browsing the full catalog.
+                    </p>
+                    <motion.button
                       type="button"
+                      whileTap={prefersReducedMotion ? undefined : { scale: 0.96 }}
                       onClick={() => {
+                        setSearchQuery("");
                         setCategoryFilter("all");
                         setPriceRange("all");
                         setOnlyCouponDeals(false);
                         setOnlySaved(false);
-                        setSearchQuery("");
+                        setPanelTab("catalog");
                       }}
-                      className="text-xs font-semibold text-slate-600 hover:text-slate-950 underline cursor-pointer"
+                      className="mt-4 min-h-[40px] px-5 py-2 rounded-xl bg-gradient-to-r from-yellow-300 to-amber-400 text-[#071128] text-xs font-extrabold cursor-pointer transition-colors"
                     >
-                      Reset Filters
-                    </button>
-                  )}
-                </div>
-              </div>
-
-              {/* Active Category Context Strip */}
-              {categoryFilter !== "all" && (
-                <div className="rounded-xl border border-slate-200 bg-white px-4 py-3 flex flex-wrap items-center justify-between gap-3 text-xs">
-                  <div className="flex items-center gap-2.5 text-slate-700">
-                    {categoryFilter === "digital" ? (
-                      <Mail className="w-4 h-4 text-emerald-600 shrink-0" />
-                    ) : (
-                      <Package className="w-4 h-4 text-amber-600 shrink-0" />
-                    )}
-                    <span>
-                      <strong className="text-slate-950">
-                        {getShopCategoryLabel(categoryFilter)}:
-                      </strong>{" "}
-                      {categoryFilter === "digital"
-                        ? "Instant automated email delivery right after payment."
-                        : categoryFilter === "cyber_pack"
-                        ? "Carrom Pool, Free Fire, PUBG & game packs — enter your email at checkout for fast delivery."
-                        : categoryFilter === "physical"
-                        ? "Nationwide physical delivery with verified shipping & tracking."
-                        : categoryFilter === "smm"
-                        ? "Social media growth services — submit your target link & email."
-                        : "Custom on-demand orders — enter your email & requirements for fast review."}
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {/* STRICT 2-COLUMN PRODUCT GRID (Left & Right — 2 Products Per Row) */}
-              {catalogLoading ? (
-                <div className="grid grid-cols-2 gap-3 sm:gap-5 lg:gap-6">
-                  {[0, 1, 2, 3].map((idx) => (
-                    <motion.div
-                      key={idx}
-                      initial={{ opacity: 0, y: 12 }}
-                      animate={{ opacity: 1, y: 0 }}
-                      transition={{ duration: 0.25, delay: idx * 0.06 }}
-                      className="rounded-xl border border-slate-200 bg-white overflow-hidden"
-                    >
-                      <div className="aspect-[4/3] bg-slate-200/75 shop-shimmer" />
-                      <div className="p-3 sm:p-5 space-y-2.5">
-                        <div className="h-3 w-2/5 rounded bg-slate-200/80 shop-shimmer" />
-                        <div className="h-4 w-4/5 rounded bg-slate-200/90 shop-shimmer" />
-                        <div className="h-3 w-3/5 rounded bg-slate-100 shop-shimmer hidden sm:block" />
-                        <div className="pt-3 border-t border-slate-100 grid grid-cols-2 gap-2">
-                          <div className="h-9 rounded-lg bg-slate-100 shop-shimmer" />
-                          <div className="h-9 rounded-lg bg-slate-200/80 shop-shimmer" />
-                        </div>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              ) : visibleProducts.length === 0 ? (
-                <motion.div
-                  initial={prefersReducedMotion ? { opacity: 0 } : { opacity: 0, scale: 0.97, y: 10 }}
-                  animate={{ opacity: 1, scale: 1, y: 0 }}
-                  transition={{ duration: 0.28, ease: [0.16, 1, 0.3, 1] }}
-                  className="rounded-xl border border-slate-200 bg-white p-10 sm:p-12 text-center"
-                >
-                  <ShoppingBag className="w-8 h-8 text-slate-400 mx-auto" />
-                  <p className="mt-3 text-sm font-semibold text-slate-900">
-                    {onlySaved
-                      ? "No saved products in your wishlist yet"
-                      : onlyCouponDeals
-                      ? "No products currently have active coupons matching this filter"
-                      : panelTab === "agent-store"
-                      ? "No Agent products match your filter yet"
-                      : "No matching products found"}
-                  </p>
-                  <p className="mt-1 text-xs text-slate-500">
-                    Try clearing your filters or browsing the full catalog.
-                  </p>
-                  <motion.button
-                    type="button"
-                    whileTap={prefersReducedMotion ? undefined : { scale: 0.96 }}
-                    onClick={() => {
-                      setSearchQuery("");
-                      setCategoryFilter("all");
-                      setPriceRange("all");
-                      setOnlyCouponDeals(false);
-                      setOnlySaved(false);
-                      setPanelTab("catalog");
-                    }}
-                    className="mt-4 min-h-[40px] px-4 py-2 rounded-lg bg-slate-900 hover:bg-emerald-700 text-white text-xs font-semibold cursor-pointer transition-colors"
+                      Show All Products
+                    </motion.button>
+                  </motion.div>
+                ) : (
+                  <motion.div
+                    layout
+                    className="grid grid-cols-2 gap-3.5 sm:gap-6 lg:gap-7"
                   >
-                    Show All Products
-                  </motion.button>
-                </motion.div>
-              ) : (
-                <motion.div
-                  layout
-                  className="grid grid-cols-2 gap-3.5 sm:gap-6 lg:gap-7"
-                >
-                  <AnimatePresence mode="popLayout" initial={true}>
-                    {visibleProducts.map((item, idx) => {
-                      const cat = resolveShopCategory(item);
-                      const mode = resolveDeliveryMode(item);
-                      const itemCoupons = getProductEffectiveCoupons(item);
-                      const topCoupon = itemCoupons[0] || null;
-                      const isSaved = wishlistIds.includes(item.id);
-                      const isJustAdded = justAddedItemId === item.id;
-                      const isLeftColumn = idx % 2 === 0;
-                      const isAgentListing =
-                        (item.submittedByRole === "agent" ||
-                          item.submittedByRole === "sub_agent" ||
-                          Boolean(item.agentId)) &&
-                        Boolean(item.submittedByUsername);
-                      const singleUnitCouponSavings =
-                        topCoupon && item.price >= topCoupon.minOrderAmount
-                          ? topCoupon.discountType === "percent"
-                            ? Math.min(
-                                Math.round((item.price * topCoupon.discountValue) / 100),
-                                topCoupon.maxDiscount ?? Number.POSITIVE_INFINITY
-                              )
-                            : Math.min(topCoupon.discountValue, item.price)
-                          : 0;
+                    <AnimatePresence mode="popLayout" initial={true}>
+                      {visibleProducts.map((item, idx) => {
+                        const cat = resolveShopCategory(item);
+                        const mode = resolveDeliveryMode(item);
+                        const itemCoupons = getProductEffectiveCoupons(item);
+                        const topCoupon = itemCoupons[0] || null;
+                        const isSaved = wishlistIds.includes(item.id);
+                        const isJustAdded = justAddedItemId === item.id;
+                        const isLeftColumn = idx % 2 === 0;
+                        const isAgentListing =
+                          (item.submittedByRole === "agent" ||
+                            item.submittedByRole === "sub_agent" ||
+                            Boolean(item.agentId)) &&
+                          Boolean(item.submittedByUsername);
+                        const singleUnitCouponSavings =
+                          topCoupon && item.price >= topCoupon.minOrderAmount
+                            ? topCoupon.discountType === "percent"
+                              ? Math.min(
+                                  Math.round((item.price * topCoupon.discountValue) / 100),
+                                  topCoupon.maxDiscount ?? Number.POSITIVE_INFINITY
+                                )
+                              : Math.min(topCoupon.discountValue, item.price)
+                            : 0;
 
-                      return (
-                        <motion.article
-                          key={item.id}
-                          layout={prefersReducedMotion ? false : "position"}
-                          initial={
-                            prefersReducedMotion
-                              ? { opacity: 0 }
-                              : {
-                                  opacity: 0,
-                                  y: 22,
-                                  x: isLeftColumn ? -12 : 12,
-                                  scale: 0.97,
-                                }
-                          }
-                          animate={{
-                            opacity: 1,
-                            y: 0,
-                            x: 0,
-                            scale: 1,
-                          }}
-                          exit={
-                            prefersReducedMotion
-                              ? { opacity: 0 }
-                              : {
-                                  opacity: 0,
-                                  scale: 0.94,
-                                  y: -8,
-                                  transition: { duration: 0.18, ease: [0.4, 0, 1, 1] },
-                                }
-                          }
-                          whileHover={
-                            prefersReducedMotion
-                              ? undefined
-                              : {
-                                  y: -5,
-                                  transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
-                                }
-                          }
-                          transition={{
-                            opacity: {
-                              duration: 0.32,
-                              delay: prefersReducedMotion ? 0 : Math.min(idx * 0.045, 0.32),
-                              ease: [0.16, 1, 0.3, 1],
-                            },
-                            y: {
-                              duration: 0.4,
-                              delay: prefersReducedMotion ? 0 : Math.min(idx * 0.045, 0.32),
-                              ease: [0.16, 1, 0.3, 1],
-                            },
-                            x: {
-                              duration: 0.4,
-                              delay: prefersReducedMotion ? 0 : Math.min(idx * 0.045, 0.32),
-                              ease: [0.16, 1, 0.3, 1],
-                            },
-                            scale: {
-                              duration: 0.36,
-                              delay: prefersReducedMotion ? 0 : Math.min(idx * 0.045, 0.32),
-                              ease: [0.16, 1, 0.3, 1],
-                            },
-                            layout: {
-                              type: "spring",
-                              stiffness: 360,
-                              damping: 30,
-                              mass: 0.85,
-                            },
-                          }}
-                          className="group rounded-2xl border border-slate-200/85 bg-white overflow-hidden flex flex-col justify-between transition-[box-shadow,border-color] duration-250 hover:shadow-[0_18px_38px_-14px_rgba(12,17,29,0.16)] hover:border-slate-300/95 will-change-transform"
-                        >
-                          {/* Top: Studio Image Stage + Refined Editorial Metadata */}
-                          <div>
-                            <div className="relative overflow-hidden bg-[#F3F1EC] border-b border-slate-100">
-                              <button
-                                type="button"
-                                onClick={() => onSelectProduct(item.id)}
-                                className="block w-full text-left cursor-pointer focus-visible:outline-none"
-                              >
-                                <ProductImageFrame item={item} aspectClass="aspect-[4/3]" />
-                              </button>
-
-                              {/* Single Restrained Offer Tag (Only when an active coupon applies) */}
-                              {topCoupon && (
-                                <div className="pointer-events-none absolute top-2.5 left-2.5 z-10 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-md bg-[#0C111D]/90 backdrop-blur-xs text-[10px] sm:text-[11px] font-mono font-semibold text-white tracking-tight shadow-xs">
-                                  {topCoupon.discountType === "percent"
-                                    ? `${topCoupon.discountValue}% OFF`
-                                    : `${formatTaka(topCoupon.discountValue, sym)} OFF`}
-                                </div>
-                              )}
-
-                              {/* Top-Right Minimal Floating Controls (Heart always visible; Quick View on mobile) */}
-                              <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1.5">
-                                <motion.button
-                                  type="button"
-                                  whileTap={prefersReducedMotion ? undefined : { scale: 0.88 }}
-                                  onClick={() => {
-                                    setQuickViewItem(item);
-                                    setQuickViewQty(1);
-                                  }}
-                                  aria-label={`Quick view ${item.title}`}
-                                  title="Quick View"
-                                  className="sm:hidden w-8 h-8 rounded-full bg-white/92 hover:bg-white text-slate-700 hover:text-slate-950 border border-slate-200/70 backdrop-blur-xs shadow-xs flex items-center justify-center cursor-pointer transition-colors"
-                                >
-                                  <Eye className="w-3.5 h-3.5" />
-                                </motion.button>
-                                <motion.button
-                                  type="button"
-                                  whileHover={prefersReducedMotion ? undefined : { scale: 1.08 }}
-                                  whileTap={prefersReducedMotion ? undefined : { scale: 0.86 }}
-                                  transition={{ duration: 0.14 }}
-                                  onClick={() => toggleWishlist(item.id, item.title)}
-                                  aria-label={
-                                    isSaved
-                                      ? `Remove ${item.title} from saved`
-                                      : `Save ${item.title}`
+                        return (
+                          <motion.article
+                            key={item.id}
+                            layout={prefersReducedMotion ? false : "position"}
+                            initial={
+                              prefersReducedMotion
+                                ? { opacity: 0 }
+                                : {
+                                    opacity: 0,
+                                    y: 22,
+                                    x: isLeftColumn ? -12 : 12,
+                                    scale: 0.97,
                                   }
-                                  title={isSaved ? "Saved" : "Save to Wishlist"}
-                                  className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-white/92 hover:bg-white border border-slate-200/70 backdrop-blur-xs shadow-xs flex items-center justify-center cursor-pointer transition-colors"
-                                >
-                                  <motion.span
-                                    key={isSaved ? "saved" : "unsaved"}
-                                    initial={
-                                      isSaved && !prefersReducedMotion
-                                        ? { scale: 0.65 }
-                                        : false
-                                    }
-                                    animate={
-                                      isSaved && !prefersReducedMotion
-                                        ? { scale: [0.65, 1.32, 1] }
-                                        : { scale: 1 }
-                                    }
-                                    transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
-                                    className="inline-flex items-center justify-center"
-                                  >
-                                    <Heart
-                                      className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-colors duration-150 ${
-                                        isSaved
-                                          ? "fill-rose-500 text-rose-500"
-                                          : "text-slate-700 hover:text-rose-500"
-                                      }`}
-                                    />
-                                  </motion.span>
-                                </motion.button>
-                              </div>
-
-                              {/* Desktop Hover Slide-Up Studio Utility Bar */}
-                              <div className="hidden sm:flex items-center justify-between gap-2 absolute inset-x-2.5 bottom-2.5 z-10 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 focus-within:opacity-100 focus-within:translate-y-0 transition-all duration-250 ease-[cubic-bezier(0.16,1,0.3,1)]">
+                            }
+                            animate={{
+                              opacity: 1,
+                              y: 0,
+                              x: 0,
+                              scale: 1,
+                            }}
+                            exit={
+                              prefersReducedMotion
+                                ? { opacity: 0 }
+                                : {
+                                    opacity: 0,
+                                    scale: 0.94,
+                                    y: -8,
+                                    transition: { duration: 0.18, ease: [0.4, 0, 1, 1] },
+                                  }
+                            }
+                            whileHover={
+                              prefersReducedMotion
+                                ? undefined
+                                : {
+                                    y: -5,
+                                    transition: { duration: 0.2, ease: [0.16, 1, 0.3, 1] },
+                                  }
+                            }
+                            transition={{
+                              opacity: {
+                                duration: 0.32,
+                                delay: prefersReducedMotion ? 0 : Math.min(idx * 0.045, 0.32),
+                                ease: [0.16, 1, 0.3, 1],
+                              },
+                              y: {
+                                duration: 0.4,
+                                delay: prefersReducedMotion ? 0 : Math.min(idx * 0.045, 0.32),
+                                ease: [0.16, 1, 0.3, 1],
+                              },
+                              x: {
+                                duration: 0.4,
+                                delay: prefersReducedMotion ? 0 : Math.min(idx * 0.045, 0.32),
+                                ease: [0.16, 1, 0.3, 1],
+                              },
+                              scale: {
+                                duration: 0.36,
+                                delay: prefersReducedMotion ? 0 : Math.min(idx * 0.045, 0.32),
+                                ease: [0.16, 1, 0.3, 1],
+                              },
+                              layout: {
+                                type: "spring",
+                                stiffness: 360,
+                                damping: 30,
+                                mass: 0.85,
+                              },
+                            }}
+                            className="group rounded-2xl border border-blue-400/25 bg-gradient-to-b from-[#111D3F] via-[#0C1633] to-[#081026] overflow-hidden flex flex-col justify-between shadow-[0_12px_30px_rgba(0,0,0,0.42)] transition-[box-shadow,border-color] duration-250 hover:shadow-[0_18px_38px_-10px_rgba(250,204,21,0.18)] hover:border-amber-400/65 will-change-transform"
+                          >
+                            {/* Top: Dark-Navy Studio Image Stage + Refined Metadata */}
+                            <div>
+                              <div className="relative overflow-hidden bg-[#09122A] border-b border-white/10">
                                 <button
                                   type="button"
-                                  onClick={() => {
-                                    setQuickViewItem(item);
-                                    setQuickViewQty(1);
-                                  }}
-                                  className="flex-1 min-h-[34px] px-3 rounded-lg bg-white/95 hover:bg-white text-slate-900 text-xs font-semibold shadow-sm backdrop-blur-xs inline-flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
+                                  onClick={() => onSelectProduct(item.id)}
+                                  className="block w-full text-left cursor-pointer focus-visible:outline-none"
                                 >
-                                  <Eye className="w-3.5 h-3.5 text-slate-600" />
-                                  <span>Quick View</span>
+                                  <ProductImageFrame item={item} aspectClass="aspect-[4/3]" />
                                 </button>
-                                <button
-                                  type="button"
-                                  onClick={() => void handleCopyProductLink(item)}
-                                  title="Copy direct product link"
-                                  aria-label={`Copy link for ${item.title}`}
-                                  className="min-h-[34px] px-2.5 rounded-lg bg-[#0C111D]/90 hover:bg-[#0C111D] text-white text-xs font-medium shadow-sm backdrop-blur-xs inline-flex items-center justify-center gap-1 cursor-pointer transition-colors"
-                                >
-                                  {copiedKey === `link:${item.id}` ? (
-                                    <Check className="w-3.5 h-3.5 text-emerald-400" />
-                                  ) : (
-                                    <Link2 className="w-3.5 h-3.5" />
-                                  )}
-                                </button>
-                              </div>
-                            </div>
 
-                            <div className="p-3 sm:p-5 pb-3 sm:pb-4">
-                              {/* Clean Unboxed Kicker Line */}
-                              <div className="flex items-center justify-between gap-1.5 text-[10px] sm:text-[11px] text-slate-500">
-                                <span className="truncate uppercase tracking-[0.08em] font-semibold">
-                                  {getShopCategoryLabel(cat)}
-                                  <span aria-hidden="true"> · </span>
-                                  <span
-                                    className={
-                                      mode === "auto_email"
-                                        ? "text-emerald-700"
-                                        : "text-slate-600"
-                                    }
-                                  >
-                                    {mode === "auto_email" ? "Instant" : "Verified"}
-                                  </span>
-                                </span>
-                              </div>
-
-                              {/* Editorial Product Title */}
-                              <button
-                                type="button"
-                                onClick={() => onSelectProduct(item.id)}
-                                className="mt-1 sm:mt-1.5 text-left block w-full cursor-pointer"
-                              >
-                                <h2 className="font-display text-[13px] sm:text-[17px] font-semibold tracking-tight text-slate-950 group-hover:text-emerald-700 transition-colors duration-200 leading-snug line-clamp-2">
-                                  {item.title}
-                                </h2>
-                              </button>
-
-                              <p className="hidden sm:line-clamp-2 mt-1.5 text-xs text-slate-500 leading-relaxed">
-                                {item.description}
-                              </p>
-
-                              {isAgentListing && (
-                                <p className="mt-1.5 text-[10px] sm:text-[11px] font-medium text-slate-500 truncate">
-                                  {item.submittedByRole === "sub_agent" ? "Sub-Agent" : "Agent"} @
-                                  {item.submittedByUsername}
-                                  {item.agentDistrict ? ` · ${item.agentDistrict}` : ""}
-                                </p>
-                              )}
-
-                              {/* Interactive Coupon Strip with 1-Click Copy */}
-                              {topCoupon && (
-                                <div className="mt-2 sm:mt-2.5 flex items-center justify-between gap-1.5 rounded-lg border border-emerald-200/80 bg-emerald-50/60 px-2 sm:px-2.5 py-1.5">
-                                  <div className="min-w-0 flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono font-semibold text-emerald-800">
-                                    <Tag className="w-3 h-3 shrink-0 text-emerald-700" />
-                                    <span className="truncate">
-                                      {topCoupon.code}
-                                      {topCoupon.minOrderAmount > 0
-                                        ? ` · Min ${formatTaka(topCoupon.minOrderAmount, sym)}`
-                                        : ` · ${formatCouponDiscountBadge(topCoupon, sym)}`}
-                                    </span>
+                                {/* Single Gold Offer Tag (Only when an active coupon applies) */}
+                                {topCoupon && (
+                                  <div className="pointer-events-none absolute top-2.5 left-2.5 z-10 px-2 py-0.5 sm:px-2.5 sm:py-1 rounded-lg bg-gradient-to-r from-yellow-300 to-amber-400 text-[10px] sm:text-[11px] font-mono font-extrabold text-[#071128] tracking-tight shadow-md">
+                                    {topCoupon.discountType === "percent"
+                                      ? `${topCoupon.discountValue}% OFF`
+                                      : `${formatTaka(topCoupon.discountValue, sym)} OFF`}
                                   </div>
+                                )}
+
+                                {/* Top-Right Glass Dark-Navy Controls */}
+                                <div className="absolute top-2.5 right-2.5 z-10 flex items-center gap-1.5">
+                                  <motion.button
+                                    type="button"
+                                    whileTap={prefersReducedMotion ? undefined : { scale: 0.88 }}
+                                    onClick={() => {
+                                      setQuickViewItem(item);
+                                      setQuickViewQty(1);
+                                    }}
+                                    aria-label={`Quick view ${item.title}`}
+                                    title="Quick View"
+                                    className="sm:hidden w-8 h-8 rounded-full bg-[#09132E]/85 hover:bg-[#13224A] text-slate-100 hover:text-amber-300 border border-white/15 backdrop-blur-xs shadow-md flex items-center justify-center cursor-pointer transition-colors"
+                                  >
+                                    <Eye className="w-3.5 h-3.5" />
+                                  </motion.button>
+                                  <motion.button
+                                    type="button"
+                                    whileHover={prefersReducedMotion ? undefined : { scale: 1.08 }}
+                                    whileTap={prefersReducedMotion ? undefined : { scale: 0.86 }}
+                                    transition={{ duration: 0.14 }}
+                                    onClick={() => toggleWishlist(item.id, item.title)}
+                                    aria-label={
+                                      isSaved
+                                        ? `Remove ${item.title} from saved`
+                                        : `Save ${item.title}`
+                                    }
+                                    title={isSaved ? "Saved" : "Save to Wishlist"}
+                                    className="w-8 h-8 sm:w-9 sm:h-9 rounded-full bg-[#09132E]/85 hover:bg-[#13224A] border border-white/15 backdrop-blur-xs shadow-md flex items-center justify-center cursor-pointer transition-colors"
+                                  >
+                                    <motion.span
+                                      key={isSaved ? "saved" : "unsaved"}
+                                      initial={
+                                        isSaved && !prefersReducedMotion
+                                          ? { scale: 0.65 }
+                                          : false
+                                      }
+                                      animate={
+                                        isSaved && !prefersReducedMotion
+                                          ? { scale: [0.65, 1.32, 1] }
+                                          : { scale: 1 }
+                                      }
+                                      transition={{ duration: 0.3, ease: [0.16, 1, 0.3, 1] }}
+                                      className="inline-flex items-center justify-center"
+                                    >
+                                      <Heart
+                                        className={`w-3.5 h-3.5 sm:w-4 sm:h-4 transition-colors duration-150 ${
+                                          isSaved
+                                            ? "fill-rose-500 text-rose-500"
+                                            : "text-slate-200 hover:text-rose-400"
+                                        }`}
+                                      />
+                                    </motion.span>
+                                  </motion.button>
+                                </div>
+
+                                {/* Desktop Hover Slide-Up Utility Bar */}
+                                <div className="hidden sm:flex items-center justify-between gap-2 absolute inset-x-2.5 bottom-2.5 z-10 opacity-0 translate-y-2 group-hover:opacity-100 group-hover:translate-y-0 focus-within:opacity-100 focus-within:translate-y-0 transition-all duration-250 ease-[cubic-bezier(0.16,1,0.3,1)]">
                                   <button
                                     type="button"
-                                    onClick={() =>
-                                      void copyText(
-                                        topCoupon.code,
-                                        `coupon:${item.id}`,
-                                        `Coupon "${topCoupon.code}" copied!`
-                                      )
-                                    }
-                                    aria-label={`Copy coupon ${topCoupon.code}`}
-                                    className="text-[10px] font-semibold text-emerald-800 hover:text-emerald-950 inline-flex items-center gap-0.5 shrink-0 cursor-pointer"
+                                    onClick={() => {
+                                      setQuickViewItem(item);
+                                      setQuickViewQty(1);
+                                    }}
+                                    className="flex-1 min-h-[34px] px-3 rounded-xl bg-[#0B1532]/92 hover:bg-[#13224C] border border-blue-400/30 text-white text-xs font-semibold shadow-md backdrop-blur-xs inline-flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
                                   >
-                                    {copiedKey === `coupon:${item.id}` ? (
-                                      <>
-                                        <Check className="w-3 h-3 text-emerald-600" />
-                                        <span className="hidden sm:inline">Copied</span>
-                                      </>
+                                    <Eye className="w-3.5 h-3.5 text-amber-400" />
+                                    <span>Quick View</span>
+                                  </button>
+                                  <button
+                                    type="button"
+                                    onClick={() => void handleCopyProductLink(item)}
+                                    title="Copy direct product link"
+                                    aria-label={`Copy link for ${item.title}`}
+                                    className="min-h-[34px] px-2.5 rounded-xl bg-amber-400/95 hover:bg-amber-300 text-[#071128] text-xs font-bold shadow-md backdrop-blur-xs inline-flex items-center justify-center gap-1 cursor-pointer transition-colors"
+                                  >
+                                    {copiedKey === `link:${item.id}` ? (
+                                      <Check className="w-3.5 h-3.5 text-emerald-900" />
                                     ) : (
-                                      <>
-                                        <Copy className="w-3 h-3" />
-                                        <span className="hidden sm:inline">Copy</span>
-                                      </>
+                                      <Link2 className="w-3.5 h-3.5" />
                                     )}
                                   </button>
                                 </div>
-                              )}
-                            </div>
-                          </div>
+                              </div>
 
-                          {/* Bottom: Aligned Price Baseline + Responsive Dual Actions */}
-                          <div className="px-3 sm:px-5 py-3 sm:py-4 border-t border-slate-100 bg-slate-50/45 space-y-2.5 sm:space-y-3">
-                            <div className="flex items-baseline justify-between gap-2">
-                              <div className="flex items-baseline gap-1.5 flex-wrap">
-                                <span className="text-[15px] sm:text-xl font-mono font-bold tracking-tight text-slate-950 tabular-nums">
-                                  {formatTaka(item.price, sym)}
-                                </span>
-                                {singleUnitCouponSavings > 0 && (
-                                  <span className="hidden sm:inline text-[11px] font-medium text-emerald-700 tabular-nums">
-                                    Save {formatTaka(singleUnitCouponSavings, sym)}
+                              <div className="p-3 sm:p-5 pb-3 sm:pb-4">
+                                {/* Clean Unboxed Kicker Line */}
+                                <div className="flex items-center justify-between gap-1.5 text-[10px] sm:text-[11px] text-indigo-200/80">
+                                  <span className="truncate uppercase tracking-[0.08em] font-semibold">
+                                    {getShopCategoryLabel(cat)}
+                                    <span aria-hidden="true"> · </span>
+                                    <span
+                                      className={
+                                        mode === "auto_email"
+                                          ? "text-emerald-400"
+                                          : "text-amber-300"
+                                      }
+                                    >
+                                      {mode === "auto_email" ? "Instant" : "Verified"}
+                                    </span>
                                   </span>
+                                </div>
+
+                                {/* Product Title */}
+                                <button
+                                  type="button"
+                                  onClick={() => onSelectProduct(item.id)}
+                                  className="mt-1 sm:mt-1.5 text-left block w-full cursor-pointer"
+                                >
+                                  <h2 className="font-display text-[13px] sm:text-[17px] font-bold tracking-tight text-white group-hover:text-amber-300 transition-colors duration-200 leading-snug line-clamp-2">
+                                    {item.title}
+                                  </h2>
+                                </button>
+
+                                <p className="hidden sm:line-clamp-2 mt-1.5 text-xs text-slate-300/80 leading-relaxed">
+                                  {item.description}
+                                </p>
+
+                                {isAgentListing && (
+                                  <p className="mt-1.5 text-[10px] sm:text-[11px] font-medium text-sky-300/90 truncate">
+                                    {item.submittedByRole === "sub_agent" ? "Sub-Agent" : "Agent"} @
+                                    {item.submittedByUsername}
+                                    {item.agentDistrict ? ` · ${item.agentDistrict}` : ""}
+                                  </p>
+                                )}
+
+                                {/* Interactive Coupon Strip with 1-Click Copy */}
+                                {topCoupon && (
+                                  <div className="mt-2 sm:mt-2.5 flex items-center justify-between gap-1.5 rounded-xl border border-emerald-400/30 bg-emerald-500/10 px-2 sm:px-2.5 py-1.5">
+                                    <div className="min-w-0 flex items-center gap-1.5 text-[10px] sm:text-[11px] font-mono font-semibold text-emerald-300">
+                                      <Tag className="w-3 h-3 shrink-0 text-emerald-400" />
+                                      <span className="truncate">
+                                        {topCoupon.code}
+                                        {topCoupon.minOrderAmount > 0
+                                          ? ` · Min ${formatTaka(topCoupon.minOrderAmount, sym)}`
+                                          : ` · ${formatCouponDiscountBadge(topCoupon, sym)}`}
+                                      </span>
+                                    </div>
+                                    <button
+                                      type="button"
+                                      onClick={() =>
+                                        void copyText(
+                                          topCoupon.code,
+                                          `coupon:${item.id}`,
+                                          `Coupon "${topCoupon.code}" copied!`
+                                        )
+                                      }
+                                      aria-label={`Copy coupon ${topCoupon.code}`}
+                                      className="text-[10px] font-bold text-amber-300 hover:text-amber-200 inline-flex items-center gap-0.5 shrink-0 cursor-pointer"
+                                    >
+                                      {copiedKey === `coupon:${item.id}` ? (
+                                        <>
+                                          <Check className="w-3 h-3 text-emerald-400" />
+                                          <span className="hidden sm:inline">Copied</span>
+                                        </>
+                                      ) : (
+                                        <>
+                                          <Copy className="w-3 h-3" />
+                                          <span className="hidden sm:inline">Copy</span>
+                                        </>
+                                      )}
+                                    </button>
+                                  </div>
                                 )}
                               </div>
-                              <button
-                                type="button"
-                                onClick={() => onSelectProduct(item.id)}
-                                className="text-[11px] sm:text-xs font-semibold text-slate-500 hover:text-slate-950 cursor-pointer whitespace-nowrap inline-flex items-center gap-0.5 group/link"
-                              >
-                                <span>Details</span>
-                                <ArrowRight className="w-3 h-3 opacity-60 group-hover/link:opacity-100 group-hover/link:translate-x-0.5 transition-all duration-150" />
-                              </button>
                             </div>
 
-                            <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
-                              <motion.button
-                                type="button"
-                                whileHover={prefersReducedMotion ? undefined : { y: -1 }}
-                                whileTap={prefersReducedMotion ? undefined : { scale: 0.96 }}
-                                transition={{ duration: 0.14 }}
-                                onClick={() => addToCart(item, 1, false)}
-                                className={`min-h-[38px] sm:min-h-[42px] px-2.5 sm:px-3 py-1.5 rounded-xl border text-[11px] sm:text-xs font-semibold transition-colors duration-200 cursor-pointer whitespace-nowrap inline-flex items-center justify-center gap-1.5 ${
-                                  isJustAdded
-                                    ? "border-emerald-300 bg-emerald-50 text-emerald-800"
-                                    : "border-slate-200/90 bg-white hover:bg-slate-50 hover:border-slate-300 text-slate-800"
-                                }`}
-                              >
-                                {isJustAdded ? (
-                                  <>
-                                    <Check className="w-3.5 h-3.5 text-emerald-600" />
-                                    <span>Added</span>
-                                  </>
-                                ) : (
-                                  <>
-                                    <ShoppingCart className="w-3.5 h-3.5 text-slate-500 hidden sm:inline" />
-                                    <span>Add to Cart</span>
-                                  </>
-                                )}
-                              </motion.button>
-                              <motion.button
-                                type="button"
-                                whileHover={prefersReducedMotion ? undefined : { y: -1 }}
-                                whileTap={prefersReducedMotion ? undefined : { scale: 0.96 }}
-                                transition={{ duration: 0.14 }}
-                                onClick={() => handleDirectCheckout(item, 1)}
-                                className="min-h-[38px] sm:min-h-[42px] px-2.5 sm:px-3 py-1.5 rounded-xl bg-[#0C111D] hover:bg-emerald-700 text-[11px] sm:text-xs font-semibold text-white transition-colors duration-200 cursor-pointer whitespace-nowrap inline-flex items-center justify-center gap-1 group/buy"
-                              >
-                                <span>Buy Now</span>
-                                <ArrowRight className="w-3.5 h-3.5 transition-transform duration-150 group-hover/buy:translate-x-0.5 hidden sm:inline" />
-                              </motion.button>
+                            {/* Bottom: Glowing Gold Price + Midnight-Navy & Gold Action Buttons */}
+                            <div className="px-3 sm:px-5 py-3 sm:py-4 border-t border-white/10 bg-[#081026]/80 space-y-2.5 sm:space-y-3">
+                              <div className="flex items-baseline justify-between gap-2">
+                                <div className="flex items-baseline gap-1.5 flex-wrap">
+                                  <span className="text-[15px] sm:text-xl font-mono font-extrabold tracking-tight text-amber-400 tabular-nums drop-shadow-[0_2px_8px_rgba(250,204,21,0.2)]">
+                                    {formatTaka(item.price, sym)}
+                                  </span>
+                                  {singleUnitCouponSavings > 0 && (
+                                    <span className="hidden sm:inline text-[11px] font-semibold text-emerald-400 tabular-nums">
+                                      Save {formatTaka(singleUnitCouponSavings, sym)}
+                                    </span>
+                                  )}
+                                </div>
+                                <button
+                                  type="button"
+                                  onClick={() => onSelectProduct(item.id)}
+                                  className="text-[11px] sm:text-xs font-semibold text-slate-300 hover:text-amber-300 cursor-pointer whitespace-nowrap inline-flex items-center gap-0.5 group/link"
+                                >
+                                  <span>Details</span>
+                                  <ArrowRight className="w-3 h-3 opacity-70 group-hover/link:opacity-100 group-hover/link:translate-x-0.5 transition-all duration-150" />
+                                </button>
+                              </div>
+
+                              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 sm:gap-2">
+                                <motion.button
+                                  type="button"
+                                  whileHover={prefersReducedMotion ? undefined : { y: -1 }}
+                                  whileTap={prefersReducedMotion ? undefined : { scale: 0.96 }}
+                                  transition={{ duration: 0.14 }}
+                                  onClick={() => addToCart(item, 1, false)}
+                                  className={`min-h-[38px] sm:min-h-[42px] px-2.5 sm:px-3 py-1.5 rounded-xl border text-[11px] sm:text-xs font-bold transition-colors duration-200 cursor-pointer whitespace-nowrap inline-flex items-center justify-center gap-1.5 ${
+                                    isJustAdded
+                                      ? "border-emerald-400/60 bg-emerald-500/20 text-emerald-300"
+                                      : "border-blue-400/30 bg-[#14234D]/85 hover:bg-[#1C2F66] hover:border-amber-400/50 text-slate-100"
+                                  }`}
+                                >
+                                  {isJustAdded ? (
+                                    <>
+                                      <Check className="w-3.5 h-3.5 text-emerald-400" />
+                                      <span>Added</span>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <ShoppingCart className="w-3.5 h-3.5 text-amber-400 hidden sm:inline" />
+                                      <span>Add to Cart</span>
+                                    </>
+                                  )}
+                                </motion.button>
+                                <motion.button
+                                  type="button"
+                                  whileHover={prefersReducedMotion ? undefined : { y: -1 }}
+                                  whileTap={prefersReducedMotion ? undefined : { scale: 0.96 }}
+                                  transition={{ duration: 0.14 }}
+                                  onClick={() => handleDirectCheckout(item, 1)}
+                                  className="min-h-[38px] sm:min-h-[42px] px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-400 hover:from-yellow-200 hover:to-amber-300 text-[11px] sm:text-xs font-extrabold text-[#071128] shadow-[0_4px_14px_rgba(250,204,21,0.25)] transition-all duration-200 cursor-pointer whitespace-nowrap inline-flex items-center justify-center gap-1 group/buy"
+                                >
+                                  <span>Buy Now</span>
+                                  <ArrowRight className="w-3.5 h-3.5 transition-transform duration-150 group-hover/buy:translate-x-0.5 hidden sm:inline stroke-[2.5]" />
+                                </motion.button>
+                              </div>
                             </div>
-                          </div>
-                        </motion.article>
-                      );
-                    })}
-                  </AnimatePresence>
-                </motion.div>
-              )}
-            </section>
+                          </motion.article>
+                        );
+                      })}
+                    </AnimatePresence>
+                  </motion.div>
+                )}
+              </section>
+            </div>
           </div>
         )}
       </main>
 
       {/* Quiet Storefront Footer */}
-      <footer className="mt-auto border-t border-slate-200 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-wrap items-center justify-between gap-4 text-xs text-slate-500">
+      <footer
+        className={`mt-auto border-t ${
+          isDarkCatalogView
+            ? "border-white/10 bg-[#060E24] text-slate-400"
+            : "border-slate-200 bg-white text-slate-500"
+        }`}
+      >
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 flex flex-wrap items-center justify-between gap-4 text-xs">
           <span>
             {siteName || "Lottery Winner"} Separate Shop Panel · Store Wallet, Agent Wallet, bKash &amp; Nagad
           </span>
@@ -3658,7 +3807,7 @@ export function ShopPage({
             <button
               type="button"
               onClick={onBackExit}
-              className="hover:text-slate-900 cursor-pointer"
+              className={`${isDarkCatalogView ? "hover:text-amber-300" : "hover:text-slate-900"} cursor-pointer`}
             >
               Return to Portal
             </button>
@@ -3666,7 +3815,7 @@ export function ShopPage({
               <button
                 type="button"
                 onClick={() => openPanelSection("orders")}
-                className="hover:text-slate-900 cursor-pointer"
+                className={`${isDarkCatalogView ? "hover:text-amber-300" : "hover:text-slate-900"} cursor-pointer`}
               >
                 My Orders
               </button>
@@ -3674,14 +3823,14 @@ export function ShopPage({
             <button
               type="button"
               onClick={onOpenWheel}
-              className="hover:text-slate-900 cursor-pointer"
+              className={`${isDarkCatalogView ? "hover:text-amber-300" : "hover:text-slate-900"} cursor-pointer`}
             >
               Lucky Wheel
             </button>
             <button
               type="button"
               onClick={openCartPage}
-              className="hover:text-slate-900 cursor-pointer"
+              className={`${isDarkCatalogView ? "hover:text-amber-300" : "hover:text-slate-900"} cursor-pointer`}
             >
               Cart ({cartItemCount})
             </button>
@@ -3690,7 +3839,7 @@ export function ShopPage({
       </footer>
       </div>
 
-      {/* Quick View Product Modal */}
+      {/* Quick View Product Modal (Matching Royal Midnight-Navy & Gold Theme) */}
       <AnimatePresence>
         {quickViewItem && (() => {
           const qvCoupons = getProductEffectiveCoupons(quickViewItem);
@@ -3703,7 +3852,7 @@ export function ShopPage({
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               transition={{ duration: 0.18 }}
-              className="fixed inset-0 z-50 bg-slate-950/60 backdrop-blur-xs flex items-center justify-center p-4"
+              className="fixed inset-0 z-50 bg-slate-950/75 backdrop-blur-xs flex items-center justify-center p-4"
               onClick={() => setQuickViewItem(null)}
             >
               <motion.div
@@ -3720,17 +3869,17 @@ export function ShopPage({
                     : { opacity: 0, scale: 0.96, y: 10 }
                 }
                 transition={{ duration: 0.24, ease: [0.16, 1, 0.3, 1] }}
-                className="w-full max-w-2xl rounded-2xl bg-white border border-slate-200 shadow-2xl overflow-hidden grid grid-cols-1 sm:grid-cols-2"
+                className="w-full max-w-2xl rounded-2xl bg-gradient-to-b from-[#111D3F] to-[#081026] border border-blue-400/30 text-white shadow-2xl overflow-hidden grid grid-cols-1 sm:grid-cols-2"
                 onClick={(e) => e.stopPropagation()}
               >
-                <div className="bg-[#ECEAE4] relative group">
+                <div className="bg-[#09122A] relative group">
                   <ProductImageFrame item={quickViewItem} aspectClass="aspect-[4/3] sm:aspect-auto sm:h-full" />
                 </div>
 
                 <div className="p-5 sm:p-6 flex flex-col justify-between gap-4">
                   <div className="space-y-3">
                     <div className="flex items-start justify-between gap-2">
-                      <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-500">
+                      <p className="text-[11px] font-semibold uppercase tracking-wider text-indigo-300">
                         {getShopCategoryLabel(qvCat)} ·{" "}
                         {qvMode === "auto_email" ? "Instant Email" : "Verified"}
                       </p>
@@ -3738,31 +3887,31 @@ export function ShopPage({
                         type="button"
                         onClick={() => setQuickViewItem(null)}
                         aria-label="Close quick view"
-                        className="p-1 rounded-lg text-slate-400 hover:text-slate-900 hover:bg-slate-100 cursor-pointer"
+                        className="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-white/10 cursor-pointer"
                       >
                         <X className="w-4 h-4" />
                       </button>
                     </div>
 
-                    <h3 className="text-lg font-bold text-slate-950 leading-snug">
+                    <h3 className="text-lg font-extrabold text-white leading-snug">
                       {quickViewItem.title}
                     </h3>
 
-                    <p className="font-mono text-2xl font-bold text-slate-950 tabular-nums">
+                    <p className="font-mono text-2xl font-extrabold text-amber-400 tabular-nums">
                       {formatTaka(quickViewItem.price, sym)}
                     </p>
 
-                    <p className="text-xs text-slate-600 leading-relaxed line-clamp-4">
+                    <p className="text-xs text-slate-300 leading-relaxed line-clamp-4">
                       {quickViewItem.description}
                     </p>
 
                     {qvCoupons.length > 0 && (
-                      <div className="rounded-lg border border-emerald-200 bg-emerald-50/70 p-2.5 space-y-1">
-                        <p className="text-[11px] font-bold text-emerald-900 flex items-center gap-1">
+                      <div className="rounded-xl border border-emerald-400/30 bg-emerald-500/10 p-2.5 space-y-1">
+                        <p className="text-[11px] font-bold text-emerald-300 flex items-center gap-1">
                           <TicketPercent className="w-3.5 h-3.5" />
                           Coupon {qvCoupons[0].code} · {formatCouponDiscountBadge(qvCoupons[0], sym)}
                         </p>
-                        <p className="text-[11px] text-emerald-800">
+                        <p className="text-[11px] text-emerald-200/80">
                           {qvCoupons[0].minOrderAmount > 0
                             ? `Min spend ${formatTaka(qvCoupons[0].minOrderAmount, sym)}`
                             : "No minimum spend"}
@@ -3774,25 +3923,25 @@ export function ShopPage({
                     )}
                   </div>
 
-                  <div className="space-y-3 pt-2 border-t border-slate-100">
+                  <div className="space-y-3 pt-2 border-t border-white/10">
                     <div className="flex items-center justify-between gap-2">
-                      <div className="inline-flex items-center rounded-lg border border-slate-200 bg-slate-50">
+                      <div className="inline-flex items-center rounded-xl border border-blue-400/25 bg-[#0D1838]">
                         <button
                           type="button"
                           onClick={() => setQuickViewQty((q) => Math.max(1, q - 1))}
                           aria-label="Decrease quantity"
-                          className="min-h-[36px] min-w-[36px] flex items-center justify-center text-slate-700 hover:bg-slate-200/70 rounded-l-lg cursor-pointer"
+                          className="min-h-[36px] min-w-[36px] flex items-center justify-center text-slate-200 hover:bg-white/10 rounded-l-xl cursor-pointer"
                         >
                           <Minus className="w-3.5 h-3.5" />
                         </button>
-                        <span className="w-9 text-center font-mono text-xs font-bold text-slate-900 tabular-nums">
+                        <span className="w-9 text-center font-mono text-xs font-bold text-white tabular-nums">
                           {quickViewQty}
                         </span>
                         <button
                           type="button"
                           onClick={() => setQuickViewQty((q) => Math.min(20, q + 1))}
                           aria-label="Increase quantity"
-                          className="min-h-[36px] min-w-[36px] flex items-center justify-center text-slate-700 hover:bg-slate-200/70 rounded-r-lg cursor-pointer"
+                          className="min-h-[36px] min-w-[36px] flex items-center justify-center text-slate-200 hover:bg-white/10 rounded-r-xl cursor-pointer"
                         >
                           <Plus className="w-3.5 h-3.5" />
                         </button>
@@ -3805,7 +3954,7 @@ export function ShopPage({
                           setQuickViewItem(null);
                           onSelectProduct(targetId);
                         }}
-                        className="text-xs font-semibold text-slate-600 hover:text-slate-950 underline cursor-pointer"
+                        className="text-xs font-semibold text-amber-300 hover:text-amber-200 underline cursor-pointer"
                       >
                         Full Product Page
                       </button>
@@ -3819,7 +3968,7 @@ export function ShopPage({
                           addToCart(quickViewItem, quickViewQty, false);
                           setQuickViewItem(null);
                         }}
-                        className="min-h-[42px] rounded-lg border border-slate-300 bg-white hover:bg-slate-50 text-xs font-semibold text-slate-900 cursor-pointer"
+                        className="min-h-[42px] rounded-xl border border-blue-400/30 bg-[#14234D] hover:bg-[#1D3068] text-xs font-bold text-white cursor-pointer"
                       >
                         Add to Cart
                       </motion.button>
@@ -3832,7 +3981,7 @@ export function ShopPage({
                           setQuickViewItem(null);
                           handleDirectCheckout(target, qty);
                         }}
-                        className="min-h-[42px] rounded-lg bg-[#0C111D] hover:bg-emerald-700 text-xs font-bold text-white cursor-pointer"
+                        className="min-h-[42px] rounded-xl bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-400 hover:from-yellow-200 hover:to-amber-300 text-xs font-extrabold text-[#071128] cursor-pointer"
                       >
                         Buy Now
                       </motion.button>

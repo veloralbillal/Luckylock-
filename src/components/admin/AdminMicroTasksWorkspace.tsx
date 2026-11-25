@@ -173,13 +173,13 @@ export function AdminMicroTasksWorkspace({
       if (editingTask) {
         const res = await apiRequest<{ message: string }>(
           `/api/admin/micro-tasks/${encodeURIComponent(editingTask.id)}`,
-          { method: "PUT", body: JSON.stringify(payload) }
+          { method: "PUT", body: payload }
         );
         showToast(res.message || "Task updated.", "success");
       } else {
         const res = await apiRequest<{ message: string }>("/api/admin/micro-tasks", {
           method: "POST",
-          body: JSON.stringify(payload),
+          body: payload,
         });
         showToast(res.message || "Micro-task published.", "success");
       }
@@ -199,7 +199,7 @@ export function AdminMicroTasksWorkspace({
     try {
       await apiRequest(`/api/admin/micro-tasks/${encodeURIComponent(task.id)}`, {
         method: "PUT",
-        body: JSON.stringify({ isActive: !task.isActive }),
+        body: { isActive: !task.isActive },
       });
       showToast(task.isActive ? "Task paused." : "Task resumed.", "success");
       await loadData(true);
@@ -238,7 +238,7 @@ export function AdminMicroTasksWorkspace({
         `/api/admin/micro-tasks/submissions/${encodeURIComponent(sub.id)}/review`,
         {
           method: "POST",
-          body: JSON.stringify({ decision, adminNote }),
+          body: { decision, adminNote },
         }
       );
       showToast(res.message, decision === "approve" ? "success" : "info");

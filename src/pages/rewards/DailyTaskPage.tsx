@@ -238,11 +238,11 @@ export function DailyTaskPage({
         `/api/micro-tasks/${encodeURIComponent(selectedTask.id)}/submit`,
         {
           method: "POST",
-          body: JSON.stringify({
+          body: {
             proofNote: proofNote.trim(),
             proofImageDataUrl: proofImageDataUrl || undefined,
             clickedAt: clickedAtIso,
-          }),
+          },
         }
       );
       showToast(res.message || "Proof submitted for admin review!", "success");

@@ -6,6 +6,7 @@ import path from "path";
 import { createServer as createViteServer } from "vite";
 import { getDbSnapshot } from "./server/db";
 import { attachChatWebSocket } from "./server/realtime/chatHub";
+import { attachSupportWebSocket } from "./server/realtime/supportHub";
 import { createApiRouter } from "./server/routes/api";
 import { syncCampaignStatuses } from "./server/services/lotteryService";
 
@@ -55,6 +56,7 @@ async function startServer() {
 
   const httpServer = http.createServer(app);
   attachChatWebSocket(httpServer);
+  attachSupportWebSocket(httpServer);
 
   httpServer.listen(PORT, "0.0.0.0", () => {
     console.log(`[Lottery Winner] Server listening on http://0.0.0.0:${PORT}`);

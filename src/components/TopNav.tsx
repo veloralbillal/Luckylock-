@@ -1,8 +1,8 @@
-import { ClipboardCheck, Home, MessageSquare, ShoppingBag, User, Wallet } from "lucide-react";
+import { Home, MessageSquare, ShoppingBag, User, Wallet } from "lucide-react";
 import type { PublicUser } from "../types/lottery";
 import { UserAvatar } from "./UserAvatar";
 
-export type NavTarget = "home" | "daily-task" | "shop" | "profile" | "chat" | "wallet" | "admin" | "agent";
+export type NavTarget = "home" | "shop" | "profile" | "chat" | "wallet" | "admin" | "agent";
 
 interface TopNavProps {
   siteName: string;
@@ -18,7 +18,6 @@ const DESKTOP_LINKS: Array<{
   label: string;
 }> = [
   { id: "home", label: "Home" },
-  { id: "daily-task", label: "Daily Tasks" },
   { id: "shop", label: "Shop" },
   { id: "profile", label: "Profile" },
   { id: "chat", label: "Chat" },
@@ -53,7 +52,7 @@ export function TopNav({
           {/* Zone 2: Clean Single-Line Text Navigation Links (Desktop) */}
           <nav
             aria-label="Primary navigation"
-            className="hidden md:flex items-center gap-6"
+            className="hidden md:flex items-center gap-7"
           >
             {DESKTOP_LINKS.map((item) => {
               const active = activeNav === item.id;
@@ -116,75 +115,78 @@ export function TopNav({
         </div>
       </header>
 
-      {/* Mobile Bottom Navigation Bar — Thumb-Friendly Dark Navy & Gold */}
+      {/* Responsive Bottom Navigation Bar — Symmetrical 5-Menu Dark Navy & Gold */}
       <nav
         aria-label="Mobile navigation"
-        className="md:hidden fixed bottom-0 inset-x-0 z-40 h-16 bg-[#060D1E]/95 backdrop-blur-md border-t border-amber-400/20 px-1 grid grid-cols-6 items-center shadow-[0_-4px_20px_rgba(6,13,30,0.28)]"
+        className="md:hidden fixed bottom-0 inset-x-0 z-40 h-16 bg-[#060D1E]/95 backdrop-blur-lg border-t border-amber-400/20 px-2 pb-[env(safe-area-inset-bottom)] grid grid-cols-5 items-center shadow-[0_-6px_24px_rgba(6,13,30,0.35)]"
       >
+        {/* 1. Home */}
         <button
           type="button"
           onClick={() => onNavigate("home")}
-          className={`relative min-h-[48px] flex flex-col items-center justify-center gap-1 text-[10px] font-semibold tracking-tight whitespace-nowrap cursor-pointer active:scale-95 transition-transform ${
+          aria-current={activeNav === "home" ? "page" : undefined}
+          className={`relative min-h-[52px] flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold tracking-tight whitespace-nowrap cursor-pointer active:scale-95 transition-all ${
             activeNav === "home" ? "text-amber-300" : "text-slate-400 hover:text-slate-200"
           }`}
         >
           {activeNav === "home" && (
-            <span className="absolute top-0 w-5 h-0.5 rounded-full bg-amber-400" />
+            <span className="absolute top-0 w-7 h-0.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
           )}
-          <Home className="w-[18px] h-[18px]" />
+          <span
+            className={`w-9 h-7 rounded-xl flex items-center justify-center transition-colors ${
+              activeNav === "home" ? "bg-amber-400/15 text-amber-300" : "bg-transparent"
+            }`}
+          >
+            <Home className="w-[19px] h-[19px]" />
+          </span>
           <span>Home</span>
         </button>
 
-        <button
-          type="button"
-          onClick={() => onNavigate("daily-task")}
-          className={`relative min-h-[48px] flex flex-col items-center justify-center gap-1 text-[10px] font-semibold tracking-tight whitespace-nowrap cursor-pointer active:scale-95 transition-transform ${
-            activeNav === "daily-task" ? "text-amber-300" : "text-slate-400 hover:text-slate-200"
-          }`}
-        >
-          {activeNav === "daily-task" && (
-            <span className="absolute top-0 w-5 h-0.5 rounded-full bg-amber-400" />
-          )}
-          <ClipboardCheck className="w-[18px] h-[18px]" />
-          <span>Tasks</span>
-        </button>
-
+        {/* 2. Shop */}
         <button
           type="button"
           onClick={() => onNavigate("shop")}
-          className={`relative min-h-[48px] flex flex-col items-center justify-center gap-1 text-[10px] font-semibold tracking-tight whitespace-nowrap cursor-pointer active:scale-95 transition-transform ${
+          aria-current={activeNav === "shop" ? "page" : undefined}
+          className={`relative min-h-[52px] flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold tracking-tight whitespace-nowrap cursor-pointer active:scale-95 transition-all ${
             activeNav === "shop" ? "text-amber-300" : "text-slate-400 hover:text-slate-200"
           }`}
         >
           {activeNav === "shop" && (
-            <span className="absolute top-0 w-5 h-0.5 rounded-full bg-amber-400" />
+            <span className="absolute top-0 w-7 h-0.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
           )}
-          <ShoppingBag className="w-[18px] h-[18px]" />
+          <span
+            className={`w-9 h-7 rounded-xl flex items-center justify-center transition-colors ${
+              activeNav === "shop" ? "bg-amber-400/15 text-amber-300" : "bg-transparent"
+            }`}
+          >
+            <ShoppingBag className="w-[19px] h-[19px]" />
+          </span>
           <span>Shop</span>
         </button>
 
-        {/* Elevated Profile Anchor */}
+        {/* 3. Profile (Centered Elevated Anchor) */}
         <button
           type="button"
           onClick={() => onNavigate("profile")}
           aria-label="Profile"
-          className="flex flex-col items-center justify-center -mt-3.5 cursor-pointer active:scale-95 transition-transform"
+          aria-current={activeNav === "profile" ? "page" : undefined}
+          className="relative flex flex-col items-center justify-center -mt-4 cursor-pointer active:scale-95 transition-transform"
         >
           <span
-            className={`w-10 h-10 rounded-full flex items-center justify-center shadow-lg border-2 transition-colors overflow-hidden ${
+            className={`w-11 h-11 rounded-full flex items-center justify-center shadow-lg border-2 transition-all overflow-hidden ${
               activeNav === "profile"
-                ? "border-amber-400 bg-amber-400 text-[#060D1E]"
-                : "border-[#060D1E] bg-[#132650] text-amber-300 ring-1 ring-amber-400/35"
+                ? "border-amber-300 bg-amber-400 text-[#060D1E] ring-4 ring-amber-400/25 shadow-amber-500/25"
+                : "border-[#060D1E] bg-[#132650] text-amber-300 ring-1 ring-amber-400/40"
             }`}
           >
             {user?.avatarUrl ? (
               <UserAvatar src={user.avatarUrl} name={user.fullName || user.username} size="sm" />
             ) : (
-              <User className="w-[18px] h-[18px]" />
+              <User className="w-5 h-5" />
             )}
           </span>
           <span
-            className={`mt-0.5 text-[10px] font-bold whitespace-nowrap ${
+            className={`mt-0.5 text-[11px] font-bold whitespace-nowrap transition-colors ${
               activeNav === "profile" ? "text-amber-300" : "text-slate-300"
             }`}
           >
@@ -192,34 +194,51 @@ export function TopNav({
           </span>
         </button>
 
+        {/* 4. Chat */}
         <button
           type="button"
           onClick={() => onNavigate("chat")}
-          className={`relative min-h-[48px] flex flex-col items-center justify-center gap-1 text-[10px] font-semibold tracking-tight whitespace-nowrap cursor-pointer active:scale-95 transition-transform ${
+          aria-current={activeNav === "chat" ? "page" : undefined}
+          className={`relative min-h-[52px] flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold tracking-tight whitespace-nowrap cursor-pointer active:scale-95 transition-all ${
             activeNav === "chat" ? "text-amber-300" : "text-slate-400 hover:text-slate-200"
           }`}
         >
           {activeNav === "chat" && (
-            <span className="absolute top-0 w-5 h-0.5 rounded-full bg-amber-400" />
+            <span className="absolute top-0 w-7 h-0.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
           )}
-          <MessageSquare className="w-[18px] h-[18px]" />
+          <span
+            className={`w-9 h-7 rounded-xl flex items-center justify-center transition-colors ${
+              activeNav === "chat" ? "bg-amber-400/15 text-amber-300" : "bg-transparent"
+            }`}
+          >
+            <MessageSquare className="w-[19px] h-[19px]" />
+          </span>
           <span>Chat</span>
         </button>
 
+        {/* 5. Wallet */}
         <button
           type="button"
           onClick={() => onNavigate("wallet")}
-          className={`relative min-h-[48px] flex flex-col items-center justify-center gap-1 text-[10px] font-semibold tracking-tight whitespace-nowrap cursor-pointer active:scale-95 transition-transform ${
+          aria-current={activeNav === "wallet" ? "page" : undefined}
+          className={`relative min-h-[52px] flex flex-col items-center justify-center gap-0.5 text-[11px] font-semibold tracking-tight whitespace-nowrap cursor-pointer active:scale-95 transition-all ${
             activeNav === "wallet" ? "text-amber-300" : "text-slate-400 hover:text-slate-200"
           }`}
         >
           {activeNav === "wallet" && (
-            <span className="absolute top-0 w-5 h-0.5 rounded-full bg-amber-400" />
+            <span className="absolute top-0 w-7 h-0.5 rounded-full bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.8)]" />
           )}
-          <Wallet className="w-[18px] h-[18px]" />
+          <span
+            className={`w-9 h-7 rounded-xl flex items-center justify-center transition-colors ${
+              activeNav === "wallet" ? "bg-amber-400/15 text-amber-300" : "bg-transparent"
+            }`}
+          >
+            <Wallet className="w-[19px] h-[19px]" />
+          </span>
           <span>Wallet</span>
         </button>
       </nav>
     </>
   );
 }
+

@@ -12,6 +12,7 @@ import {
   FileText,
   Gift,
   Globe,
+  Headphones,
   Inbox,
   Layers,
   LogOut,
@@ -60,6 +61,7 @@ import { AdminServerWorkspace } from "../components/admin/AdminServerWorkspace";
 import { AdminAddShopProductWorkspace } from "../components/admin/AdminAddShopProductWorkspace";
 import { AdminShopWorkspace } from "../components/admin/AdminShopWorkspace";
 import { AdminSmtpWorkspace } from "../components/admin/AdminSmtpWorkspace";
+import { AdminSupportWorkspace } from "../components/admin/AdminSupportWorkspace";
 import { AdminTicketsWorkspace } from "../components/admin/AdminTicketsWorkspace";
 import { AdminVideoPromoWorkspace } from "../components/admin/AdminVideoPromoWorkspace";
 import { ShopCouponsWorkspace } from "../components/shop/ShopCouponsWorkspace";
@@ -83,6 +85,7 @@ import type {
 type AdminTab =
   | "overview"
   | "inbox"
+  | "live-support"
   | "shop-orders"
   | "shop-add-product"
   | "shop-coupons"
@@ -118,6 +121,7 @@ interface AdminDashboardProps {
   onOpenShop?: () => void;
   onLogout: () => void;
   onOpenInboxConversation?: (target: { userId: string; conversationKey?: string | null }) => void;
+  onOpenSupportRepPortal?: () => void;
 }
 
 interface PrizeDraft {
@@ -144,6 +148,7 @@ export function AdminDashboard({
   onOpenShop,
   onLogout,
   onOpenInboxConversation,
+  onOpenSupportRepPortal,
 }: AdminDashboardProps) {
   const { showToast } = useToast();
   const [tab, setTab] = useState<AdminTab>(initialTab || "overview");
@@ -641,6 +646,7 @@ export function AdminDashboard({
   }> = [
     { id: "overview", label: "Overview", icon: BarChart3 },
     { id: "inbox", label: "Inbox", icon: Inbox, badge: data?.stats.unreadInboxCount },
+    { id: "live-support", label: "Live Support", icon: Headphones },
     { id: "shop-orders", label: "Shop & Orders", icon: ShoppingBag, badge: data?.stats.pendingShopOrdersCount },
     { id: "shop-add-product", label: "Product Manager", icon: PackagePlus, badge: data?.stats.pendingShopApprovalCount },
     { id: "shop-coupons", label: "Coupon Codes", icon: TicketPercent },
@@ -692,7 +698,7 @@ export function AdminDashboard({
   const activeNavMeta = navItems.find((n) => n.id === tab) || navItems[0];
 
   const navGroups: Array<{ title: string; ids: AdminTab[] }> = [
-    { title: "Operations", ids: ["overview", "inbox", "micro-tasks", "shop-orders", "shop-add-product", "shop-coupons", "smtp", "campaigns", "categories", "tickets", "results"] },
+    { title: "Operations", ids: ["overview", "inbox", "live-support", "micro-tasks", "shop-orders", "shop-add-product", "shop-coupons", "smtp", "campaigns", "categories", "tickets", "results"] },
     { title: "Payment & Agents", ids: ["payments", "gateways", "brand", "withdrawals", "agents", "sub-agents", "users"] },
     {
       title: "Reports & Website",
@@ -2249,6 +2255,13 @@ export function AdminDashboard({
 
                 {tab === "server" && (
                   <AdminServerWorkspace canEdit={currentUser.role === "admin"} />
+                )}
+
+                {tab === "live-support" && (
+                  <AdminSupportWorkspace
+                    currencySymbol={sym}
+                    onOpenRepPortal={onOpenSupportRepPortal}
+                  />
                 )}
 
                 {tab === "micro-tasks" && (

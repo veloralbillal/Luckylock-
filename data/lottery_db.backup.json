@@ -16,7 +16,7 @@
       "securityPinHash": "d8c2ee275ebf573364a1d28adb590266:f35e97b3769ef2fd09473480692d448a6fa2cbffcf914694e0c157952433c366c76b2c779c3c139c99db83f3d6749beac4395eeba47ce6fce62ac95cf7f48163",
       "pinLockEnabled": false,
       "createdAt": "2026-11-10T07:58:27.065Z",
-      "updatedAt": "2026-11-23T12:51:53.971Z",
+      "updatedAt": "2026-11-24T09:04:40.129Z",
       "avatarUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23881337%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F43F5E%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2244%22%20r%3D%2218%22%20fill%3D%22rgba(255%2C255%2C255%2C0.2)%22%2F%3E%3Cpath%20d%3D%22M26%20106c6-20%2020-30%2034-30s28%2010%2034%2030%22%20fill%3D%22rgba(255%2C255%2C255%2C0.18)%22%2F%3E%3Ctext%20x%3D%2260%22%20y%3D%2270%22%20text-anchor%3D%22middle%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-size%3D%2238%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20letter-spacing%3D%221%22%3ESA%3C%2Ftext%3E%3C%2Fsvg%3E",
       "spinCredits": 2,
       "otpSecret": "89df75fe9a915c5021361b067881672f823345da",
@@ -66,7 +66,7 @@
       "securityPinHash": "f49a28c609e31cdc5f19c72bf45fe853:9ca1e95e10beba2c379f84cc02d994ac9945d38313dcb6f291f170292b4270c45b7771e48073b110e68ecddcebcf7aca56788a4ed2bd8b2c18b364d1c67d69ee",
       "pinLockEnabled": false,
       "createdAt": "2026-11-13T15:58:27.065Z",
-      "updatedAt": "2026-11-21T12:53:29.571Z",
+      "updatedAt": "2026-11-24T09:04:40.216Z",
       "avatarUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23581C87%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23A855F7%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2244%22%20r%3D%2218%22%20fill%3D%22rgba(255%2C255%2C255%2C0.2)%22%2F%3E%3Cpath%20d%3D%22M26%20106c6-20%2020-30%2034-30s28%2010%2034%2030%22%20fill%3D%22rgba(255%2C255%2C255%2C0.18)%22%2F%3E%3Ctext%20x%3D%2260%22%20y%3D%2270%22%20text-anchor%3D%22middle%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-size%3D%2238%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20letter-spacing%3D%221%22%3EAR%3C%2Ftext%3E%3C%2Fsvg%3E",
       "spinCredits": 3,
       "dateOfBirth": "2026-11-21",
@@ -2334,6 +2334,109 @@
     }
   },
   "auditLogs": [
+    {
+      "id": "audit_mwuljkwk_e87b38fe",
+      "actorId": "srep_sara",
+      "actorUsername": "rep_sara",
+      "action": "SUPPORT_CHAT_CLOSED_BY_REP",
+      "targetType": "support_chat",
+      "targetId": "schat_mwuljjzx_1d4a6391",
+      "details": {
+        "ticketCode": "SUP-420447",
+        "autoAssignedNextId": null
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-24T11:13:35.636Z"
+    },
+    {
+      "id": "audit_mwuljkw9_88aebae5",
+      "actorId": "srep_rafi",
+      "actorUsername": "rep_rafi",
+      "action": "SUPPORT_CHAT_TRANSFERRED",
+      "targetType": "support_chat",
+      "targetId": "schat_mwuljjzx_1d4a6391",
+      "details": {
+        "fromRepId": "srep_rafi",
+        "toRepId": "srep_sara",
+        "reason": "Transferring to specialist"
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-24T11:13:35.625Z"
+    },
+    {
+      "id": "audit_mwuljkvl_d5c2b71b",
+      "actorId": "srep_sara",
+      "actorUsername": "rep_sara",
+      "action": "SUPPORT_CHAT_CLOSED_BY_REP",
+      "targetType": "support_chat",
+      "targetId": "schat_mwuljjyr_47fcc696",
+      "details": {
+        "ticketCode": "SUP-505940",
+        "autoAssignedNextId": null
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-24T11:13:35.601Z"
+    },
+    {
+      "id": "audit_mwuljjzz_19379536",
+      "actorId": null,
+      "actorUsername": "E2E Customer Beta",
+      "action": "SUPPORT_CHAT_STARTED",
+      "targetType": "support_chat",
+      "targetId": "schat_mwuljjzx_1d4a6391",
+      "details": {
+        "ticketCode": "SUP-420447",
+        "customerPhone": "01799003344",
+        "status": "waiting",
+        "assignedRepId": null
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-24T11:13:34.463Z"
+    },
+    {
+      "id": "audit_mwuljjys_6f713ccb",
+      "actorId": null,
+      "actorUsername": "E2E Customer Alpha",
+      "action": "SUPPORT_CHAT_STARTED",
+      "targetType": "support_chat",
+      "targetId": "schat_mwuljjyr_47fcc696",
+      "details": {
+        "ticketCode": "SUP-505940",
+        "customerPhone": "01799001122",
+        "status": "active",
+        "assignedRepId": "srep_sara"
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-24T11:13:34.420Z"
+    },
+    {
+      "id": "audit_mwuljjvw_575942d0",
+      "actorId": "srep_rafi",
+      "actorUsername": "rep_rafi",
+      "action": "SUPPORT_REP_LOGIN",
+      "targetType": "support_representative",
+      "targetId": "srep_rafi",
+      "details": {
+        "status": "offline",
+        "activeCount": 0
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-24T11:13:34.316Z"
+    },
+    {
+      "id": "audit_mwuljjtg_92cb7d2b",
+      "actorId": "srep_sara",
+      "actorUsername": "rep_sara",
+      "action": "SUPPORT_REP_LOGIN",
+      "targetType": "support_representative",
+      "targetId": "srep_sara",
+      "details": {
+        "status": "offline",
+        "activeCount": 0
+      },
+      "ipAddress": "127.0.0.1",
+      "createdAt": "2026-11-24T11:13:34.229Z"
+    },
     {
       "id": "audit_mwt9m5gi_0e3c3bff",
       "actorId": "u_admin_01",
@@ -7716,30 +7819,386 @@
       "completedAt": "2026-11-21T12:20:48.239Z"
     }
   ],
-  "shopCoupons": [
-    {
-      "id": "cpn_mwt9m5gi_ee917c6e",
-      "code": "TESTVIP6558",
-      "title": "Test Targeted Coupon",
-      "discountType": "percent",
-      "discountValue": 15,
-      "maxDiscount": null,
-      "minOrderAmount": 598,
-      "appliesToAllProducts": false,
-      "applicableProductIds": [
-        "shop_dig_canva"
+  "shopCoupons": [],
+  "microTasks": [],
+  "microTaskSubmissions": [],
+  "liveSupport": {
+    "departments": [
+      {
+        "id": "sdept_general",
+        "name": "General Support",
+        "slug": "general",
+        "description": "General account questions, draws, and platform guidance.",
+        "isActive": true,
+        "createdAt": "2026-11-24T11:12:58.776Z",
+        "updatedAt": "2026-11-24T11:12:58.776Z"
+      },
+      {
+        "id": "sdept_payments",
+        "name": "Payments & Wallet",
+        "slug": "payments",
+        "description": "Deposits, Bangla QR payments, withdrawals, and balance checks.",
+        "isActive": true,
+        "createdAt": "2026-11-24T11:12:58.776Z",
+        "updatedAt": "2026-11-24T11:12:58.776Z"
+      },
+      {
+        "id": "sdept_shop",
+        "name": "Shop & Orders",
+        "slug": "shop",
+        "description": "Digital products, order delivery, coupons, and refunds.",
+        "isActive": true,
+        "createdAt": "2026-11-24T11:12:58.776Z",
+        "updatedAt": "2026-11-24T11:12:58.776Z"
+      },
+      {
+        "id": "sdept_security",
+        "name": "Account & Security",
+        "slug": "security",
+        "description": "Login issues, OTP verification, and account recovery.",
+        "isActive": true,
+        "createdAt": "2026-11-24T11:12:58.776Z",
+        "updatedAt": "2026-11-24T11:12:58.776Z"
+      }
+    ],
+    "representatives": [
+      {
+        "id": "srep_sara",
+        "name": "Sara Rahman",
+        "username": "rep_sara",
+        "email": "sara.support@lotterywinner.local",
+        "phone": "01711-880101",
+        "passwordHash": "192fc18a5a4612052a7689bc14658f17:c6c33b1c4fca1786af71d209d038785d187ae6fabee889ed4393808c5e570307a1acdda4ffef6e7e7bcdd2c2ead21267f9f88b2c6aa5a4c96e1e0cab1442a4e6",
+        "avatarUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%23065F46%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%2310B981%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2244%22%20r%3D%2218%22%20fill%3D%22rgba(255%2C255%2C255%2C0.2)%22%2F%3E%3Cpath%20d%3D%22M26%20106c6-20%2020-30%2034-30s28%2010%2034%2030%22%20fill%3D%22rgba(255%2C255%2C255%2C0.18)%22%2F%3E%3Ctext%20x%3D%2260%22%20y%3D%2270%22%20text-anchor%3D%22middle%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-size%3D%2238%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20letter-spacing%3D%221%22%3ESR%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "departmentId": "sdept_general",
+        "status": "online",
+        "accountStatus": "active",
+        "maxActiveChats": 1,
+        "lastAssignedAt": "2026-11-24T11:13:35.625Z",
+        "lastSeenAt": "2026-11-24T11:13:35.534Z",
+        "createdAt": "2026-11-24T11:12:58.776Z",
+        "updatedAt": "2026-11-24T11:13:35.636Z"
+      },
+      {
+        "id": "srep_rafi",
+        "name": "Rafiul Karim",
+        "username": "rep_rafi",
+        "email": "rafi.support@lotterywinner.local",
+        "phone": "01811-880102",
+        "passwordHash": "fc4a83fa027c60ccf3837bf7cf9e5cb4:073932f1aaf2ae6db7af97ce804616aa84719921303f43799839821c67a0ccc7c2bd6737750ee2a161122f38eff2bcd1b27da9faa2b5f82f0e3bf09d15a0632c",
+        "avatarUrl": "data:image/svg+xml;utf8,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%20120%20120%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%25%22%20stop-color%3D%22%237C2D12%22%2F%3E%3Cstop%20offset%3D%22100%25%22%20stop-color%3D%22%23F59E0B%22%2F%3E%3C%2FlinearGradient%3E%3C%2Fdefs%3E%3Crect%20width%3D%22120%22%20height%3D%22120%22%20rx%3D%2260%22%20fill%3D%22url(%23g)%22%2F%3E%3Ccircle%20cx%3D%2260%22%20cy%3D%2244%22%20r%3D%2218%22%20fill%3D%22rgba(255%2C255%2C255%2C0.2)%22%2F%3E%3Cpath%20d%3D%22M26%20106c6-20%2020-30%2034-30s28%2010%2034%2030%22%20fill%3D%22rgba(255%2C255%2C255%2C0.18)%22%2F%3E%3Ctext%20x%3D%2260%22%20y%3D%2270%22%20text-anchor%3D%22middle%22%20font-family%3D%22system-ui%2C%20-apple-system%2C%20sans-serif%22%20font-size%3D%2238%22%20font-weight%3D%22700%22%20fill%3D%22%23ffffff%22%20letter-spacing%3D%221%22%3ERK%3C%2Ftext%3E%3C%2Fsvg%3E",
+        "departmentId": "sdept_payments",
+        "status": "online",
+        "accountStatus": "active",
+        "maxActiveChats": 1,
+        "lastAssignedAt": "2026-11-24T11:13:35.587Z",
+        "lastSeenAt": "2026-11-24T11:13:35.587Z",
+        "createdAt": "2026-11-24T11:12:58.776Z",
+        "updatedAt": "2026-11-24T11:13:35.625Z"
+      }
+    ],
+    "chats": [
+      {
+        "id": "schat_mwuljjzx_1d4a6391",
+        "ticketCode": "SUP-420447",
+        "customerUserId": null,
+        "customerName": "E2E Customer Beta",
+        "customerPhone": "01799003344",
+        "customerEmail": null,
+        "departmentId": "sdept_payments",
+        "representativeId": "srep_sara",
+        "status": "closed",
+        "queueEnteredAt": "2026-11-24T11:13:34.461Z",
+        "assignedAt": "2026-11-24T11:13:35.625Z",
+        "closedAt": "2026-11-24T11:13:35.636Z",
+        "closedByType": "representative",
+        "closedById": "srep_sara",
+        "lastMessagePreview": "Sara Rahman closed the conversation. Please rate your experience below.",
+        "lastMessageAt": "2026-11-24T11:13:35.636Z",
+        "customerUnreadCount": 0,
+        "repUnreadCount": 1,
+        "createdAt": "2026-11-24T11:13:34.461Z",
+        "updatedAt": "2026-11-24T11:13:35.636Z"
+      },
+      {
+        "id": "schat_mwuljjyr_47fcc696",
+        "ticketCode": "SUP-505940",
+        "customerUserId": null,
+        "customerName": "E2E Customer Alpha",
+        "customerPhone": "01799001122",
+        "customerEmail": null,
+        "departmentId": "sdept_general",
+        "representativeId": "srep_sara",
+        "status": "closed",
+        "queueEnteredAt": "2026-11-24T11:13:34.418Z",
+        "assignedAt": "2026-11-24T11:13:34.420Z",
+        "closedAt": "2026-11-24T11:13:35.601Z",
+        "closedByType": "representative",
+        "closedById": "srep_sara",
+        "lastMessagePreview": "Sara Rahman closed the conversation. Please rate your experience below.",
+        "lastMessageAt": "2026-11-24T11:13:35.601Z",
+        "customerUnreadCount": 1,
+        "repUnreadCount": 0,
+        "createdAt": "2026-11-24T11:13:34.418Z",
+        "updatedAt": "2026-11-24T11:13:35.601Z"
+      }
+    ],
+    "messages": [
+      {
+        "id": "smsg_mwuljjyr_a4107856",
+        "chatId": "schat_mwuljjyr_47fcc696",
+        "senderType": "system",
+        "senderId": null,
+        "senderName": "System",
+        "body": "Welcome to Live Support! A dedicated support representative will assist you shortly.",
+        "attachmentIds": [],
+        "deliveredAt": "2026-11-24T11:13:34.419Z",
+        "readAt": "2026-11-24T11:13:34.419Z",
+        "createdAt": "2026-11-24T11:13:34.419Z"
+      },
+      {
+        "id": "smsg_mwuljjys_e866e63e",
+        "chatId": "schat_mwuljjyr_47fcc696",
+        "senderType": "customer",
+        "senderId": null,
+        "senderName": "E2E Customer Alpha",
+        "body": "Hello, I need help with my ticket.",
+        "attachmentIds": [],
+        "deliveredAt": "2026-11-24T11:13:34.418Z",
+        "readAt": "2026-11-24T11:13:35.572Z",
+        "createdAt": "2026-11-24T11:13:34.418Z"
+      },
+      {
+        "id": "smsg_mwuljjys_11f02f6b",
+        "chatId": "schat_mwuljjyr_47fcc696",
+        "senderType": "system",
+        "senderId": null,
+        "senderName": "System",
+        "body": "Sara Rahman joined the conversation.",
+        "attachmentIds": [],
+        "deliveredAt": "2026-11-24T11:13:34.420Z",
+        "readAt": "2026-11-24T11:13:34.420Z",
+        "createdAt": "2026-11-24T11:13:34.420Z"
+      },
+      {
+        "id": "smsg_mwuljjzy_da47621e",
+        "chatId": "schat_mwuljjzx_1d4a6391",
+        "senderType": "system",
+        "senderId": null,
+        "senderName": "System",
+        "body": "Welcome to Live Support! A dedicated support representative will assist you shortly.",
+        "attachmentIds": [],
+        "deliveredAt": "2026-11-24T11:13:34.462Z",
+        "readAt": "2026-11-24T11:13:34.462Z",
+        "createdAt": "2026-11-24T11:13:34.462Z"
+      },
+      {
+        "id": "smsg_mwuljjzy_6aa9212d",
+        "chatId": "schat_mwuljjzx_1d4a6391",
+        "senderType": "customer",
+        "senderId": null,
+        "senderName": "E2E Customer Beta",
+        "body": "Hello, I need deposit help.",
+        "attachmentIds": [],
+        "deliveredAt": "2026-11-24T11:13:34.461Z",
+        "readAt": null,
+        "createdAt": "2026-11-24T11:13:34.461Z"
+      },
+      {
+        "id": "smsg_mwuljjzy_c4377ea3",
+        "chatId": "schat_mwuljjzx_1d4a6391",
+        "senderType": "system",
+        "senderId": null,
+        "senderName": "System",
+        "body": "All representatives are currently assisting other customers. You are in the live queue and will be connected automatically as soon as the next representative is free.",
+        "attachmentIds": [],
+        "deliveredAt": "2026-11-24T11:13:34.462Z",
+        "readAt": "2026-11-24T11:13:34.462Z",
+        "createdAt": "2026-11-24T11:13:34.462Z"
+      },
+      {
+        "id": "smsg_mwuljkkx_8f16bf8c",
+        "chatId": "schat_mwuljjyr_47fcc696",
+        "senderType": "customer",
+        "senderId": null,
+        "senderName": "E2E Customer Alpha",
+        "body": "Here is my screenshot",
+        "attachmentIds": [
+          "satt_mwuljkkv_192857e3"
+        ],
+        "deliveredAt": "2026-11-24T11:13:35.214Z",
+        "readAt": "2026-11-24T11:13:35.572Z",
+        "createdAt": "2026-11-24T11:13:35.214Z"
+      },
+      {
+        "id": "smsg_mwuljktq_b2c123a8",
+        "chatId": "schat_mwuljjyr_47fcc696",
+        "senderType": "representative",
+        "senderId": "srep_sara",
+        "senderName": "Sara Rahman",
+        "body": "Hi! I received your screenshot and am checking it now.",
+        "attachmentIds": [],
+        "deliveredAt": "2026-11-24T11:13:35.534Z",
+        "readAt": null,
+        "createdAt": "2026-11-24T11:13:35.534Z"
+      },
+      {
+        "id": "smsg_mwuljkv7_b81b74b1",
+        "chatId": "schat_mwuljjzx_1d4a6391",
+        "senderType": "system",
+        "senderId": null,
+        "senderName": "System",
+        "body": "Rafiul Karim joined the conversation.",
+        "attachmentIds": [],
+        "deliveredAt": "2026-11-24T11:13:35.587Z",
+        "readAt": "2026-11-24T11:13:35.587Z",
+        "createdAt": "2026-11-24T11:13:35.587Z"
+      },
+      {
+        "id": "smsg_mwuljkvl_5cac42ab",
+        "chatId": "schat_mwuljjyr_47fcc696",
+        "senderType": "system",
+        "senderId": null,
+        "senderName": "System",
+        "body": "Sara Rahman closed the conversation. Please rate your experience below.",
+        "attachmentIds": [],
+        "deliveredAt": "2026-11-24T11:13:35.601Z",
+        "readAt": "2026-11-24T11:13:35.601Z",
+        "createdAt": "2026-11-24T11:13:35.601Z"
+      },
+      {
+        "id": "smsg_mwuljkw9_edb3a34e",
+        "chatId": "schat_mwuljjzx_1d4a6391",
+        "senderType": "system",
+        "senderId": null,
+        "senderName": "System",
+        "body": "Conversation transferred to Sara Rahman (Transferring to specialist).",
+        "attachmentIds": [],
+        "deliveredAt": "2026-11-24T11:13:35.625Z",
+        "readAt": "2026-11-24T11:13:35.625Z",
+        "createdAt": "2026-11-24T11:13:35.625Z"
+      },
+      {
+        "id": "smsg_mwuljkwk_3de3db01",
+        "chatId": "schat_mwuljjzx_1d4a6391",
+        "senderType": "system",
+        "senderId": null,
+        "senderName": "System",
+        "body": "Sara Rahman closed the conversation. Please rate your experience below.",
+        "attachmentIds": [],
+        "deliveredAt": "2026-11-24T11:13:35.636Z",
+        "readAt": "2026-11-24T11:13:35.636Z",
+        "createdAt": "2026-11-24T11:13:35.636Z"
+      }
+    ],
+    "attachments": [
+      {
+        "id": "satt_mwuljkkv_192857e3",
+        "chatId": "schat_mwuljjyr_47fcc696",
+        "messageId": "smsg_mwuljkkx_8f16bf8c",
+        "uploadedByType": "customer",
+        "uploadedById": null,
+        "originalName": "receipt.png",
+        "storedName": "satt_mwuljkkv_192857e3_538ad3e81386.png",
+        "mimeType": "image/png",
+        "extension": "png",
+        "sizeBytes": 68,
+        "url": "/api/support/attachments/satt_mwuljkkv_192857e3",
+        "createdAt": "2026-11-24T11:13:35.217Z"
+      }
+    ],
+    "assignments": [
+      {
+        "id": "sasg_mwuljkw9_ecd7e52b",
+        "chatId": "schat_mwuljjzx_1d4a6391",
+        "representativeId": "srep_sara",
+        "representativeName": "Sara Rahman",
+        "previousRepresentativeId": "srep_rafi",
+        "assignedByType": "transfer",
+        "assignedById": "srep_rafi",
+        "reason": "Transferring to specialist",
+        "assignedAt": "2026-11-24T11:13:35.625Z",
+        "unassignedAt": "2026-11-24T11:13:35.636Z"
+      },
+      {
+        "id": "sasg_mwuljkv7_499ec185",
+        "chatId": "schat_mwuljjzx_1d4a6391",
+        "representativeId": "srep_rafi",
+        "representativeName": "Rafiul Karim",
+        "previousRepresentativeId": null,
+        "assignedByType": "auto",
+        "assignedById": null,
+        "reason": "Auto-assigned from waiting queue",
+        "assignedAt": "2026-11-24T11:13:35.587Z",
+        "unassignedAt": "2026-11-24T11:13:35.625Z"
+      },
+      {
+        "id": "sasg_mwuljjys_9515c870",
+        "chatId": "schat_mwuljjyr_47fcc696",
+        "representativeId": "srep_sara",
+        "representativeName": "Sara Rahman",
+        "previousRepresentativeId": null,
+        "assignedByType": "auto",
+        "assignedById": null,
+        "reason": "Auto-assigned on chat start",
+        "assignedAt": "2026-11-24T11:13:34.420Z",
+        "unassignedAt": "2026-11-24T11:13:35.601Z"
+      }
+    ],
+    "ratings": [
+      {
+        "id": "srat_mwuljkvx_58d42c3c",
+        "chatId": "schat_mwuljjyr_47fcc696",
+        "representativeId": "srep_sara",
+        "representativeName": "Sara Rahman",
+        "customerName": "E2E Customer Alpha",
+        "customerPhone": "01799001122",
+        "rating": 5,
+        "feedback": "Fast and super helpful!",
+        "createdAt": "2026-11-24T11:13:35.613Z"
+      }
+    ],
+    "settings": {
+      "autoAssignEnabled": true,
+      "maxActiveChatsPerRep": 1,
+      "maxUploadMb": 5,
+      "allowedExtensions": [
+        "jpg",
+        "jpeg",
+        "png",
+        "webp",
+        "gif",
+        "pdf",
+        "txt"
       ],
-      "startsAt": null,
-      "expiresAt": "2026-11-24T12:51:54.007Z",
-      "usageLimit": null,
-      "isActive": false,
-      "usedCount": 0,
-      "createdByUserId": "u_admin_01",
-      "createdByUsername": "Admin",
-      "createdByRole": "admin",
-      "agentId": null,
-      "createdAt": "2026-11-23T12:51:54.018Z",
-      "updatedAt": "2026-11-23T12:51:54.078Z"
-    }
-  ]
+      "allowedMimeTypes": [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/gif",
+        "application/pdf",
+        "text/plain"
+      ],
+      "welcomeMessage": "Welcome to Live Support! A dedicated support representative will assist you shortly.",
+      "queueMessage": "All representatives are currently assisting other customers. You are in the live queue and will be connected automatically as soon as the next representative is free.",
+      "offlineMessage": "All representatives are currently offline. Your conversation is queued and will be assigned automatically when a representative comes online.",
+      "updatedAt": "2026-11-24T11:12:58.776Z"
+    },
+    "presence": [
+      {
+        "representativeId": "srep_sara",
+        "isConnected": false,
+        "socketCount": 0,
+        "lastHeartbeatAt": "2026-11-24T11:12:58.776Z",
+        "disconnectedAt": null
+      },
+      {
+        "representativeId": "srep_rafi",
+        "isConnected": false,
+        "socketCount": 0,
+        "lastHeartbeatAt": "2026-11-24T11:12:58.776Z",
+        "disconnectedAt": null
+      }
+    ]
+  }
 }

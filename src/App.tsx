@@ -5,6 +5,7 @@ import { LiveDrawOverlay } from "./components/LiveDrawOverlay";
 import { LotteryOneMinuteAlertHost } from "./components/LotteryOneMinuteAlertHost";
 import { PluginRuntimeHost } from "./components/PluginRuntimeHost";
 import { RefundNoticeModal } from "./components/RefundNoticeModal";
+import { CustomerSupportWidget } from "./components/support/CustomerSupportWidget";
 import { ToastProvider, useToast } from "./components/ToastProvider";
 import { TopNav, type NavTarget } from "./components/TopNav";
 import { apiRequest, getStoredToken, setStoredToken } from "./lib/api";
@@ -31,6 +32,7 @@ import { VideoPromotionPage } from "./pages/profile/VideoPromotionPage";
 import { DailyTaskPage } from "./pages/rewards/DailyTaskPage";
 import { LuckyWheelPage } from "./pages/rewards/LuckyWheelPage";
 import { ShopPage } from "./pages/shop/ShopPage";
+import { RepresentativePortalPage } from "./pages/support/RepresentativePortalPage";
 import { UserDashboard, type UserTab } from "./pages/UserDashboard";
 import { DepositPage } from "./pages/wallet/DepositPage";
 import { WalletPage } from "./pages/wallet/WalletPage";
@@ -68,7 +70,8 @@ type ActiveScreen =
   | "chat-direct"
   | "admin"
   | "admin-inbox-chat"
-  | "agent";
+  | "agent"
+  | "support-rep";
 
 interface DirectTargetRef {
   targetType: SocialTargetType;
@@ -91,7 +94,6 @@ interface RouteState {
 }
 
 function getDefaultNavForScreen(screen: ActiveScreen): NavTarget {
-  if (screen === "daily-task") return "daily-task";
   if (screen === "campaign") return "profile";
   if (
     screen === "shop" ||
@@ -236,6 +238,9 @@ function parseRoutePath(rawPath: string): {
   }
   if (/^\/agent(?:\/|\?|$)/i.test(normalized)) {
     return { screen: "agent", campaignSlug: null };
+  }
+  if (/^\/support\/(?:rep|representative)(?:\/|\?|$)/i.test(normalized)) {
+    return { screen: "support-rep", campaignSlug: null };
   }
   const matchLottery = normalized.match(/^\/lottery\/([^/?#]+)/i);
   if (matchLottery) {
@@ -452,7 +457,8 @@ function AppShell() {
       initial.screen === "lucky-wheel" ||
       initial.screen === "daily-task" ||
       initial.screen === "referrals" ||
-      initial.screen === "chat";
+      initial.screen === "chat" ||
+      initial.screen === "support-rep";
 
     if (preserveDirectDeepLink) {
       if (initial.campaignSlug) setSelectedCampaignSlug(initial.campaignSlug);
@@ -889,7 +895,7 @@ function AppShell() {
         openShopPage("home");
         return;
       }
-      pushRoute(screen, screen === "daily-task" ? "daily-task" : "home", `/${screen}`);
+      pushRoute(screen, "home", `/${screen}`);
       window.scrollTo({ top: 0, behavior: "smooth" });
     },
     [openShopPage, pushRoute]
@@ -990,11 +996,6 @@ function AppShell() {
       return;
     }
 
-    if (target === "daily-task") {
-      openFeatureRoute("daily-task");
-      return;
-    }
-
     if (target === "shop") {
       openShopPage("home");
       return;
@@ -1084,6 +1085,7 @@ function AppShell() {
       activeScreen === "admin" ||
       activeScreen === "admin-inbox-chat" ||
       activeScreen === "agent" ||
+      activeScreen === "support-rep" ||
       activeScreen === "shop" ||
       activeScreen === "shop-product" ||
       activeScreen === "shop-cart" ||
@@ -1222,13 +1224,14 @@ function AppShell() {
   const isSeparateAgent =
     activeScreen === "agent" &&
     Boolean(user && (user.role === "agent" || user.role === "sub_agent"));
+  const isSeparateSupportRep = activeScreen === "support-rep";
   const hideConsumerChrome =
-    isFullScreenChat || isFullScreenShop || isSeparateAdmin || isSeparateAgent;
+    isFullScreenChat || isFullScreenShop || isSeparateAdmin || isSeparateAgent || isSeparateSupportRep;
 
   return (
     <div
       className={
-        isFullScreenChat
+        isFullScreenChat || isSeparateSupportRep
           ? "h-[100dvh] w-full flex flex-col bg-slate-100 text-slate-900 overflow-hidden"
           : isFullScreenShop
           ? "min-h-screen w-full flex flex-col bg-[#F8FAFC] text-slate-900"
@@ -1421,6 +1424,7 @@ function AppShell() {
           onOpenDashboard={() => handleNavigate("profile")}
           onOpenDeposit={openDepositPage}
           onOpenWithdraw={openWithdrawPage}
+          onPlayNow={() => handleNavigate("home")}
         />
       )}
 
@@ -1497,6 +1501,10 @@ function AppShell() {
             onOpenShop={() => openShopPage("home")}
             onLogout={handleLogout}
             onOpenInboxConversation={openAdminInboxChat}
+            onOpenSupportRepPortal={() => {
+              pushRoute("support-rep", "home", "/support/rep");
+              window.scrollTo({ top: 0, behavior: "auto" });
+            }}
           />
         )}
 
@@ -1526,6 +1534,14 @@ function AppShell() {
             onLogout={handleLogout}
           />
         )}
+
+      {activeScreen === "support-rep" && (
+        <RepresentativePortalPage
+          siteName={overview.settings.siteName}
+          currencySymbol={overview.settings.currencySymbol}
+          onExitToSite={() => handleNavigate("home")}
+        />
+      )}
 
       <AuthModal
         open={authModal.open}
@@ -1633,6 +1649,7 @@ function AppShell() {
           popupEventOpen &&
           !isSeparateAdmin &&
           !isSeparateAgent &&
+          !isSeparateSupportRep &&
           !isFullScreenAdminInbox &&
           !isFullScreenShop
         }
@@ -1641,6 +1658,10 @@ function AppShell() {
         onCancel={handleDismissPopupEvent}
         onAction={handlePopupEventAction}
       />
+
+      {!isSeparateAdmin && !isSeparateAgent && !isSeparateSupportRep && !isFullScreenAdminInbox && (
+        <CustomerSupportWidget user={user} siteName={overview.settings.siteName} />
+      )}
     </div>
   );
 }

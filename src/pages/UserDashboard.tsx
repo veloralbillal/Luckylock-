@@ -1,21 +1,27 @@
 import {
   ArrowDownLeft,
   ArrowUpRight,
+  BarChart2,
   Bell,
+  Calendar,
   Camera,
   Check,
+  ChevronLeft,
   ChevronRight,
   Copy,
   Download,
   Eye,
   EyeOff,
+  FileText,
   Gift,
+  History,
   KeyRound,
   Layers,
   LayoutDashboard,
   Lock,
   LogOut,
   MessageSquare,
+  Pencil,
   Receipt,
   RefreshCw,
   RotateCcw,
@@ -25,6 +31,7 @@ import {
   ShieldCheck,
   Ticket,
   Trophy,
+  User as UserIcon,
   Video,
   X,
 } from "lucide-react";
@@ -32,6 +39,11 @@ import React, { useCallback, useEffect, useMemo, useRef, useState } from "react"
 import { formatTaka } from "../components/LotteryVisuals";
 import { useToast } from "../components/ToastProvider";
 import { UserAvatar } from "../components/UserAvatar";
+import {
+  GoldTrophyArt,
+  GoldWalletArt,
+  VipAvatarFrame,
+} from "../components/user/ProfileVipVisuals";
 import { UserReferralTab } from "../components/user/UserReferralTab";
 import { WalletWorkspace } from "../components/WalletWorkspace";
 import { apiRequest } from "../lib/api";
@@ -204,6 +216,8 @@ export function UserDashboard({
 
   const quickPhotoInputRef = useRef<HTMLInputElement | null>(null);
   const settingsPhotoInputRef = useRef<HTMLInputElement | null>(null);
+  const overviewSliderRef = useRef<HTMLDivElement | null>(null);
+  const [activeSlide, setActiveSlide] = useState(0);
   const onUserUpdatedRef = useRef(onUserUpdated);
   onUserUpdatedRef.current = onUserUpdated;
 
@@ -520,23 +534,64 @@ export function UserDashboard({
     [lotteries]
   );
 
-  const navItems: Array<{
+  const primaryPillTabs: Array<{
     id: UserTab;
     label: string;
-    shortLabel: string;
     icon: React.ComponentType<{ className?: string }>;
-    count?: number;
   }> = [
-    { id: "overview", label: "Overview", shortLabel: "Overview", icon: LayoutDashboard },
-    { id: "draws", label: "Draws", shortLabel: "Draws", icon: Layers, count: activeDrawsCount },
-    { id: "results", label: "Wins & Draws", shortLabel: "Wins", icon: Trophy },
-    { id: "notifications", label: "Notifications", shortLabel: "Notifications", icon: Bell, count: unreadCount },
+    { id: "overview", label: "Overview", icon: BarChart2 },
+    { id: "draws", label: "Draws", icon: Layers },
+    { id: "results", label: "Wins", icon: Trophy },
+    { id: "transactions", label: "History", icon: History },
   ];
+
+  const firstActiveLottery = useMemo(
+    () => lotteries.find((l) => l.status === "active") || lotteries[0] || null,
+    [lotteries]
+  );
+
+  const OVERVIEW_SLIDES_COUNT = 6;
+
+  const scrollToOverviewSlide = (index: number) => {
+    const el = overviewSliderRef.current;
+    if (!el) return;
+    const clamped = Math.max(0, Math.min(OVERVIEW_SLIDES_COUNT - 1, index));
+    const child = el.children[clamped] as HTMLElement | undefined;
+    if (child) {
+      el.scrollTo({ left: child.offsetLeft, behavior: "smooth" });
+      setActiveSlide(clamped);
+    }
+  };
+
+  const handleOverviewSliderScroll = () => {
+    const el = overviewSliderRef.current;
+    if (!el) return;
+    const children = Array.from(el.children) as HTMLElement[];
+    if (children.length === 0) return;
+    const scrollCenter = el.scrollLeft + el.clientWidth * 0.25;
+    let closest = 0;
+    let minDiff = Infinity;
+    children.forEach((child, idx) => {
+      const diff = Math.abs(child.offsetLeft - scrollCenter);
+      if (diff < minDiff) {
+        minDiff = diff;
+        closest = idx;
+      }
+    });
+    setActiveSlide(closest);
+  };
 
   const maskedAmount = (value: number) => (hideBalance ? `${sym} ••••` : formatTaka(value, sym));
 
   return (
-    <div className="max-w-7xl mx-auto w-full px-3.5 sm:px-6 lg:px-8 py-4 sm:py-7 pb-24 md:pb-10 space-y-5">
+    <div className="relative min-h-[calc(100vh-3.5rem)] w-full bg-gradient-to-b from-[#040B1F] via-[#081533] to-[#050C22] text-white overflow-x-clip">
+      {/* Subtle Royal Golden & Sapphire Ambient Light Waves */}
+      <div aria-hidden="true" className="pointer-events-none absolute inset-x-0 top-0 h-72 overflow-hidden">
+        <div className="absolute -top-24 -left-16 w-80 h-56 rounded-full bg-blue-600/20 blur-3xl" />
+        <div className="absolute -top-20 -right-12 w-80 h-56 rounded-full bg-amber-400/20 blur-3xl" />
+        <div className="absolute top-14 inset-x-0 h-[1.5px] bg-gradient-to-r from-transparent via-amber-400/45 to-transparent opacity-60" />
+      </div>
+
       {/* Hidden Quick Photo Input */}
       <input
         ref={quickPhotoInputRef}
@@ -546,565 +601,661 @@ export function UserDashboard({
         className="hidden"
       />
 
-      {/* Mobile-First Dark Navy & Gold Profile Identity Hero */}
-      <section className="rounded-2xl bg-gradient-to-br from-[#060D1E] via-[#0D1A36] to-[#132650] text-white border border-amber-400/20 overflow-hidden shadow-md">
-        <div className="p-4 sm:p-6">
-          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-5">
-            {/* Left: Avatar + Identity + Social Counts */}
-            <div className="flex items-start sm:items-center gap-3.5 sm:gap-4 min-w-0">
-              <div className="relative shrink-0">
-                <UserAvatar
-                  src={user.avatarUrl}
-                  name={user.fullName || user.username}
-                  size="lg"
-                  className="ring-2 ring-amber-400/60"
-                />
-                <button
-                  type="button"
-                  disabled={uploadingQuickPhoto}
-                  onClick={() => quickPhotoInputRef.current?.click()}
-                  aria-label="Change profile photo"
-                  className="absolute -bottom-1 -right-1 w-8 h-8 rounded-full bg-amber-400 hover:bg-amber-300 text-[#060D1E] flex items-center justify-center shadow-md cursor-pointer transition-colors disabled:opacity-60"
-                >
-                  <Camera className="w-4 h-4" />
-                </button>
+      <div className="relative z-10 max-w-5xl mx-auto w-full px-3.5 sm:px-6 py-4 sm:py-6 pb-28 md:pb-12 space-y-4 sm:space-y-5">
+        {/* 1. VIP IDENTITY HERO (Crown + Laurel Avatar + Name + Gold @Username + Social Counts) */}
+        <section className="flex items-center gap-3.5 sm:gap-6 pt-1">
+          <VipAvatarFrame
+            avatarUrl={user.avatarUrl}
+            name={user.fullName || user.username}
+            uploading={uploadingQuickPhoto}
+            onUploadClick={() => quickPhotoInputRef.current?.click()}
+          />
+
+          <div className="min-w-0 flex-1 space-y-2">
+            <div className="flex items-center justify-between gap-2">
+              <div className="flex items-center gap-2 min-w-0">
+                <h1 className="text-xl sm:text-2xl font-extrabold tracking-tight text-white truncate">
+                  {user.fullName}
+                </h1>
+                {user.chatProfileCompleted && (
+                  <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" aria-label="Verified profile" />
+                )}
               </div>
-
-              <div className="min-w-0 flex-1 space-y-1">
-                <div className="flex items-center gap-2 min-w-0">
-                  <h1 className="text-lg sm:text-xl font-bold text-white truncate">
-                    {user.fullName}
-                  </h1>
-                  {user.chatProfileCompleted && (
-                    <ShieldCheck className="w-4 h-4 text-emerald-400 shrink-0" aria-label="Verified profile" />
-                  )}
-                </div>
-
-                <div className="flex flex-wrap items-center gap-x-2 gap-y-0.5 text-xs text-slate-300">
-                  <button
-                    type="button"
-                    onClick={handleCopyUsername}
-                    className="font-mono font-semibold text-amber-300 hover:text-amber-200 inline-flex items-center gap-1 cursor-pointer"
-                  >
-                    @{user.username}
-                    <Copy className="w-3 h-3" />
-                  </button>
-                  <span aria-hidden="true" className="text-slate-500">·</span>
-                  <span>Joined {memberSince}</span>
-                  {social && (
-                    <>
-                      <span aria-hidden="true" className="text-slate-500">·</span>
-                      <span className="font-mono tabular-nums text-slate-200">
-                        {social.followersCount} Followers · {social.followingCount} Following · {social.friends.length} Friends
-                      </span>
-                    </>
-                  )}
-                </div>
-
-                {/* Utility Action Row */}
-                <div className="flex flex-wrap items-center gap-2 pt-1.5">
-                  <button
-                    type="button"
-                    onClick={handleShareProfile}
-                    className="min-h-[36px] px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-semibold text-slate-100 inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
-                  >
-                    <Share2 className="w-3.5 h-3.5 text-amber-300" />
-                    Share ID
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => selectTab("notifications")}
-                    className={`min-h-[36px] px-3 py-1.5 rounded-lg border text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap transition-colors ${
-                      unreadCount > 0
-                        ? "bg-amber-400/20 hover:bg-amber-400/30 border-amber-400/50 text-amber-200"
-                        : "bg-white/10 hover:bg-white/15 border-white/15 text-slate-100"
-                    }`}
-                  >
-                    <Bell className="w-3.5 h-3.5 text-amber-300" />
-                    Notifications
-                    {unreadCount > 0 && (
-                      <span className="px-1.5 py-0.5 rounded-md bg-amber-400 text-[#060D1E] font-mono text-[10px] font-black tabular-nums">
-                        {unreadCount}
-                      </span>
-                    )}
-                  </button>
-                  <button
-                    type="button"
-                    onClick={() => selectTab("profile")}
-                    className="min-h-[36px] px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-semibold text-slate-100 inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
-                  >
-                    <Settings className="w-3.5 h-3.5 text-amber-300" />
-                    Edit Profile
-                  </button>
-                  {onOpenChat && (
-                    <button
-                      type="button"
-                      onClick={onOpenChat}
-                      className="min-h-[36px] px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/15 border border-white/15 text-xs font-semibold text-slate-100 inline-flex items-center gap-1.5 cursor-pointer whitespace-nowrap"
-                    >
-                      <MessageSquare className="w-3.5 h-3.5 text-sky-300" />
-                      Chat
-                    </button>
-                  )}
-                  <button
-                    type="button"
-                    onClick={loadDashboard}
-                    aria-label="Refresh profile data"
-                    className="min-h-[36px] min-w-[36px] rounded-lg bg-white/10 hover:bg-white/15 border border-white/15 text-slate-200 inline-flex items-center justify-center cursor-pointer"
-                  >
-                    <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
-                  </button>
-                </div>
-              </div>
+              <button
+                type="button"
+                onClick={loadDashboard}
+                aria-label="Refresh profile"
+                className="w-8 h-8 rounded-full bg-white/[0.07] hover:bg-white/15 border border-white/15 text-amber-300 flex items-center justify-center shrink-0 cursor-pointer transition-colors"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${loading ? "animate-spin" : ""}`} />
+              </button>
             </div>
 
-            {/* Right: Balance Readout + Privacy Toggle (No Deposit/Withdraw inside Profile) */}
-            <div className="rounded-xl bg-white/[0.06] border border-white/10 p-3.5 sm:p-4 lg:min-w-[290px] space-y-2.5">
-              <div className="flex items-center justify-between gap-3">
-                <div>
-                  <p className="text-xs text-slate-300">Main Wallet Balance</p>
-                  <p className="mt-0.5 text-2xl sm:text-3xl font-bold font-mono tabular-nums text-amber-300">
-                    {maskedAmount(user.balance)}
-                  </p>
-                </div>
-                <button
-                  type="button"
-                  onClick={toggleBalanceVisibility}
-                  aria-label={hideBalance ? "Show balance" : "Hide balance"}
-                  className="min-h-[44px] min-w-[44px] rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-slate-200 flex items-center justify-center cursor-pointer shrink-0"
-                >
-                  {hideBalance ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
-                </button>
-              </div>
+            <div className="flex flex-wrap items-center gap-2">
+              <button
+                type="button"
+                onClick={handleCopyUsername}
+                className="inline-flex items-center gap-1.5 rounded-full border border-amber-400/75 bg-amber-400/10 hover:bg-amber-400/20 px-3 py-1 text-xs font-bold text-amber-300 shadow-[0_0_12px_rgba(251,191,36,0.16)] transition-colors cursor-pointer"
+              >
+                <UserIcon className="w-3.5 h-3.5 text-amber-400" />
+                <span className="font-mono">@{user.username}</span>
+                <Copy className="w-3 h-3 text-amber-300/90" />
+              </button>
+            </div>
 
-              <div className="pt-2 border-t border-white/10 flex items-center justify-between text-xs text-slate-300">
-                <span>Total Won</span>
-                <span className="font-mono font-bold text-emerald-300 tabular-nums">
-                  {maskedAmount(totalWinningsAmount)}
-                </span>
+            <div className="flex items-center gap-1.5 text-xs sm:text-sm text-slate-200/90">
+              <Calendar className="w-3.5 h-3.5 text-amber-400 shrink-0" />
+              <span>Joined {memberSince}</span>
+            </div>
+
+            {/* 3-Column Social Counters with Hairline Dividers */}
+            <div className="grid grid-cols-3 divide-x divide-white/15 pt-1 max-w-xs sm:max-w-sm">
+              <div className="pr-2 text-center">
+                <div className="text-sm sm:text-base font-extrabold text-white font-mono tabular-nums leading-tight">
+                  {social?.followersCount ?? 0}
+                </div>
+                <div className="text-[11px] text-slate-300/80 mt-0.5">Followers</div>
+              </div>
+              <div className="px-2 text-center">
+                <div className="text-sm sm:text-base font-extrabold text-white font-mono tabular-nums leading-tight">
+                  {social?.followingCount ?? 0}
+                </div>
+                <div className="text-[11px] text-slate-300/80 mt-0.5">Following</div>
+              </div>
+              <div className="pl-2 text-center">
+                <div className="text-sm sm:text-base font-extrabold text-white font-mono tabular-nums leading-tight">
+                  {social?.friends.length ?? 0}
+                </div>
+                <div className="text-[11px] text-slate-300/80 mt-0.5">Friends</div>
               </div>
             </div>
           </div>
+        </section>
 
-          {/* Mobile & Desktop Quick Action Shortcuts Strip */}
-          <div className="mt-4 pt-3.5 border-t border-white/10 grid grid-cols-2 sm:grid-cols-4 gap-2">
+        {/* 2. FOUR GLOSSY QUICK ACTION TILES (Share ID · Notifications · Edit Profile · Chat) */}
+        <section className="grid grid-cols-4 gap-2 sm:gap-3">
+          <button
+            type="button"
+            onClick={handleShareProfile}
+            className="group rounded-2xl bg-gradient-to-b from-[#162B5C]/90 to-[#0B1738]/95 hover:from-[#1D3670] hover:to-[#10204C] border border-blue-400/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_16px_rgba(0,0,0,0.28)] py-3 px-1.5 flex flex-col items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all"
+          >
+            <Share2 className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
+            <span className="text-[11px] sm:text-xs font-semibold text-slate-100 whitespace-nowrap">
+              Share ID
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => selectTab("notifications")}
+            className={`group relative rounded-2xl bg-gradient-to-b from-[#162B5C]/90 to-[#0B1738]/95 hover:from-[#1D3670] hover:to-[#10204C] border shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_16px_rgba(0,0,0,0.28)] py-3 px-1.5 flex flex-col items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all ${
+              tab === "notifications" ? "border-amber-400/75" : "border-blue-400/25"
+            }`}
+          >
+            <div className="relative">
+              <Bell className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
+              {unreadCount > 0 && (
+                <span className="absolute -top-2 -right-3 min-w-[18px] h-[18px] px-1 rounded-full bg-rose-500 text-white text-[10px] font-extrabold flex items-center justify-center shadow-md ring-2 ring-[#0E1E46]">
+                  {unreadCount > 9 ? "9+" : unreadCount}
+                </span>
+              )}
+            </div>
+            <span className="text-[11px] sm:text-xs font-semibold text-slate-100 whitespace-nowrap">
+              Notifications
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => selectTab("profile")}
+            className={`group rounded-2xl bg-gradient-to-b from-[#162B5C]/90 to-[#0B1738]/95 hover:from-[#1D3670] hover:to-[#10204C] border shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_16px_rgba(0,0,0,0.28)] py-3 px-1.5 flex flex-col items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all ${
+              tab === "profile" ? "border-amber-400/75" : "border-blue-400/25"
+            }`}
+          >
+            <Pencil className="w-5 h-5 text-amber-400 group-hover:scale-110 transition-transform" />
+            <span className="text-[11px] sm:text-xs font-semibold text-slate-100 whitespace-nowrap">
+              Edit Profile
+            </span>
+          </button>
+
+          <button
+            type="button"
+            onClick={() => (onOpenChat ? onOpenChat() : selectTab("overview"))}
+            className="group rounded-2xl bg-gradient-to-b from-[#162B5C]/90 to-[#0B1738]/95 hover:from-[#1D3670] hover:to-[#10204C] border border-blue-400/25 shadow-[inset_0_1px_0_rgba(255,255,255,0.12),0_6px_16px_rgba(0,0,0,0.28)] py-3 px-1.5 flex flex-col items-center justify-center gap-1.5 cursor-pointer active:scale-95 transition-all"
+          >
+            <MessageSquare className="w-5 h-5 text-sky-400 group-hover:scale-110 transition-transform" />
+            <span className="text-[11px] sm:text-xs font-semibold text-slate-100 whitespace-nowrap">
+              Chat
+            </span>
+          </button>
+        </section>
+
+        {/* 3. MAIN WALLET BALANCE LUXURY GOLD CARD */}
+        <section className="relative overflow-hidden rounded-[22px] bg-gradient-to-br from-[#17284E] via-[#0B1736] to-[#09122B] border border-amber-400/60 shadow-[0_12px_34px_rgba(0,0,0,0.45),0_0_24px_rgba(251,191,36,0.12)] p-4 sm:p-5">
+          {/* Golden ambient flare accents */}
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -top-10 -left-10 w-44 h-44 rounded-full bg-amber-400/20 blur-2xl"
+          />
+          <div
+            aria-hidden="true"
+            className="pointer-events-none absolute -bottom-12 -right-8 w-52 h-36 rounded-full bg-amber-400/20 blur-2xl"
+          />
+
+          <div className="relative z-10 flex items-center justify-between gap-3 sm:gap-5">
+            <div className="flex items-center gap-3 sm:gap-4 min-w-0">
+              <GoldWalletArt className="w-16 h-16 sm:w-20 sm:h-20 shrink-0 drop-shadow-[0_8px_18px_rgba(251,191,36,0.3)]" />
+              <div className="min-w-0">
+                <p className="text-xs sm:text-sm font-medium text-slate-200/90">
+                  Main Wallet Balance
+                </p>
+                <p className="mt-0.5 text-2xl sm:text-4xl font-extrabold tracking-tight text-amber-400 font-mono tabular-nums drop-shadow-[0_2px_10px_rgba(251,191,36,0.28)] truncate">
+                  {maskedAmount(user.balance)}
+                </p>
+              </div>
+            </div>
+
             <button
               type="button"
-              onClick={() => selectTab("transactions")}
-              className={`min-h-[44px] rounded-xl px-3 py-2 text-left flex items-center justify-between gap-2 cursor-pointer transition-colors border ${
-                tab === "transactions"
-                  ? "bg-amber-400/20 border-amber-400/50 text-amber-200"
-                  : "bg-white/[0.06] hover:bg-white/10 border-white/10"
-              }`}
+              onClick={toggleBalanceVisibility}
+              aria-label={hideBalance ? "Show balance" : "Hide balance"}
+              className="w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#09142E]/85 hover:bg-amber-400/15 border-2 border-amber-400/70 text-amber-400 flex items-center justify-center shrink-0 cursor-pointer shadow-[0_0_15px_rgba(251,191,36,0.22)] transition-transform active:scale-90"
             >
+              {hideBalance ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+            </button>
+          </div>
+
+          <div className="relative z-10 mt-3.5 pt-3 border-t border-white/15 flex items-center justify-between gap-3">
+            <div className="flex items-center gap-2 text-xs sm:text-sm font-semibold text-slate-100">
+              <Trophy className="w-4 h-4 text-amber-400 shrink-0" />
+              <span>Total Won</span>
+            </div>
+            <span className="text-base sm:text-lg font-extrabold font-mono tabular-nums text-emerald-400">
+              {maskedAmount(totalWinningsAmount)}
+            </span>
+          </div>
+        </section>
+
+        {/* 4. 2x2 FEATURE SHORTCUT CARDS (Ledger · Settings · Refer & Earn · My Lottery) */}
+        <section className="grid grid-cols-2 gap-2.5 sm:gap-3.5">
+          <button
+            type="button"
+            onClick={() => selectTab("transactions")}
+            className={`group rounded-2xl bg-gradient-to-br from-[#142552]/95 via-[#0B1738] to-[#08122C] border p-3.5 sm:p-4 text-left flex items-center justify-between gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_6px_18px_rgba(0,0,0,0.3)] cursor-pointer active:scale-[0.98] transition-all ${
+              tab === "transactions"
+                ? "border-amber-400 shadow-[0_0_18px_rgba(251,191,36,0.2)]"
+                : "border-amber-400/35 hover:border-amber-400/70"
+            }`}
+          >
+            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <FileText className="w-6 h-6 sm:w-7 sm:h-7 text-amber-400 shrink-0" />
               <div className="min-w-0">
-                <p className="text-xs font-semibold text-white truncate">Ledger</p>
-                <p className="text-[11px] font-mono tabular-nums text-slate-300 truncate">
+                <p className="text-sm sm:text-base font-bold text-white truncate">Ledger</p>
+                <p className="text-[11px] sm:text-xs text-slate-300/85 font-mono tabular-nums truncate">
                   {data?.transactions.length ?? 0} entries
                 </p>
               </div>
-              <Receipt className="w-4 h-4 text-emerald-400 shrink-0" />
-            </button>
+            </div>
+            <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 group-hover:bg-amber-400 group-hover:text-[#071128] text-slate-200 flex items-center justify-center shrink-0 transition-colors">
+              <ChevronRight className="w-4 h-4" />
+            </span>
+          </button>
 
-            <button
-              type="button"
-              onClick={() => selectTab("profile")}
-              className={`min-h-[44px] rounded-xl px-3 py-2 text-left flex items-center justify-between gap-2 cursor-pointer transition-colors border ${
-                tab === "profile"
-                  ? "bg-amber-400/20 border-amber-400/50 text-amber-200"
-                  : "bg-white/[0.06] hover:bg-white/10 border-white/10"
-              }`}
-            >
+          <button
+            type="button"
+            onClick={() => selectTab("profile")}
+            className={`group rounded-2xl bg-gradient-to-br from-[#142552]/95 via-[#0B1738] to-[#08122C] border p-3.5 sm:p-4 text-left flex items-center justify-between gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_6px_18px_rgba(0,0,0,0.3)] cursor-pointer active:scale-[0.98] transition-all ${
+              tab === "profile"
+                ? "border-amber-400 shadow-[0_0_18px_rgba(251,191,36,0.2)]"
+                : "border-amber-400/35 hover:border-amber-400/70"
+            }`}
+          >
+            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <Settings className="w-6 h-6 sm:w-7 sm:h-7 text-amber-400 shrink-0" />
               <div className="min-w-0">
-                <p className="text-xs font-semibold text-white truncate">Settings</p>
-                <p className="text-[11px] font-mono tabular-nums text-amber-300 truncate">
+                <p className="text-sm sm:text-base font-bold text-white truncate">Settings</p>
+                <p className="text-[11px] sm:text-xs text-amber-400 font-semibold font-mono tabular-nums truncate">
                   {securityChecklist.percent}% ready
                 </p>
               </div>
-              <Settings className="w-4 h-4 text-amber-300 shrink-0" />
-            </button>
+            </div>
+            <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 group-hover:bg-amber-400 group-hover:text-[#071128] text-slate-200 flex items-center justify-center shrink-0 transition-colors">
+              <ChevronRight className="w-4 h-4" />
+            </span>
+          </button>
 
-            <button
-              type="button"
-              onClick={() => selectTab("referrals")}
-              className={`min-h-[44px] rounded-xl px-3 py-2 text-left flex items-center justify-between gap-2 cursor-pointer transition-colors border ${
-                tab === "referrals"
-                  ? "bg-amber-400/20 border-amber-400/50 text-amber-200"
-                  : "bg-white/[0.06] hover:bg-white/10 border-white/10"
-              }`}
-            >
+          <button
+            type="button"
+            onClick={() => selectTab("referrals")}
+            className={`group rounded-2xl bg-gradient-to-br from-[#142552]/95 via-[#0B1738] to-[#08122C] border p-3.5 sm:p-4 text-left flex items-center justify-between gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_6px_18px_rgba(0,0,0,0.3)] cursor-pointer active:scale-[0.98] transition-all ${
+              tab === "referrals"
+                ? "border-amber-400 shadow-[0_0_18px_rgba(251,191,36,0.2)]"
+                : "border-amber-400/35 hover:border-amber-400/70"
+            }`}
+          >
+            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <Gift className="w-6 h-6 sm:w-7 sm:h-7 text-amber-400 shrink-0" />
               <div className="min-w-0">
-                <p className="text-xs font-semibold text-white truncate">Refer &amp; Earn</p>
-                <p className="text-[11px] font-mono tabular-nums text-slate-300 truncate">
+                <p className="text-sm sm:text-base font-bold text-white truncate">Refer &amp; Earn</p>
+                <p className="text-[11px] sm:text-xs text-slate-300/85 font-mono tabular-nums truncate">
                   {user.referralCount || 0} invited
                 </p>
               </div>
-              <Gift className="w-4 h-4 text-amber-300 shrink-0" />
-            </button>
+            </div>
+            <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 group-hover:bg-amber-400 group-hover:text-[#071128] text-slate-200 flex items-center justify-center shrink-0 transition-colors">
+              <ChevronRight className="w-4 h-4" />
+            </span>
+          </button>
 
-            <button
-              type="button"
-              onClick={() => selectTab("tickets")}
-              className={`min-h-[44px] rounded-xl px-3 py-2 text-left flex items-center justify-between gap-2 cursor-pointer transition-colors border ${
-                tab === "tickets"
-                  ? "bg-amber-400/20 border-amber-400/50 text-amber-200"
-                  : "bg-white/[0.06] hover:bg-white/10 border-white/10"
-              }`}
-            >
+          <button
+            type="button"
+            onClick={() => selectTab("tickets")}
+            className={`group rounded-2xl bg-gradient-to-br from-[#142552]/95 via-[#0B1738] to-[#08122C] border p-3.5 sm:p-4 text-left flex items-center justify-between gap-2 shadow-[inset_0_1px_0_rgba(255,255,255,0.1),0_6px_18px_rgba(0,0,0,0.3)] cursor-pointer active:scale-[0.98] transition-all ${
+              tab === "tickets"
+                ? "border-amber-400 shadow-[0_0_18px_rgba(251,191,36,0.2)]"
+                : "border-amber-400/35 hover:border-amber-400/70"
+            }`}
+          >
+            <div className="flex items-center gap-2.5 sm:gap-3 min-w-0">
+              <Ticket className="w-6 h-6 sm:w-7 sm:h-7 text-amber-400 shrink-0" />
               <div className="min-w-0">
-                <p className="text-xs font-semibold text-white truncate">My Lottery</p>
-                <p className="text-[11px] font-mono tabular-nums text-slate-300 truncate">
+                <p className="text-sm sm:text-base font-bold text-white truncate">My Lottery</p>
+                <p className="text-[11px] sm:text-xs text-slate-300/85 font-mono tabular-nums truncate">
                   {totalTicketsCount} tickets
                 </p>
               </div>
-              <Ticket className="w-4 h-4 text-sky-300 shrink-0" />
-            </button>
-          </div>
-        </div>
-      </section>
+            </div>
+            <span className="w-6 h-6 sm:w-7 sm:h-7 rounded-full bg-white/10 group-hover:bg-amber-400 group-hover:text-[#071128] text-slate-200 flex items-center justify-center shrink-0 transition-colors">
+              <ChevronRight className="w-4 h-4" />
+            </span>
+          </button>
+        </section>
 
-      {/* Main Responsive Workspace: Mobile Horizontal Tabs + Desktop Sidebar */}
-      <div className="flex flex-col lg:flex-row gap-5 lg:gap-7">
-        <aside className="lg:w-60 shrink-0 space-y-4">
-          {/* Interactive Tab Switcher */}
-          <nav
-            aria-label="Profile sections"
-            className="flex lg:flex-col gap-1.5 overflow-x-auto pb-1 lg:pb-0 -mx-0.5 px-0.5"
-          >
-            {navItems.map((item) => {
-              const Icon = item.icon;
-              const active = tab === item.id;
-              return (
+        {/* 5. GOLD SEGMENTED TAB BAR (Overview | Draws | Wins | History) */}
+        <nav
+          aria-label="Profile sections"
+          className="rounded-full bg-[#0C193B]/95 border border-blue-400/25 p-1 flex items-center shadow-lg overflow-x-auto"
+        >
+          {primaryPillTabs.map((item, idx) => {
+            const Icon = item.icon;
+            const active = tab === item.id;
+            const prevActive = idx > 0 && tab === primaryPillTabs[idx - 1].id;
+            return (
+              <React.Fragment key={item.id}>
+                {idx > 0 && !active && !prevActive && (
+                  <span aria-hidden="true" className="w-px h-5 bg-white/15 shrink-0" />
+                )}
                 <button
-                  key={item.id}
                   type="button"
                   onClick={() => selectTab(item.id)}
-                  className={`min-h-[44px] flex items-center justify-between gap-2.5 rounded-xl px-3.5 py-2.5 text-xs sm:text-sm font-semibold transition-colors whitespace-nowrap shrink-0 cursor-pointer ${
+                  className={`flex-1 min-h-[40px] px-3 py-2 rounded-full text-xs sm:text-sm font-bold inline-flex items-center justify-center gap-1.5 whitespace-nowrap cursor-pointer transition-all ${
                     active
-                      ? "bg-[#0D1A36] text-amber-300 shadow-xs"
-                      : "bg-white border border-slate-200 lg:border-transparent lg:bg-transparent text-slate-700 hover:bg-slate-100 hover:text-slate-900"
+                      ? "bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-400 text-[#071128] shadow-[0_4px_16px_rgba(251,191,36,0.38)]"
+                      : "text-slate-200 hover:text-white"
                   }`}
                 >
-                  <span className="flex items-center gap-2">
-                    <Icon className="w-4 h-4 shrink-0" />
-                    <span className="sm:hidden">{item.shortLabel}</span>
-                    <span className="hidden sm:inline">{item.label}</span>
-                  </span>
-                  {typeof item.count === "number" && item.count > 0 && (
-                    <span
-                      className={`font-mono text-xs tabular-nums ${
-                        item.id === "notifications"
-                          ? "px-1.5 py-0.5 rounded-md bg-amber-400 text-[#060D1E] font-bold text-[11px]"
-                          : active
-                          ? "text-emerald-300"
-                          : "text-slate-500"
-                      }`}
-                    >
-                      {item.count}
-                    </span>
-                  )}
+                  <Icon className="w-4 h-4 shrink-0" />
+                  <span>{item.label}</span>
                 </button>
-              );
-            })}
-          </nav>
-
-          {/* Desktop Account Checklist Card */}
-          <div className="hidden lg:block rounded-2xl border border-slate-200 bg-white p-4 space-y-3">
-            <div className="flex items-center justify-between">
-              <p className="text-xs font-bold text-slate-900">Account Readiness</p>
-              <span className="font-mono text-xs font-bold text-emerald-700 tabular-nums">
-                {securityChecklist.percent}%
-              </span>
-            </div>
-            <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-              <div
-                className="h-full bg-emerald-600 transition-all"
-                style={{ width: `${securityChecklist.percent}%` }}
-              />
-            </div>
-            <ul className="space-y-2 text-xs">
-              {securityChecklist.items.map((item) => (
-                <li key={item.id} className="flex items-center justify-between gap-2">
-                  <span className={item.done ? "text-slate-600" : "text-slate-900 font-medium"}>
-                    {item.label}
-                  </span>
-                  {item.done ? (
-                    <Check className="w-3.5 h-3.5 text-emerald-600 shrink-0" />
-                  ) : (
-                    <button
-                      type="button"
-                      onClick={() => selectTab("profile")}
-                      className="text-amber-700 font-semibold hover:underline cursor-pointer"
-                    >
-                      Set
-                    </button>
-                  )}
-                </li>
-              ))}
-            </ul>
-            {onLogout && (
-              <button
-                type="button"
-                onClick={onLogout}
-                className="w-full min-h-[42px] mt-2 rounded-xl border border-slate-200 hover:bg-rose-50 hover:border-rose-200 text-slate-700 hover:text-rose-700 text-xs font-semibold inline-flex items-center justify-center gap-2 cursor-pointer transition-colors"
-              >
-                <LogOut className="w-4 h-4" />
-                Sign Out
-              </button>
-            )}
-          </div>
-        </aside>
+              </React.Fragment>
+            );
+          })}
+        </nav>
 
         {/* Main Content Panel */}
-        <main className="flex-1 min-w-0 space-y-5">
+        <main className="min-w-0 space-y-5">
           {loading && !data ? (
-            <div className="rounded-2xl border border-slate-200 bg-white p-12 text-center text-sm text-slate-500">
-              Loading your profile & account analytics...
+            <div className="rounded-2xl border border-blue-400/20 bg-[#0C193B]/80 p-12 text-center text-sm text-slate-300">
+              Loading your profile &amp; account analytics...
             </div>
           ) : (
             <>
-              {/* TAB 1: OVERVIEW & ANALYTICS */}
+              {/* TAB 1: OVERVIEW (PROMO BANNER + HORIZONTAL SLIDER FOR ALL EXTRA MODULES) */}
               {tab === "overview" && (
-                <div className="space-y-5">
-                  {/* 4-Metric KPI Strip */}
-                  <div className="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4">
-                    <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                      <p className="text-xs text-slate-500">Total Deposited</p>
-                      <p className="mt-1 text-lg sm:text-xl font-bold text-slate-900 font-mono tabular-nums">
-                        {maskedAmount(user.totalDeposited)}
-                      </p>
-                    </div>
-                    <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                      <p className="text-xs text-slate-500">Total Prize Won</p>
-                      <p className="mt-1 text-lg sm:text-xl font-bold text-emerald-700 font-mono tabular-nums">
-                        {maskedAmount(totalWinningsAmount)}
-                      </p>
-                    </div>
-                    <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                      <p className="text-xs text-slate-500">Tickets & Win Rate</p>
-                      <p className="mt-1 text-lg sm:text-xl font-bold text-slate-900 font-mono tabular-nums">
-                        {totalTicketsCount}{" "}
-                        <span className="text-xs font-semibold text-amber-700">
-                          · {winRatePercent}% won
-                        </span>
-                      </p>
-                    </div>
-                    <div className="rounded-2xl border border-slate-200 bg-white p-4">
-                      <p className="text-xs text-slate-500">Referrals</p>
-                      <p className="mt-1 text-lg sm:text-xl font-bold text-slate-900 font-mono tabular-nums">
-                        {user.referralCount || 0}{" "}
-                        <span className="text-xs font-normal text-slate-500">invited</span>
-                      </p>
-                    </div>
-                  </div>
-
-                  {/* Mobile Account Readiness Banner (visible when < 100%) */}
-                  {securityChecklist.percent < 100 && (
-                    <div className="lg:hidden rounded-2xl border border-slate-200 bg-white p-4 space-y-3">
-                      <div className="flex items-center justify-between gap-3">
-                        <div>
-                          <p className="text-sm font-bold text-slate-900">
-                            Account Security & Profile
-                          </p>
-                          <p className="text-xs text-slate-500">
-                            {securityChecklist.completed} of {securityChecklist.total} steps completed
+                <div className="space-y-4 sm:space-y-5">
+                  {/* "Keep Playing & Win Big!" Promo Card (Exact match to reference design) */}
+                  <section className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-[#0F2661] via-[#122D6F] to-[#0B1E4E] border border-blue-400/35 p-3.5 sm:p-4 shadow-[0_8px_24px_rgba(0,0,0,0.35)]">
+                    <div
+                      aria-hidden="true"
+                      className="pointer-events-none absolute -left-8 top-0 w-32 h-32 rounded-full bg-amber-400/15 blur-2xl"
+                    />
+                    <div className="relative z-10 flex items-center justify-between gap-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <GoldTrophyArt className="w-12 h-12 sm:w-14 sm:h-14 shrink-0 drop-shadow-[0_4px_14px_rgba(251,191,36,0.4)]" />
+                        <div className="min-w-0">
+                          <h2 className="text-sm sm:text-base font-extrabold text-white leading-tight truncate">
+                            Keep Playing &amp; Win Big!
+                          </h2>
+                          <p className="text-[11px] sm:text-xs text-blue-100/80 mt-0.5 truncate">
+                            Your luck is just a click away
                           </p>
                         </div>
-                        <button
-                          type="button"
-                          onClick={() => selectTab("profile")}
-                          className="min-h-[40px] px-3.5 rounded-xl bg-[#0D1A36] text-amber-300 text-xs font-bold cursor-pointer whitespace-nowrap"
-                        >
-                          Complete
-                        </button>
                       </div>
-                      <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-                        <div
-                          className="h-full bg-emerald-600 transition-all"
-                          style={{ width: `${securityChecklist.percent}%` }}
-                        />
-                      </div>
+                      <button
+                        type="button"
+                        onClick={() => {
+                          if (firstActiveLottery) {
+                            onSelectLottery(firstActiveLottery.id);
+                          } else {
+                            selectTab("draws");
+                          }
+                        }}
+                        className="shrink-0 inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-yellow-300 via-amber-400 to-yellow-400 hover:from-yellow-200 hover:to-amber-300 text-[#071128] font-extrabold text-xs sm:text-sm px-4 py-2.5 shadow-[0_4px_14px_rgba(251,191,36,0.38)] cursor-pointer active:scale-95 transition-transform whitespace-nowrap"
+                      >
+                        <span>Play Now</span>
+                        <ChevronRight className="w-4 h-4 stroke-[2.5]" />
+                      </button>
                     </div>
-                  )}
-
-                  {/* Financial Flow & Recent Activity Split */}
-                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-5">
-                    {/* Money Flow Visual Breakdown */}
-                    <section className="rounded-2xl border border-slate-200 bg-white p-5 space-y-4">
-                      <div className="flex items-center justify-between gap-2">
-                        <div>
-                          <h2 className="text-base font-bold text-slate-900">Account Cash Flow</h2>
-                          <p className="text-xs text-slate-500">Lifetime deposits, withdrawals, and prizes</p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => selectTab("transactions")}
-                          className="text-xs font-semibold text-emerald-700 hover:underline cursor-pointer whitespace-nowrap"
-                        >
-                          Full Ledger
-                        </button>
-                      </div>
-
-                      <div className="space-y-3.5">
-                        <div className="space-y-1.5">
-                          <div className="flex items-center justify-between text-xs">
-                            <span className="font-medium text-slate-700">Deposits</span>
-                            <span className="font-mono font-bold tabular-nums text-slate-900">
-                              {maskedAmount(flowTotals.deposited)}
-                            </span>
-                          </div>
-                          <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-                            <div
-                              className="h-full bg-emerald-600 rounded-full"
-                              style={{ width: `${Math.max(4, flowTotals.depositedPct)}%` }}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-1.5">
-                          <div className="flex items-center justify-between text-xs">
-                            <span className="font-medium text-slate-700">Prize Winnings</span>
-                            <span className="font-mono font-bold tabular-nums text-emerald-700">
-                              {maskedAmount(flowTotals.won)}
-                            </span>
-                          </div>
-                          <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-                            <div
-                              className="h-full bg-amber-500 rounded-full"
-                              style={{ width: `${flowTotals.won > 0 ? Math.max(4, flowTotals.wonPct) : 0}%` }}
-                            />
-                          </div>
-                        </div>
-
-                        <div className="space-y-1.5">
-                          <div className="flex items-center justify-between text-xs">
-                            <span className="font-medium text-slate-700">Withdrawals</span>
-                            <span className="font-mono font-bold tabular-nums text-slate-900">
-                              {maskedAmount(flowTotals.withdrawn)}
-                            </span>
-                          </div>
-                          <div className="h-2 rounded-full bg-slate-100 overflow-hidden">
-                            <div
-                              className="h-full bg-[#0D1A36] rounded-full"
-                              style={{ width: `${flowTotals.withdrawn > 0 ? Math.max(4, flowTotals.withdrawnPct) : 0}%` }}
-                            />
-                          </div>
-                        </div>
-                      </div>
-                    </section>
-
-                    {/* Recent Activity Feed */}
-                    <section className="rounded-2xl border border-slate-200 bg-white p-5 space-y-3">
-                      <div className="flex items-center justify-between gap-2">
-                        <div>
-                          <h2 className="text-base font-bold text-slate-900">Recent Activity</h2>
-                          <p className="text-xs text-slate-500">Latest wallet & ticket updates</p>
-                        </div>
-                        <button
-                          type="button"
-                          onClick={() => selectTab("transactions")}
-                          className="text-xs font-semibold text-emerald-700 hover:underline cursor-pointer whitespace-nowrap"
-                        >
-                          See All
-                        </button>
-                      </div>
-
-                      {(data?.transactions || []).length === 0 ? (
-                        <p className="py-6 text-center text-xs text-slate-500">
-                          No recent activity yet.
-                        </p>
-                      ) : (
-                        <div className="divide-y divide-slate-100">
-                          {(data?.transactions || []).slice(0, 4).map((txn) => (
-                            <div
-                              key={txn.id}
-                              className="py-2.5 flex items-center justify-between gap-3"
-                            >
-                              <div className="min-w-0">
-                                <p className="text-xs sm:text-sm font-semibold text-slate-800 truncate">
-                                  {txn.description}
-                                </p>
-                                <p className="text-[11px] font-mono text-slate-400">
-                                  {new Date(txn.createdAt).toLocaleDateString()} ·{" "}
-                                  {new Date(txn.createdAt).toLocaleTimeString([], {
-                                    hour: "2-digit",
-                                    minute: "2-digit",
-                                  })}
-                                </p>
-                              </div>
-                              <span
-                                className={`font-mono text-xs sm:text-sm font-bold tabular-nums whitespace-nowrap shrink-0 ${
-                                  txn.direction === "credit" ? "text-emerald-700" : "text-rose-600"
-                                }`}
-                              >
-                                {txn.direction === "credit" ? "+" : "-"}
-                                {maskedAmount(txn.amount)}
-                              </span>
-                            </div>
-                          ))}
-                        </div>
-                      )}
-                    </section>
-                  </div>
-
-                  {/* Security OTP & Creator Video Promotion Hub */}
-                  <section className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    {/* OTP 30-Second Authenticator Card */}
-                    <button
-                      type="button"
-                      onClick={() => onOpenOtp?.()}
-                      className="group text-left rounded-2xl bg-gradient-to-br from-[#060D1E] via-[#0D1A36] to-[#132650] text-white border border-amber-400/25 p-5 shadow-sm hover:border-amber-400/60 transition-all cursor-pointer flex flex-col justify-between gap-4 min-h-[164px]"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="w-11 h-11 rounded-xl bg-amber-400/15 border border-amber-400/35 text-amber-300 flex items-center justify-center shrink-0">
-                          <KeyRound className="w-5 h-5" />
-                        </div>
-                        <span className="font-mono text-[11px] font-bold text-amber-300 bg-amber-400/15 border border-amber-400/30 px-2.5 py-1 rounded-lg">
-                          30s LIVE CODE
-                        </span>
-                      </div>
-
-                      <div className="space-y-1">
-                        <h2 className="text-base sm:text-lg font-bold text-white flex items-center justify-between gap-2">
-                          <span>OTP Security Code</span>
-                          <ChevronRight className="w-5 h-5 text-amber-300 group-hover:translate-x-0.5 transition-transform shrink-0" />
-                        </h2>
-                        <p className="text-xs text-slate-300 leading-relaxed">
-                          Open your dedicated 6-digit authenticator code that automatically rotates every 30 seconds.
-                        </p>
-                      </div>
-                    </button>
-
-                    {/* Video Promotion Card */}
-                    <button
-                      type="button"
-                      onClick={() => onOpenVideoPromo?.()}
-                      className="group text-left rounded-2xl border border-slate-200 bg-white hover:border-[#0D1A36]/40 p-5 shadow-xs transition-all cursor-pointer flex flex-col justify-between gap-4 min-h-[164px]"
-                    >
-                      <div className="flex items-start justify-between gap-3">
-                        <div className="w-11 h-11 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-700 flex items-center justify-center shrink-0">
-                          <Video className="w-5 h-5" />
-                        </div>
-                        <span className="font-mono text-[11px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg tabular-nums">
-                          EARN {formatTaka(settings.videoPromoDefaultReward ?? 100, sym)}+
-                        </span>
-                      </div>
-
-                      <div className="space-y-1">
-                        <h2 className="text-base sm:text-lg font-bold text-slate-900 flex items-center justify-between gap-2">
-                          <span>Video Promotion</span>
-                          <ChevronRight className="w-5 h-5 text-slate-400 group-hover:text-[#0D1A36] group-hover:translate-x-0.5 transition-transform shrink-0" />
-                        </h2>
-                        <p className="text-xs text-slate-600 leading-relaxed">
-                          Make a video about {settings.siteName} and submit your link. Admin verifies &amp; adds Taka straight to your wallet.
-                        </p>
-                      </div>
-                    </button>
                   </section>
 
+                  {/* HORIZONTAL SWIPEABLE SLIDER FOR REMAINING PROFILE CARDS */}
+                  <section className="space-y-3">
+                    <div className="flex items-center justify-between gap-2 px-0.5">
+                      <div>
+                        <h3 className="text-xs sm:text-sm font-bold uppercase tracking-wider text-amber-300/90">
+                          More Tools &amp; Insights
+                        </h3>
+                        <p className="text-[11px] text-slate-400">
+                          Swipe to explore OTP, Video Promo, Cash Flow, Activity &amp; Security
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          type="button"
+                          onClick={() => scrollToOverviewSlide(activeSlide - 1)}
+                          disabled={activeSlide === 0}
+                          aria-label="Previous slide"
+                          className="w-8 h-8 rounded-full bg-white/10 hover:bg-amber-400 hover:text-[#071128] disabled:opacity-35 text-white flex items-center justify-center transition-colors cursor-pointer"
+                        >
+                          <ChevronLeft className="w-4 h-4" />
+                        </button>
+                        <button
+                          type="button"
+                          onClick={() => scrollToOverviewSlide(activeSlide + 1)}
+                          disabled={activeSlide >= OVERVIEW_SLIDES_COUNT - 1}
+                          aria-label="Next slide"
+                          className="w-8 h-8 rounded-full bg-white/10 hover:bg-amber-400 hover:text-[#071128] disabled:opacity-35 text-white flex items-center justify-center transition-colors cursor-pointer"
+                        >
+                          <ChevronRight className="w-4 h-4" />
+                        </button>
+                      </div>
+                    </div>
+
+                    <div
+                      ref={overviewSliderRef}
+                      onScroll={handleOverviewSliderScroll}
+                      className="flex gap-3.5 overflow-x-auto snap-x snap-mandatory scroll-smooth pb-2 -mx-1 px-1 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+                    >
+                      {/* SLIDE 1: OTP 30-Second Authenticator */}
+                      <button
+                        type="button"
+                        onClick={() => onOpenOtp?.()}
+                        className="snap-start shrink-0 w-[86%] sm:w-[340px] group text-left rounded-2xl bg-gradient-to-br from-[#142552] via-[#0D1A3B] to-[#08122B] border border-amber-400/40 hover:border-amber-400 p-5 shadow-lg transition-all cursor-pointer flex flex-col justify-between gap-4 min-h-[192px]"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="w-11 h-11 rounded-xl bg-amber-400/15 border border-amber-400/40 text-amber-300 flex items-center justify-center shrink-0">
+                            <KeyRound className="w-5 h-5" />
+                          </div>
+                          <span className="font-mono text-[11px] font-bold text-amber-300 bg-amber-400/15 border border-amber-400/35 px-2.5 py-1 rounded-lg">
+                            30s LIVE CODE
+                          </span>
+                        </div>
+                        <div className="space-y-1">
+                          <h4 className="text-base font-bold text-white flex items-center justify-between gap-2">
+                            <span>OTP Security Code</span>
+                            <ChevronRight className="w-5 h-5 text-amber-300 group-hover:translate-x-0.5 transition-transform shrink-0" />
+                          </h4>
+                          <p className="text-xs text-slate-300 leading-relaxed">
+                            Open your dedicated 6-digit authenticator code that automatically rotates every 30 seconds.
+                          </p>
+                        </div>
+                      </button>
+
+                      {/* SLIDE 2: Video Promotion Earn */}
+                      <button
+                        type="button"
+                        onClick={() => onOpenVideoPromo?.()}
+                        className="snap-start shrink-0 w-[86%] sm:w-[340px] group text-left rounded-2xl bg-gradient-to-br from-[#112A48] via-[#0B1C3A] to-[#08122B] border border-emerald-400/35 hover:border-emerald-400 p-5 shadow-lg transition-all cursor-pointer flex flex-col justify-between gap-4 min-h-[192px]"
+                      >
+                        <div className="flex items-start justify-between gap-3">
+                          <div className="w-11 h-11 rounded-xl bg-emerald-400/15 border border-emerald-400/35 text-emerald-300 flex items-center justify-center shrink-0">
+                            <Video className="w-5 h-5" />
+                          </div>
+                          <span className="font-mono text-[11px] font-bold text-emerald-300 bg-emerald-400/15 border border-emerald-400/35 px-2.5 py-1 rounded-lg tabular-nums">
+                            EARN {formatTaka(settings.videoPromoDefaultReward ?? 100, sym)}+
+                          </span>
+                        </div>
+                        <div className="space-y-1">
+                          <h4 className="text-base font-bold text-white flex items-center justify-between gap-2">
+                            <span>Video Promotion</span>
+                            <ChevronRight className="w-5 h-5 text-emerald-300 group-hover:translate-x-0.5 transition-transform shrink-0" />
+                          </h4>
+                          <p className="text-xs text-slate-300 leading-relaxed">
+                            Make a video about {settings.siteName} and submit your link. Admin verifies &amp; adds Taka straight to your wallet.
+                          </p>
+                        </div>
+                      </button>
+
+                      {/* SLIDE 3: Account KPI Metrics */}
+                      <div className="snap-start shrink-0 w-[88%] sm:w-[360px] rounded-2xl bg-gradient-to-br from-[#142552]/95 via-[#0C193B] to-[#08122B] border border-blue-400/30 p-5 shadow-lg flex flex-col justify-between gap-3 min-h-[192px]">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-sm font-bold text-white">Performance Stats</h4>
+                          <span className="text-[11px] font-mono text-amber-300 font-semibold">
+                            {winRatePercent}% Win Rate
+                          </span>
+                        </div>
+                        <div className="grid grid-cols-2 gap-2.5">
+                          <div className="rounded-xl bg-white/[0.05] border border-white/10 p-3">
+                            <p className="text-[11px] text-slate-400">Deposited</p>
+                            <p className="mt-0.5 text-sm font-bold text-white font-mono tabular-nums truncate">
+                              {maskedAmount(user.totalDeposited)}
+                            </p>
+                          </div>
+                          <div className="rounded-xl bg-white/[0.05] border border-white/10 p-3">
+                            <p className="text-[11px] text-slate-400">Prize Won</p>
+                            <p className="mt-0.5 text-sm font-bold text-emerald-400 font-mono tabular-nums truncate">
+                              {maskedAmount(totalWinningsAmount)}
+                            </p>
+                          </div>
+                          <div className="rounded-xl bg-white/[0.05] border border-white/10 p-3">
+                            <p className="text-[11px] text-slate-400">Active Tickets</p>
+                            <p className="mt-0.5 text-sm font-bold text-amber-300 font-mono tabular-nums">
+                              {pendingTicketsCount} / {totalTicketsCount}
+                            </p>
+                          </div>
+                          <div className="rounded-xl bg-white/[0.05] border border-white/10 p-3">
+                            <p className="text-[11px] text-slate-400">Referrals</p>
+                            <p className="mt-0.5 text-sm font-bold text-sky-300 font-mono tabular-nums">
+                              {user.referralCount || 0} invited
+                            </p>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* SLIDE 4: Account Cash Flow */}
+                      <div className="snap-start shrink-0 w-[88%] sm:w-[360px] rounded-2xl bg-gradient-to-br from-[#142552]/95 via-[#0C193B] to-[#08122B] border border-blue-400/30 p-5 shadow-lg space-y-3.5 min-h-[192px]">
+                        <div className="flex items-center justify-between gap-2">
+                          <div>
+                            <h4 className="text-sm font-bold text-white">Account Cash Flow</h4>
+                            <p className="text-[11px] text-slate-400">Lifetime wallet breakdown</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => selectTab("transactions")}
+                            className="text-xs font-semibold text-amber-300 hover:underline cursor-pointer"
+                          >
+                            Full Ledger
+                          </button>
+                        </div>
+
+                        <div className="space-y-2.5">
+                          <div className="space-y-1">
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="text-slate-300">Deposits</span>
+                              <span className="font-mono font-bold text-white tabular-nums">
+                                {maskedAmount(flowTotals.deposited)}
+                              </span>
+                            </div>
+                            <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                              <div
+                                className="h-full bg-emerald-400 rounded-full"
+                                style={{ width: `${Math.max(4, flowTotals.depositedPct)}%` }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-1">
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="text-slate-300">Prize Winnings</span>
+                              <span className="font-mono font-bold text-emerald-400 tabular-nums">
+                                {maskedAmount(flowTotals.won)}
+                              </span>
+                            </div>
+                            <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                              <div
+                                className="h-full bg-amber-400 rounded-full"
+                                style={{ width: `${flowTotals.won > 0 ? Math.max(4, flowTotals.wonPct) : 0}%` }}
+                              />
+                            </div>
+                          </div>
+
+                          <div className="space-y-1">
+                            <div className="flex items-center justify-between text-xs">
+                              <span className="text-slate-300">Withdrawals</span>
+                              <span className="font-mono font-bold text-sky-300 tabular-nums">
+                                {maskedAmount(flowTotals.withdrawn)}
+                              </span>
+                            </div>
+                            <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                              <div
+                                className="h-full bg-sky-400 rounded-full"
+                                style={{ width: `${flowTotals.withdrawn > 0 ? Math.max(4, flowTotals.withdrawnPct) : 0}%` }}
+                              />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* SLIDE 5: Recent Activity Feed */}
+                      <div className="snap-start shrink-0 w-[88%] sm:w-[360px] rounded-2xl bg-gradient-to-br from-[#142552]/95 via-[#0C193B] to-[#08122B] border border-blue-400/30 p-5 shadow-lg space-y-2.5 min-h-[192px]">
+                        <div className="flex items-center justify-between gap-2">
+                          <div>
+                            <h4 className="text-sm font-bold text-white">Recent Activity</h4>
+                            <p className="text-[11px] text-slate-400">Latest wallet &amp; ticket updates</p>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => selectTab("transactions")}
+                            className="text-xs font-semibold text-amber-300 hover:underline cursor-pointer"
+                          >
+                            See All
+                          </button>
+                        </div>
+
+                        {(data?.transactions || []).length === 0 ? (
+                          <p className="py-6 text-center text-xs text-slate-400">
+                            No recent activity yet.
+                          </p>
+                        ) : (
+                          <div className="divide-y divide-white/10">
+                            {(data?.transactions || []).slice(0, 3).map((txn) => (
+                              <div
+                                key={txn.id}
+                                className="py-2 flex items-center justify-between gap-2.5"
+                              >
+                                <div className="min-w-0">
+                                  <p className="text-xs font-semibold text-slate-100 truncate">
+                                    {txn.description}
+                                  </p>
+                                  <p className="text-[10px] font-mono text-slate-400">
+                                    {new Date(txn.createdAt).toLocaleDateString()}
+                                  </p>
+                                </div>
+                                <span
+                                  className={`font-mono text-xs font-bold tabular-nums whitespace-nowrap shrink-0 ${
+                                    txn.direction === "credit" ? "text-emerald-400" : "text-rose-400"
+                                  }`}
+                                >
+                                  {txn.direction === "credit" ? "+" : "-"}
+                                  {maskedAmount(txn.amount)}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        )}
+                      </div>
+
+                      {/* SLIDE 6: Account Readiness & Sign Out */}
+                      <div className="snap-start shrink-0 w-[88%] sm:w-[340px] rounded-2xl bg-gradient-to-br from-[#142552]/95 via-[#0C193B] to-[#08122B] border border-amber-400/30 p-5 shadow-lg flex flex-col justify-between gap-3 min-h-[192px]">
+                        <div className="space-y-2.5">
+                          <div className="flex items-center justify-between">
+                            <h4 className="text-sm font-bold text-white">Account Readiness</h4>
+                            <span className="font-mono text-xs font-bold text-amber-300 tabular-nums">
+                              {securityChecklist.percent}%
+                            </span>
+                          </div>
+                          <div className="h-1.5 rounded-full bg-white/10 overflow-hidden">
+                            <div
+                              className="h-full bg-gradient-to-r from-amber-400 to-emerald-400 transition-all"
+                              style={{ width: `${securityChecklist.percent}%` }}
+                            />
+                          </div>
+                          <ul className="space-y-1.5 text-xs">
+                            {securityChecklist.items.map((item) => (
+                              <li key={item.id} className="flex items-center justify-between gap-2">
+                                <span className={item.done ? "text-slate-300" : "text-white font-medium"}>
+                                  {item.label}
+                                </span>
+                                {item.done ? (
+                                  <Check className="w-3.5 h-3.5 text-emerald-400 shrink-0" />
+                                ) : (
+                                  <button
+                                    type="button"
+                                    onClick={() => selectTab("profile")}
+                                    className="text-amber-300 font-semibold hover:underline cursor-pointer"
+                                  >
+                                    Set
+                                  </button>
+                                )}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                        {onLogout && (
+                          <button
+                            type="button"
+                            onClick={onLogout}
+                            className="w-full py-2 rounded-xl bg-rose-500/15 hover:bg-rose-500/25 border border-rose-400/30 text-rose-300 text-xs font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
+                          >
+                            <LogOut className="w-3.5 h-3.5" />
+                            Sign Out
+                          </button>
+                        )}
+                      </div>
+                    </div>
+
+                    {/* Slider Pagination Dots */}
+                    <div className="flex items-center justify-center gap-1.5 pt-0.5">
+                      {Array.from({ length: OVERVIEW_SLIDES_COUNT }).map((_, idx) => (
+                        <button
+                          key={idx}
+                          type="button"
+                          onClick={() => scrollToOverviewSlide(idx)}
+                          aria-label={`Go to slide ${idx + 1}`}
+                          className={`h-1.5 rounded-full transition-all cursor-pointer ${
+                            activeSlide === idx
+                              ? "w-6 bg-amber-400 shadow-[0_0_8px_rgba(251,191,36,0.7)]"
+                              : "w-1.5 bg-white/25 hover:bg-white/50"
+                          }`}
+                        />
+                      ))}
+                    </div>
+                  </section>
                 </div>
               )}
 
+              {tab !== "overview" && (
+                <div className="text-slate-900 space-y-5">
               {/* TAB 2: MY LOTTERY (AUTO-GENERATED TICKETS + MOBILE CARDS + DESKTOP TABLE) */}
               {tab === "tickets" && (
                 <div className="space-y-4">
@@ -2064,6 +2215,8 @@ export function UserDashboard({
               {tab === "referrals" && (
                 <UserReferralTab currencySymbol={sym} siteName={settings.siteName} />
               )}
+                </div>
+              )}
             </>
           )}
         </main>
@@ -2077,7 +2230,7 @@ export function UserDashboard({
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            className="w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 space-y-4 shadow-2xl"
+            className="w-full sm:max-w-md rounded-t-3xl sm:rounded-2xl bg-white text-slate-900 border border-slate-200 p-5 sm:p-6 space-y-4 shadow-2xl"
           >
             <div className="w-10 h-1 bg-slate-300 rounded-full mx-auto sm:hidden" />
 

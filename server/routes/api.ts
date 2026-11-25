@@ -18,6 +18,7 @@ import {
   getOnlineChatCount,
   sendChatEventToUsers,
 } from "../realtime/chatHub";
+import { createSupportRouter } from "./supportRoutes";
 import {
   computeTimedOtp,
   createRateLimiter,
@@ -15089,6 +15090,9 @@ try {
       }
     }
   );
+
+  // Mount Live Customer Support System routes
+  router.use(createSupportRouter());
 
   return router;
 }

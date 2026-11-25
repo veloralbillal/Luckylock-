@@ -10,6 +10,7 @@ import {
 import { createDefaultSecurityRoom, DEFAULT_SECURITY_POLICY } from "./services/securityRoomService";
 import type {
   InstalledPlugin,
+  LiveSupportState,
   LotteryDatabase,
   PaymentGatewayConfig,
   PublicUser,
@@ -1231,6 +1232,124 @@ function createSeedDatabase(): LotteryDatabase {
     serverCluster: createDefaultServerCluster(),
     security: createDefaultSecurityRoom(),
     referrals: createDefaultReferralState(),
+    liveSupport: createDefaultLiveSupportState(),
+  };
+}
+
+export function createDefaultLiveSupportState(): LiveSupportState {
+  const now = new Date().toISOString();
+  const departments = [
+    {
+      id: "sdept_general",
+      name: "General Support",
+      slug: "general",
+      description: "General account questions, draws, and platform guidance.",
+      isActive: true,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: "sdept_payments",
+      name: "Payments & Wallet",
+      slug: "payments",
+      description: "Deposits, Bangla QR payments, withdrawals, and balance checks.",
+      isActive: true,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: "sdept_shop",
+      name: "Shop & Orders",
+      slug: "shop",
+      description: "Digital products, order delivery, coupons, and refunds.",
+      isActive: true,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: "sdept_security",
+      name: "Account & Security",
+      slug: "security",
+      description: "Login issues, OTP verification, and account recovery.",
+      isActive: true,
+      createdAt: now,
+      updatedAt: now,
+    },
+  ];
+
+  const representatives = [
+    {
+      id: "srep_sara",
+      name: "Sara Rahman",
+      username: "rep_sara",
+      email: "sara.support@lotterywinner.local",
+      phone: "01711-880101",
+      passwordHash: hashPassword("Support123"),
+      avatarUrl: buildSvgAvatar("Sara Rahman", 0),
+      departmentId: "sdept_general",
+      status: "offline" as const,
+      accountStatus: "active" as const,
+      maxActiveChats: 1,
+      lastAssignedAt: null,
+      lastSeenAt: null,
+      createdAt: now,
+      updatedAt: now,
+    },
+    {
+      id: "srep_rafi",
+      name: "Rafiul Karim",
+      username: "rep_rafi",
+      email: "rafi.support@lotterywinner.local",
+      phone: "01811-880102",
+      passwordHash: hashPassword("Support123"),
+      avatarUrl: buildSvgAvatar("Rafiul Karim", 1),
+      departmentId: "sdept_payments",
+      status: "offline" as const,
+      accountStatus: "active" as const,
+      maxActiveChats: 1,
+      lastAssignedAt: null,
+      lastSeenAt: null,
+      createdAt: now,
+      updatedAt: now,
+    },
+  ];
+
+  return {
+    departments,
+    representatives,
+    chats: [],
+    messages: [],
+    attachments: [],
+    assignments: [],
+    ratings: [],
+    settings: {
+      autoAssignEnabled: true,
+      maxActiveChatsPerRep: 1,
+      maxUploadMb: 5,
+      allowedExtensions: ["jpg", "jpeg", "png", "webp", "gif", "pdf", "txt"],
+      allowedMimeTypes: [
+        "image/jpeg",
+        "image/png",
+        "image/webp",
+        "image/gif",
+        "application/pdf",
+        "text/plain",
+      ],
+      welcomeMessage:
+        "Welcome to Live Support! A dedicated support representative will assist you shortly.",
+      queueMessage:
+        "All representatives are currently assisting other customers. You are in the live queue and will be connected automatically as soon as the next representative is free.",
+      offlineMessage:
+        "All representatives are currently offline. Your conversation is queued and will be assigned automatically when a representative comes online.",
+      updatedAt: now,
+    },
+    presence: representatives.map((r) => ({
+      representativeId: r.id,
+      isConnected: false,
+      socketCount: 0,
+      lastHeartbeatAt: now,
+      disconnectedAt: null,
+    })),
   };
 }
 
@@ -2218,6 +2337,26 @@ function loadDbFromDisk(): LotteryDatabase {
     }
     if (!Array.isArray(parsed.microTaskSubmissions)) {
       parsed.microTaskSubmissions = [];
+    }
+    if (!parsed.liveSupport || typeof parsed.liveSupport !== "object") {
+      parsed.liveSupport = createDefaultLiveSupportState();
+    } else {
+      const def = createDefaultLiveSupportState();
+      if (!Array.isArray(parsed.liveSupport.departments) || parsed.liveSupport.departments.length === 0) {
+        parsed.liveSupport.departments = def.departments;
+      }
+      if (!Array.isArray(parsed.liveSupport.representatives)) {
+        parsed.liveSupport.representatives = def.representatives;
+      }
+      if (!Array.isArray(parsed.liveSupport.chats)) parsed.liveSupport.chats = [];
+      if (!Array.isArray(parsed.liveSupport.messages)) parsed.liveSupport.messages = [];
+      if (!Array.isArray(parsed.liveSupport.attachments)) parsed.liveSupport.attachments = [];
+      if (!Array.isArray(parsed.liveSupport.assignments)) parsed.liveSupport.assignments = [];
+      if (!Array.isArray(parsed.liveSupport.ratings)) parsed.liveSupport.ratings = [];
+      if (!Array.isArray(parsed.liveSupport.presence)) parsed.liveSupport.presence = def.presence;
+      if (!parsed.liveSupport.settings) {
+        parsed.liveSupport.settings = def.settings;
+      }
     }
     if (!Array.isArray(parsed.agents) || parsed.agents.length < 64) {
       const existingByDistrict = new Map(

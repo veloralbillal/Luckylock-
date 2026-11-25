@@ -1080,6 +1080,148 @@ export interface MicroTaskSubmission {
   updatedAt: string;
 }
 
+export type SupportRepStatus = "online" | "offline" | "busy";
+export type SupportRepAccountStatus = "active" | "suspended";
+export type SupportChatStatus = "waiting" | "active" | "closed";
+export type SupportSenderType = "customer" | "representative" | "system";
+export type SupportAssignmentTrigger = "auto" | "admin" | "transfer";
+
+export interface SupportDepartment {
+  id: string;
+  name: string;
+  slug: string;
+  description: string;
+  isActive: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SupportRepresentative {
+  id: string;
+  name: string;
+  username: string;
+  email: string;
+  phone: string;
+  passwordHash: string;
+  avatarUrl: string;
+  departmentId: string | null;
+  status: SupportRepStatus;
+  accountStatus: SupportRepAccountStatus;
+  maxActiveChats: number;
+  lastAssignedAt: string | null;
+  lastSeenAt: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SupportChat {
+  id: string;
+  ticketCode: string;
+  customerUserId: string | null;
+  customerName: string;
+  customerPhone: string;
+  customerEmail: string | null;
+  departmentId: string | null;
+  representativeId: string | null;
+  status: SupportChatStatus;
+  queueEnteredAt: string | null;
+  assignedAt: string | null;
+  closedAt: string | null;
+  closedByType: "customer" | "representative" | "admin" | null;
+  closedById: string | null;
+  lastMessagePreview: string | null;
+  lastMessageAt: string | null;
+  customerUnreadCount: number;
+  repUnreadCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SupportMessage {
+  id: string;
+  chatId: string;
+  senderType: SupportSenderType;
+  senderId: string | null;
+  senderName: string;
+  body: string;
+  attachmentIds: string[];
+  deliveredAt: string | null;
+  readAt: string | null;
+  createdAt: string;
+}
+
+export interface SupportAttachment {
+  id: string;
+  chatId: string;
+  messageId: string | null;
+  uploadedByType: "customer" | "representative";
+  uploadedById: string | null;
+  originalName: string;
+  storedName: string;
+  mimeType: string;
+  extension: string;
+  sizeBytes: number;
+  url: string;
+  createdAt: string;
+}
+
+export interface SupportAssignment {
+  id: string;
+  chatId: string;
+  representativeId: string;
+  representativeName: string;
+  previousRepresentativeId: string | null;
+  assignedByType: SupportAssignmentTrigger;
+  assignedById: string | null;
+  reason: string | null;
+  assignedAt: string;
+  unassignedAt: string | null;
+}
+
+export interface SupportRating {
+  id: string;
+  chatId: string;
+  representativeId: string | null;
+  representativeName: string | null;
+  customerName: string;
+  customerPhone: string;
+  rating: number;
+  feedback: string;
+  createdAt: string;
+}
+
+export interface SupportSettings {
+  autoAssignEnabled: boolean;
+  maxActiveChatsPerRep: number;
+  maxUploadMb: number;
+  allowedExtensions: string[];
+  allowedMimeTypes: string[];
+  welcomeMessage: string;
+  queueMessage: string;
+  offlineMessage: string;
+  updatedAt: string;
+}
+
+export interface SupportPresence {
+  representativeId: string;
+  isConnected: boolean;
+  socketCount: number;
+  lastHeartbeatAt: string;
+  disconnectedAt: string | null;
+}
+
+export interface LiveSupportState {
+  departments: SupportDepartment[];
+  representatives: SupportRepresentative[];
+  chats: SupportChat[];
+  messages: SupportMessage[];
+  attachments: SupportAttachment[];
+  assignments: SupportAssignment[];
+  ratings: SupportRating[];
+  settings: SupportSettings;
+  presence: SupportPresence[];
+}
+
 export interface LotteryDatabase {
   users: User[];
   categories: LotteryCategory[];
@@ -1118,4 +1260,6 @@ export interface LotteryDatabase {
   referrals?: ReferralSystemState;
   smtpConfig?: SmtpConfig;
   smtpLogs?: SmtpEmailLogRecord[];
+  liveSupport?: LiveSupportState;
 }
+

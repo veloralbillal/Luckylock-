@@ -137,6 +137,7 @@ interface MobileNotificationBarStripProps {
   className?: string;
   sampleLotteryName?: string;
   sampleLotterySlug?: string;
+  variant?: "light" | "dark";
   onTriggerPreviewBanner?: () => void;
 }
 
@@ -144,6 +145,7 @@ export function MobileNotificationBarStrip({
   compact = false,
   className = "",
   sampleLotterySlug,
+  variant = "light",
 }: MobileNotificationBarStripProps) {
   const { showToast } = useToast();
   const { isInstallable, isInstalled, isIOS, install } = usePWAInstall();
@@ -220,18 +222,28 @@ export function MobileNotificationBarStrip({
     return null;
   }
 
+  const isDark = variant === "dark";
+
   return (
     <>
       <div
-        className={`rounded-xl border border-slate-200 bg-white ${
+        className={`${
+          isDark
+            ? "rounded-2xl border border-amber-400/30 bg-gradient-to-r from-[#111E44] via-[#0B1634] to-[#081026] shadow-[0_10px_28px_rgba(0,0,0,0.4)]"
+            : "rounded-xl border border-slate-200 bg-white"
+        } ${
           compact ? "px-3.5 py-3" : "px-4 sm:px-5 py-3.5"
         } flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 ${className}`.trim()}
       >
         <div className="flex items-start sm:items-center gap-3 min-w-0">
           <div
-            className={`w-9 h-9 rounded-lg flex items-center justify-center shrink-0 ${
+            className={`w-9 h-9 rounded-xl flex items-center justify-center shrink-0 ${
               permission === "denied"
-                ? "bg-rose-50 text-rose-600 border border-rose-200"
+                ? isDark
+                  ? "bg-rose-500/15 text-rose-300 border border-rose-400/35"
+                  : "bg-rose-50 text-rose-600 border border-rose-200"
+                : isDark
+                ? "bg-amber-400/15 text-amber-300 border border-amber-400/35"
                 : "bg-amber-50 text-amber-700 border border-amber-200"
             }`}
           >
@@ -243,10 +255,18 @@ export function MobileNotificationBarStrip({
           </div>
 
           <div className="min-w-0">
-            <p className="text-xs sm:text-sm font-bold text-slate-900 leading-snug">
+            <p
+              className={`text-xs sm:text-sm font-bold leading-snug ${
+                isDark ? "text-white" : "text-slate-900"
+              }`}
+            >
               1-Minute Lottery Alert in Mobile Notification Bar
             </p>
-            <p className="text-[11px] sm:text-xs text-slate-600 leading-relaxed">
+            <p
+              className={`text-[11px] sm:text-xs leading-relaxed ${
+                isDark ? "text-blue-100/75" : "text-slate-600"
+              }`}
+            >
               {permission === "denied"
                 ? "Browser notifications are blocked — allow Notifications in site settings to receive 1-minute mobile bar alerts."
                 : "লটারি শেষ হওয়ার ১ মিনিট আগে আপনার মোবাইলের নোটিফিকেশন বারে নোট পেতে অ্যালার্ট চালু করুন।"}
@@ -259,9 +279,13 @@ export function MobileNotificationBarStrip({
             type="button"
             disabled={requesting}
             onClick={() => void handleEnableNotifications()}
-            className="min-h-[38px] px-4 py-1.5 rounded-lg bg-[#060D1E] hover:bg-emerald-700 text-white text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer transition-colors whitespace-nowrap disabled:opacity-60"
+            className={`min-h-[38px] px-4 py-1.5 text-xs font-extrabold inline-flex items-center gap-1.5 cursor-pointer transition-all whitespace-nowrap disabled:opacity-60 ${
+              isDark
+                ? "rounded-full bg-gradient-to-r from-[#FDE047] via-[#FACC15] to-[#EAB308] hover:brightness-105 text-[#071128] shadow-[0_6px_18px_rgba(250,204,21,0.3)]"
+                : "rounded-lg bg-[#060D1E] hover:bg-emerald-700 text-white"
+            }`}
           >
-            <BellRing className="w-3.5 h-3.5 text-amber-300" />
+            <BellRing className={`w-3.5 h-3.5 ${isDark ? "text-[#071128]" : "text-amber-300"}`} />
             {requesting ? "Enabling..." : "Enable Mobile Alerts"}
           </button>
 
@@ -269,9 +293,13 @@ export function MobileNotificationBarStrip({
             <button
               type="button"
               onClick={() => void install()}
-              className="min-h-[38px] px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer transition-colors whitespace-nowrap"
+              className={`min-h-[38px] px-3.5 py-1.5 text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer transition-colors whitespace-nowrap ${
+                isDark
+                  ? "rounded-full border border-white/20 bg-white/10 hover:bg-white/15 text-white"
+                  : "rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800"
+              }`}
             >
-              <Download className="w-3.5 h-3.5 text-slate-600" />
+              <Download className={`w-3.5 h-3.5 ${isDark ? "text-amber-300" : "text-slate-600"}`} />
               Install App
             </button>
           )}
@@ -280,9 +308,13 @@ export function MobileNotificationBarStrip({
             <button
               type="button"
               onClick={() => setShowIOSGuide(true)}
-              className="min-h-[38px] px-3.5 py-1.5 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800 text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer transition-colors whitespace-nowrap"
+              className={`min-h-[38px] px-3.5 py-1.5 text-xs font-semibold inline-flex items-center gap-1.5 cursor-pointer transition-colors whitespace-nowrap ${
+                isDark
+                  ? "rounded-full border border-white/20 bg-white/10 hover:bg-white/15 text-white"
+                  : "rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-800"
+              }`}
             >
-              <Download className="w-3.5 h-3.5 text-slate-600" />
+              <Download className={`w-3.5 h-3.5 ${isDark ? "text-amber-300" : "text-slate-600"}`} />
               Install on iPhone
             </button>
           )}

@@ -169,7 +169,7 @@ export function DirectMessagePage({
   // First-time Chat Profile Setup Gate
   if (user && !user.chatProfileCompleted) {
     return (
-      <div className="min-h-[100dvh] w-full bg-slate-50 overflow-y-auto py-6 px-4">
+      <div className="min-h-[100dvh] w-full bg-[#040B1F] overflow-y-auto">
         <ChatProfileSetupCard
           user={user}
           isFirstTime
@@ -182,13 +182,13 @@ export function DirectMessagePage({
 
   if (!user) {
     return (
-      <div className="h-[100dvh] w-full flex flex-col items-center justify-center bg-slate-50 px-4 text-center space-y-4">
-        <div className="w-14 h-14 rounded-2xl bg-[#0B1221] text-amber-400 flex items-center justify-center">
+      <div className="h-[100dvh] w-full flex flex-col items-center justify-center bg-gradient-to-b from-[#040B1F] via-[#071330] to-[#040B1F] text-white px-4 text-center space-y-4">
+        <div className="w-14 h-14 rounded-2xl bg-amber-400/15 border border-amber-400/40 text-amber-400 flex items-center justify-center">
           <MessageSquare className="w-7 h-7" />
         </div>
         <div className="space-y-1 max-w-sm">
-          <h1 className="text-lg font-bold text-slate-900">Sign In to Send Direct Messages</h1>
-          <p className="text-xs text-slate-500">
+          <h1 className="text-lg font-extrabold text-white">Sign In to Send Direct Messages</h1>
+          <p className="text-xs text-slate-300">
             Log in to your player account to chat directly with players and 64-district agents.
           </p>
         </div>
@@ -196,14 +196,14 @@ export function DirectMessagePage({
           <button
             type="button"
             onClick={onBackToChat}
-            className="min-h-[42px] px-4 rounded-xl border border-slate-300 bg-white text-slate-700 text-xs font-semibold cursor-pointer"
+            className="min-h-[42px] px-4 rounded-full border border-white/15 bg-white/10 text-slate-200 text-xs font-semibold cursor-pointer"
           >
             Back
           </button>
           <button
             type="button"
             onClick={onOpenAuth}
-            className="min-h-[42px] px-5 rounded-xl bg-amber-400 hover:bg-amber-300 text-slate-950 text-xs font-bold cursor-pointer"
+            className="min-h-[42px] px-5 rounded-full bg-gradient-to-r from-[#FDE047] via-[#FACC15] to-[#EAB308] text-[#071128] text-xs font-extrabold cursor-pointer"
           >
             Sign In
           </button>
@@ -275,15 +275,15 @@ export function DirectMessagePage({
       : ["Assalamu Alaikum!", "Hi! Good luck on today's draw!", "Hello, let's connect!"];
 
   return (
-    <div className="h-[100dvh] w-full flex flex-col bg-slate-100 overflow-hidden">
+    <div className="h-[100dvh] w-full flex flex-col bg-gradient-to-b from-[#040B1F] via-[#071330] to-[#040B1F] text-white overflow-hidden">
       {/* Full-Screen Sticky Top Header */}
-      <header className="shrink-0 bg-[#0B1221] text-white border-b border-slate-800 px-3 sm:px-6 py-3 flex items-center justify-between gap-3">
+      <header className="shrink-0 bg-[#060E24]/95 backdrop-blur-md text-white border-b border-amber-400/25 px-3 sm:px-6 py-3 flex items-center justify-between gap-3">
         <div className="flex items-center gap-2.5 sm:gap-3.5 min-w-0">
           <button
             type="button"
             onClick={onBackToChat}
             aria-label="Back to Chat"
-            className="min-h-[40px] min-w-[40px] rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 text-white flex items-center justify-center cursor-pointer shrink-0 transition-colors"
+            className="min-h-[40px] min-w-[40px] rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-white flex items-center justify-center cursor-pointer shrink-0 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
           </button>
@@ -294,11 +294,11 @@ export function DirectMessagePage({
                 src={partner.avatarUrl}
                 name={partner.fullName}
                 size="md"
-                className="ring-2 ring-amber-400/50 shrink-0"
+                className="ring-2 ring-amber-400/60 shrink-0"
               />
               <div className="min-w-0">
                 <div className="flex items-center gap-1.5 min-w-0">
-                  <h1 className="text-sm sm:text-base font-bold text-white truncate">
+                  <h1 className="text-sm sm:text-base font-extrabold text-white truncate">
                     {partner.fullName}
                   </h1>
                   {partner.isVerified && (
@@ -341,7 +341,7 @@ export function DirectMessagePage({
             type="button"
             onClick={() => void loadConversation()}
             aria-label="Refresh messages"
-            className="min-h-[38px] min-w-[38px] rounded-xl bg-white/10 hover:bg-white/15 border border-white/10 text-slate-200 flex items-center justify-center cursor-pointer transition-colors"
+            className="min-h-[38px] min-w-[38px] rounded-xl bg-white/10 hover:bg-white/15 border border-white/15 text-slate-200 flex items-center justify-center cursor-pointer transition-colors"
           >
             <RefreshCw className={`w-4 h-4 ${loading ? "animate-spin" : ""}`} />
           </button>
@@ -351,10 +351,10 @@ export function DirectMessagePage({
               type="button"
               disabled={followBusy}
               onClick={handleToggleFollow}
-              className={`min-h-[38px] px-3 sm:px-3.5 rounded-xl text-xs font-bold inline-flex items-center gap-1.5 cursor-pointer transition-colors disabled:opacity-60 ${
+              className={`min-h-[38px] px-3.5 rounded-full text-xs font-extrabold inline-flex items-center gap-1.5 cursor-pointer transition-all disabled:opacity-60 ${
                 partner.isFollowing
-                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/30 hover:bg-emerald-500/30"
-                  : "bg-amber-400 hover:bg-amber-300 text-slate-950"
+                  ? "bg-emerald-500/20 text-emerald-300 border border-emerald-400/40 hover:bg-emerald-500/30"
+                  : "bg-gradient-to-r from-[#FDE047] via-[#FACC15] to-[#EAB308] hover:brightness-105 text-[#071128]"
               }`}
             >
               {partner.isFollowing ? (
@@ -377,16 +377,16 @@ export function DirectMessagePage({
       <main className="flex-1 overflow-y-auto px-3 sm:px-6 py-4 sm:py-6">
         <div className="max-w-4xl mx-auto space-y-3">
           {loading ? (
-            <div className="py-16 text-center text-sm text-slate-500">
+            <div className="py-16 text-center text-sm text-slate-300">
               Loading conversation history...
             </div>
           ) : !partner ? (
             <div className="py-16 text-center space-y-3">
-              <p className="text-sm font-semibold text-slate-700">Conversation not found.</p>
+              <p className="text-sm font-semibold text-white">Conversation not found.</p>
               <button
                 type="button"
                 onClick={onBackToChat}
-                className="min-h-[40px] px-4 rounded-xl bg-[#0B1221] text-white text-xs font-bold cursor-pointer"
+                className="min-h-[40px] px-5 rounded-full bg-gradient-to-r from-[#FDE047] via-[#FACC15] to-[#EAB308] text-[#071128] text-xs font-extrabold cursor-pointer"
               >
                 Return to Chat
               </button>
@@ -397,15 +397,15 @@ export function DirectMessagePage({
                 src={partner.avatarUrl}
                 name={partner.fullName}
                 size="xl"
-                className="mx-auto ring-2 ring-slate-200"
+                className="mx-auto ring-2 ring-amber-400/60"
               />
               <div className="space-y-1">
-                <h2 className="text-base font-bold text-slate-900">{partner.fullName}</h2>
-                <p className="text-xs font-mono text-slate-500">
+                <h2 className="text-base font-extrabold text-white">{partner.fullName}</h2>
+                <p className="text-xs font-mono text-amber-300">
                   @{partner.username}
                   {partner.district ? ` · ${partner.district} Agent` : ""}
                 </p>
-                <p className="text-xs text-slate-500 max-w-sm mx-auto pt-1">
+                <p className="text-xs text-slate-300 max-w-sm mx-auto pt-1">
                   No messages yet. Send a quick message below to start your private conversation.
                 </p>
               </div>
@@ -416,7 +416,7 @@ export function DirectMessagePage({
                     type="button"
                     disabled={sending}
                     onClick={() => void sendTextMessage(starter)}
-                    className="min-h-[38px] px-3.5 py-2 rounded-xl bg-white border border-slate-200 hover:border-amber-400 hover:bg-amber-50/40 text-xs font-medium text-slate-700 cursor-pointer transition-colors"
+                    className="min-h-[38px] px-3.5 py-2 rounded-full bg-[#0C1736] border border-blue-400/35 hover:border-amber-400/65 hover:text-amber-300 text-xs font-medium text-slate-200 cursor-pointer transition-colors"
                   >
                     {starter}
                   </button>
@@ -435,7 +435,7 @@ export function DirectMessagePage({
                 <React.Fragment key={dm.id}>
                   {showDateDivider && (
                     <div className="flex items-center justify-center py-2">
-                      <span className="text-[11px] font-semibold text-slate-500 bg-slate-200/70 px-3 py-1 rounded-lg">
+                      <span className="text-[11px] font-semibold text-blue-200/80 bg-[#0B1634] border border-white/10 px-3 py-1 rounded-full">
                         {curDay}
                       </span>
                     </div>
@@ -447,20 +447,20 @@ export function DirectMessagePage({
                         src={partner.avatarUrl}
                         name={partner.fullName}
                         size="sm"
-                        className="shrink-0 mb-0.5"
+                        className="shrink-0 mb-0.5 border border-amber-400/40"
                       />
                     )}
                     <div
                       className={`max-w-[82%] sm:max-w-[70%] rounded-2xl px-4 py-2.5 text-sm leading-relaxed border ${
                         isOwn
-                          ? "bg-[#0D1A36] text-white border-[#0D1A36] rounded-br-md"
-                          : "bg-white text-slate-900 border-slate-200 rounded-bl-md"
+                          ? "bg-gradient-to-br from-[#1C2E6B] to-[#111E47] text-white border-amber-400/45 rounded-br-md shadow-[0_6px_18px_rgba(0,0,0,0.3)]"
+                          : "bg-[#0C1736] text-slate-100 border-blue-400/25 rounded-bl-md shadow-[0_6px_16px_rgba(0,0,0,0.25)]"
                       }`}
                     >
                       <p className="break-words whitespace-pre-wrap">{dm.message}</p>
                       <p
                         className={`mt-1 text-[10px] font-mono tabular-nums ${
-                          isOwn ? "text-amber-300/80 text-right" : "text-slate-400"
+                          isOwn ? "text-amber-300/85 text-right" : "text-slate-400"
                         }`}
                       >
                         {new Date(dm.createdAt).toLocaleTimeString([], {
@@ -480,10 +480,10 @@ export function DirectMessagePage({
 
       {/* Sticky Bottom Message Composer */}
       {partner && (
-        <footer className="shrink-0 bg-white border-t border-slate-200 px-3 sm:px-6 py-3">
+        <footer className="shrink-0 bg-[#060E24] border-t border-white/10 px-3 sm:px-6 py-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
           <div className="max-w-4xl mx-auto space-y-2">
             {showEmojiPicker && (
-              <div className="flex flex-wrap items-center gap-1.5 p-2 rounded-xl bg-slate-50 border border-slate-200">
+              <div className="flex flex-wrap items-center gap-1.5 p-2 rounded-2xl bg-[#0B1634] border border-blue-400/25">
                 {QUICK_EMOJIS.map((em) => (
                   <button
                     key={em}
@@ -492,7 +492,7 @@ export function DirectMessagePage({
                       setDraft((prev) => `${prev}${em}`);
                       inputRef.current?.focus();
                     }}
-                    className="w-9 h-9 rounded-lg hover:bg-slate-200/70 text-lg flex items-center justify-center cursor-pointer"
+                    className="w-9 h-9 rounded-lg hover:bg-white/10 text-lg flex items-center justify-center cursor-pointer"
                   >
                     {em}
                   </button>
@@ -505,10 +505,10 @@ export function DirectMessagePage({
                 type="button"
                 onClick={() => setShowEmojiPicker((v) => !v)}
                 aria-label="Insert emoji"
-                className={`min-h-[44px] min-w-[44px] rounded-xl border flex items-center justify-center cursor-pointer shrink-0 transition-colors ${
+                className={`min-h-[44px] min-w-[44px] rounded-full border flex items-center justify-center cursor-pointer shrink-0 transition-colors ${
                   showEmojiPicker
-                    ? "bg-amber-50 border-amber-300 text-amber-700"
-                    : "bg-slate-50 border-slate-300 text-slate-600 hover:bg-slate-100"
+                    ? "bg-amber-400/20 border-amber-400/60 text-amber-300"
+                    : "bg-[#0B1634] border-blue-400/30 text-slate-300 hover:text-amber-300"
                 }`}
               >
                 <Smile className="w-5 h-5" />
@@ -521,13 +521,13 @@ export function DirectMessagePage({
                 value={draft}
                 onChange={(e) => setDraft(e.target.value)}
                 placeholder={`Write a message to @${partner.username}...`}
-                className="flex-1 min-h-[44px] rounded-xl border border-slate-300 bg-slate-50 px-4 py-2 text-sm text-slate-900 placeholder:text-slate-400 focus:bg-white focus:border-slate-800 focus:outline-none"
+                className="flex-1 min-h-[44px] rounded-full border border-blue-400/30 bg-[#0B1634] px-4 py-2 text-sm text-white placeholder:text-slate-400 focus:border-amber-400 focus:outline-none"
               />
 
               <button
                 type="submit"
                 disabled={sending || !draft.trim()}
-                className="min-h-[44px] px-4 sm:px-5 rounded-xl bg-emerald-700 hover:bg-emerald-800 disabled:opacity-50 text-white text-sm font-bold inline-flex items-center justify-center gap-1.5 cursor-pointer shrink-0 transition-colors"
+                className="min-h-[44px] px-4 sm:px-5 rounded-full bg-gradient-to-r from-[#FDE047] via-[#FACC15] to-[#EAB308] hover:brightness-105 disabled:opacity-50 text-[#071128] text-sm font-extrabold inline-flex items-center justify-center gap-1.5 cursor-pointer shrink-0 transition-all shadow-[0_6px_18px_rgba(250,204,21,0.28)]"
               >
                 <Send className="w-4 h-4" />
                 <span className="hidden sm:inline">Send</span>
