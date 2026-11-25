@@ -25,6 +25,7 @@ import { ChatPage } from "./pages/ChatPage";
 import { CommunityChatPage } from "./pages/chat/CommunityChatPage";
 import { DirectMessagePage } from "./pages/chat/DirectMessagePage";
 import { HomePage } from "./pages/HomePage";
+import { InstallerPage } from "./pages/InstallerPage";
 import { LotteryDetailsPage } from "./pages/lottery/LotteryDetailsPage";
 import { OtpSecurityPage } from "./pages/profile/OtpSecurityPage";
 import { ReferralPage } from "./pages/profile/ReferralPage";
@@ -71,7 +72,8 @@ type ActiveScreen =
   | "admin"
   | "admin-inbox-chat"
   | "agent"
-  | "support-rep";
+  | "support-rep"
+  | "install";
 
 interface DirectTargetRef {
   targetType: SocialTargetType;
@@ -241,6 +243,9 @@ function parseRoutePath(rawPath: string): {
   }
   if (/^\/support\/(?:rep|representative)(?:\/|\?|$)/i.test(normalized)) {
     return { screen: "support-rep", campaignSlug: null };
+  }
+  if (/^\/install(?:\/|\?|$)/i.test(normalized)) {
+    return { screen: "install", campaignSlug: null };
   }
   const matchLottery = normalized.match(/^\/lottery\/([^/?#]+)/i);
   if (matchLottery) {
@@ -458,7 +463,8 @@ function AppShell() {
       initial.screen === "daily-task" ||
       initial.screen === "referrals" ||
       initial.screen === "chat" ||
-      initial.screen === "support-rep";
+      initial.screen === "support-rep" ||
+      initial.screen === "install";
 
     if (preserveDirectDeepLink) {
       if (initial.campaignSlug) setSelectedCampaignSlug(initial.campaignSlug);
@@ -510,7 +516,17 @@ function AppShell() {
   useEffect(() => {
     loadPublicOverview();
     restoreSession();
-  }, [loadPublicOverview, restoreSession]);
+    // On fresh self-hosted servers where FORCE_INSTALL_REDIRECT=true, guide the owner directly to /install
+    apiRequest<{ forceRedirect?: boolean }>("/api/installer/status")
+      .then((res) => {
+        if (res?.forceRedirect && !/^\/install(?:\/|\?|$)/i.test(window.location.pathname || "")) {
+          pushRoute("install", "home", "/install", { replace: true });
+        }
+      })
+      .catch(() => {
+        // Ignore installer probe error
+      });
+  }, [loadPublicOverview, restoreSession, pushRoute]);
 
   // Global real-time WebSocket subscription for live 3-second pre-draw countdowns & official draw reveals
   useEffect(() => {
@@ -1225,8 +1241,14 @@ function AppShell() {
     activeScreen === "agent" &&
     Boolean(user && (user.role === "agent" || user.role === "sub_agent"));
   const isSeparateSupportRep = activeScreen === "support-rep";
+  const isSeparateInstaller = activeScreen === "install";
   const hideConsumerChrome =
-    isFullScreenChat || isFullScreenShop || isSeparateAdmin || isSeparateAgent || isSeparateSupportRep;
+    isFullScreenChat ||
+    isFullScreenShop ||
+    isSeparateAdmin ||
+    isSeparateAgent ||
+    isSeparateSupportRep ||
+    isSeparateInstaller;
 
   return (
     <div
@@ -1543,6 +1565,27 @@ function AppShell() {
         />
       )}
 
+      {activeScreen === "install" && (
+        <InstallerPage
+          onInstalledSuccess={(adminUser) => {
+            setUser(adminUser);
+            void loadPublicOverview();
+          }}
+          onGoHome={() => {
+            pushRoute("home", "home", "/", { replace: true });
+            void loadPublicOverview();
+          }}
+          onGoAdmin={() => {
+            if (user && (user.role === "admin" || user.role === "moderator")) {
+              pushRoute("admin", "admin", "/admin", { replace: true });
+            } else {
+              pushRoute("home", "home", "/", { replace: true });
+              setAuthModal({ open: true, mode: "login" });
+            }
+          }}
+        />
+      )}
+
       <AuthModal
         open={authModal.open}
         initialMode={authModal.mode}
@@ -1650,6 +1693,7 @@ function AppShell() {
           !isSeparateAdmin &&
           !isSeparateAgent &&
           !isSeparateSupportRep &&
+          !isSeparateInstaller &&
           !isFullScreenAdminInbox &&
           !isFullScreenShop
         }
@@ -1659,9 +1703,13 @@ function AppShell() {
         onAction={handlePopupEventAction}
       />
 
-      {!isSeparateAdmin && !isSeparateAgent && !isSeparateSupportRep && !isFullScreenAdminInbox && (
-        <CustomerSupportWidget user={user} siteName={overview.settings.siteName} />
-      )}
+      {!isSeparateAdmin &&
+        !isSeparateAgent &&
+        !isSeparateSupportRep &&
+        !isSeparateInstaller &&
+        !isFullScreenAdminInbox && (
+          <CustomerSupportWidget user={user} siteName={overview.settings.siteName} />
+        )}
     </div>
   );
 }

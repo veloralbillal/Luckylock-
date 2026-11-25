@@ -18,6 +18,7 @@ import {
   getOnlineChatCount,
   sendChatEventToUsers,
 } from "../realtime/chatHub";
+import { createInstallerRouter } from "./installerRoutes";
 import { createSupportRouter } from "./supportRoutes";
 import {
   computeTimedOtp,
@@ -15090,6 +15091,9 @@ try {
       }
     }
   );
+
+  // Mount Direct Hosting Web Installer routes (/api/installer/*)
+  router.use(createInstallerRouter());
 
   // Mount Live Customer Support System routes
   router.use(createSupportRouter());
